@@ -1,8 +1,9 @@
-
 import 'package:erp_windows/design/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../design/app_colors.dart';
+import '../states/states.dart';
 
 const sidebarColor = AppColors.lightSecondary; // left bar color
 
@@ -10,6 +11,8 @@ class AppSidebar extends StatelessWidget {
   const AppSidebar({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    Function setIndexSidebar = Provider.of<States>(context).setIndexSidebar;
+
     return SizedBox(
         width: MediaQuery.of(context).size.width * 0.20,
         child: Container(
@@ -21,8 +24,6 @@ class AppSidebar extends StatelessWidget {
                   children: [
                     //PANEL
                     ListTile(
-
-
                       leading: const Icon(
                         Icons.dashboard_outlined,
                         color: AppColors.lightBlack,
@@ -31,7 +32,7 @@ class AppSidebar extends StatelessWidget {
                         "Panel",
                         style: AppText.contextSemiBold,
                       ),
-                      onTap: () {},
+                      onTap: () {setIndexSidebar(0);},
                     ),
                     const SizedBox(
                       height: 10,
@@ -59,7 +60,7 @@ class AppSidebar extends StatelessWidget {
                             "Hammadde",
                             style: AppText.label,
                           ),
-                          onTap: () {},
+                          onTap: () {setIndexSidebar(1);},
                         ),
                         ListTile(
                           leading: const Icon(
@@ -70,7 +71,7 @@ class AppSidebar extends StatelessWidget {
                             "Bitmiş Ürün",
                             style: AppText.label,
                           ),
-                          onTap: () {},
+                          onTap: () {setIndexSidebar(2);},
                         ),
                       ],
                     ),
@@ -100,7 +101,7 @@ class AppSidebar extends StatelessWidget {
                             "Gelen Sipariş",
                             style: AppText.label,
                           ),
-                          onTap: () {},
+                          onTap: () {setIndexSidebar(3);},
                         ),
                         ListTile(
                           leading: const Icon(
@@ -111,7 +112,7 @@ class AppSidebar extends StatelessWidget {
                             "Hazırlanan Sipariş",
                             style: AppText.label,
                           ),
-                          onTap: () {},
+                          onTap: () {setIndexSidebar(4);},
                         ),
                         ListTile(
                           leading: const Icon(
@@ -122,7 +123,7 @@ class AppSidebar extends StatelessWidget {
                             "Giden Sipariş",
                             style: AppText.label,
                           ),
-                          onTap: () {},
+                          onTap: () {setIndexSidebar(5);},
                         ),
                       ],
                     ),
@@ -139,7 +140,7 @@ class AppSidebar extends StatelessWidget {
                         "Personel",
                         style: AppText.contextSemiBold,
                       ),
-                      onTap: () {},
+                      onTap: () {setIndexSidebar(6);},
                     ),
                     const SizedBox(
                       height: 10,
@@ -167,7 +168,7 @@ class AppSidebar extends StatelessWidget {
                             "Üretim",
                             style: AppText.label,
                           ),
-                          onTap: () {},
+                          onTap: () {setIndexSidebar(7);},
                         ),
                         ListTile(
                           leading: const Icon(
@@ -178,7 +179,7 @@ class AppSidebar extends StatelessWidget {
                             "Depo",
                             style: AppText.label,
                           ),
-                          onTap: () {},
+                          onTap: () {setIndexSidebar(8);},
                         ),
                         ListTile(
                           leading: const Icon(
@@ -189,7 +190,7 @@ class AppSidebar extends StatelessWidget {
                             "Transfer",
                             style: AppText.label,
                           ),
-                          onTap: () {},
+                          onTap: () {setIndexSidebar(9);},
                         ),
                         ListTile(
                           leading: const Icon(
@@ -200,7 +201,7 @@ class AppSidebar extends StatelessWidget {
                             "İnsan Kaynakları",
                             style: AppText.label,
                           ),
-                          onTap: () {},
+                          onTap: () {setIndexSidebar(10);},
                         ),
                       ],
                     ),
@@ -217,7 +218,7 @@ class AppSidebar extends StatelessWidget {
                         "Etiket",
                         style: AppText.contextSemiBold,
                       ),
-                      onTap: () {},
+                      onTap: () {setIndexSidebar(11);},
                     ),
                     const SizedBox(
                       height: 10,
@@ -245,7 +246,7 @@ class AppSidebar extends StatelessWidget {
                             "Raporlar",
                             style: AppText.label,
                           ),
-                          onTap: () {},
+                          onTap: () {setIndexSidebar(12);},
                         ),
                         ListTile(
                           leading: const Icon(
@@ -256,9 +257,8 @@ class AppSidebar extends StatelessWidget {
                             "Faturalar",
                             style: AppText.label,
                           ),
-                          onTap: () {},
+                          onTap: () {setIndexSidebar(13);},
                         ),
-
                       ],
                     ),
                   ],

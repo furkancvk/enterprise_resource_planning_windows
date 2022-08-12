@@ -62,11 +62,18 @@ class _HomeState extends State<Home> {
   }
 }
 
-class RightSide extends StatelessWidget {
+class RightSide extends StatefulWidget {
   const RightSide({Key? key}) : super(key: key);
+
+  @override
+  State<RightSide> createState() => _RightSideState();
+}
+
+class _RightSideState extends State<RightSide> {
   @override
   Widget build(BuildContext context) {
-    int indexContent = Provider.of<States>(context).indexContent;
+    int indexSidebar = Provider.of<States>(context).indexSidebar;
+
     return Expanded(
       child: Container(
         decoration: const BoxDecoration(color: AppColors.lightGrey),
@@ -77,7 +84,7 @@ class RightSide extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: contents[0],
+            child: contents[indexSidebar],
           ),
         ]),
       ),
