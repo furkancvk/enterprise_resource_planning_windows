@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Order extends StatelessWidget {
-  const Order({Key? key}) : super(key: key);
+class StoreDepartment extends StatelessWidget {
+  const StoreDepartment({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sipariş SAYFASI'),
+        title: const Text('Depo  SAYFASI'),
       ),
     );
   }

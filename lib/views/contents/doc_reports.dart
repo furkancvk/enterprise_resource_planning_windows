@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Staff extends StatelessWidget {
-  const Staff({Key? key}) : super(key: key);
+class Reports extends StatelessWidget {
+  const Reports({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Staff SAYFASI'),
+        title: const Text('Raporlar SAYFASI'),
       ),
     );
   }

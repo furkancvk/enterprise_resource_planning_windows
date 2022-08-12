@@ -1,19 +1,53 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:erp_windows/widgets/app_sidebar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../design/app_colors.dart';
 
+import '../states/states.dart';
+import '../views/contents/barcode.dart';
+import 'package:erp_windows/views/contents/panel.dart';
+import 'package:erp_windows/views/contents/stock_material.dart';
+import 'package:erp_windows/views/contents/order_incoming.dart';
+import 'package:erp_windows/views/contents/order_outgoing.dart';
+import 'package:erp_windows/views/contents/order_prepared.dart';
+import 'package:erp_windows/views/contents/staff.dart';
+import 'package:erp_windows/views/contents/stock_product.dart';
+import 'package:erp_windows/views/contents/department_human_resources.dart';
+import 'package:erp_windows/views/contents/department_production.dart';
+import 'package:erp_windows/views/contents/department_store.dart';
+import 'package:erp_windows/views/contents/department_transfer.dart';
+import 'package:erp_windows/views/contents/doc_bills.dart';
+import 'package:erp_windows/views/contents/doc_reports.dart';
+
 const borderColor = AppColors.lightSecondary;
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<Home> createState() => _HomeState();
 }
 
-class _HomePageState extends State<HomePage> {
+List<Widget> contents = const [
+  Panel(), // 0
+  MaterialStock(), // 1
+  ProductStock(), // 2
+  IncomingOrder(), // 3
+  PreparedOrder(), // 4
+  OutgoingOrder(), // 5
+  Staff(), // 6
+  ProductionDepartment(), // 7
+  StoreDepartment(), // 8
+  TransferDepartment(), // 9
+  HumanResourcesDepartment(), //10
+  Barcode(), //11
+  Reports(), //12
+  Bills(), //13
+];
+
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +66,7 @@ class RightSide extends StatelessWidget {
   const RightSide({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    int indexContent = Provider.of<States>(context).indexContent;
     return Expanded(
       child: Container(
         decoration: const BoxDecoration(color: AppColors.lightGrey),
@@ -41,8 +76,9 @@ class RightSide extends StatelessWidget {
               children: [Expanded(child: MoveWindow()), const WindowButtons()],
             ),
           ),
-          Text('asdfghj'),
-
+          Expanded(
+            child: contents[indexContent],
+          ),
         ]),
       ),
     );
@@ -70,6 +106,7 @@ class WindowButtons extends StatefulWidget {
   @override
   _WindowButtonsState createState() => _WindowButtonsState();
 }
+
 class _WindowButtonsState extends State<WindowButtons> {
   void maximizeOrRestore() {
     setState(() {
@@ -84,13 +121,13 @@ class _WindowButtonsState extends State<WindowButtons> {
         MinimizeWindowButton(colors: buttonColors),
         appWindow.isMaximized
             ? RestoreWindowButton(
-          colors: buttonColors,
-          onPressed: maximizeOrRestore,
-        )
+                colors: buttonColors,
+                onPressed: maximizeOrRestore,
+              )
             : MaximizeWindowButton(
-          colors: buttonColors,
-          onPressed: maximizeOrRestore,
-        ),
+                colors: buttonColors,
+                onPressed: maximizeOrRestore,
+              ),
         CloseWindowButton(colors: closeButtonColors),
       ],
     );
