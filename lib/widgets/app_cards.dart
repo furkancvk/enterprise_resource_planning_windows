@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
 
-import '../desing/app_colors.dart';
-import '../desing/app_text.dart';
+import '../design/app_colors.dart';
+import '../design/app_text.dart';
 
 class AppCards {
   static Widget taskCard({

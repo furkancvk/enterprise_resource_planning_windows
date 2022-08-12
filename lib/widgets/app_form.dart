@@ -3,8 +3,8 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
-import '../desing/app_colors.dart';
-import '../desing/app_text.dart';
+import '../design/app_colors.dart';
+import '../design/app_text.dart';
 
 class AppForm {
   static Widget appTextFormField({
