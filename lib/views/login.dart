@@ -10,7 +10,7 @@ class Login extends StatelessWidget {
         title: const Text('Giriş SAYFASI'),
       ),
       body: ElevatedButton(
-        onPressed: () {Navigator.pushReplacementNamed(context, "panel_view");},
+        onPressed: () {Navigator.pushReplacementNamed(context, "home_view");},
         child: const Text('giriş yap'),
       ),
     );

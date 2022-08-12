@@ -77,7 +77,7 @@ class RightSide extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: contents[indexContent],
+            child: contents[0],
           ),
         ]),
       ),
