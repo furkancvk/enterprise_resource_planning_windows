@@ -7,69 +7,69 @@ class AppText {
     fontSize: 12,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.4,
-    color: AppColors.lightPrimary,
+    color: AppColors.lightBlack,
   );
 
   static TextStyle helperSemiBold = const TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.w600,
     letterSpacing: 0.4,
-    color: AppColors.lightPrimary,
+    color: AppColors.lightBlack,
   );
 
   static TextStyle label = const TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.4,
-    color: AppColors.lightPrimary,
+    color: AppColors.lightBlack,
   );
 
   static TextStyle labelSemiBold = const TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w600,
     letterSpacing: 0.4,
-    color: AppColors.lightPrimary,
+    color: AppColors.lightBlack,
   );
 
   static TextStyle context = const TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.4,
-    color: AppColors.lightPrimary,
+    color: AppColors.lightBlack,
   );
 
   static TextStyle contextSemiBold = const TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w600,
     letterSpacing: 0.4,
-    color: AppColors.lightPrimary,
+    color: AppColors.lightBlack,
   );
 
   static TextStyle title = const TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.4,
-    color: AppColors.lightPrimary,
+    color: AppColors.lightBlack,
   );
 
   static TextStyle titleSemiBold = const TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.w600,
     letterSpacing: 0.4,
-    color: AppColors.lightPrimary,
+    color: AppColors.lightBlack,
   );
 
   static TextStyle header = const TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.4,
-    color: AppColors.lightPrimary,
+    color: AppColors.lightBlack,
   );
 
   static TextStyle headerSemiBold = const TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.w600,
     letterSpacing: 0.4,
-    color: AppColors.lightPrimary,
+    color: AppColors.lightBlack,
   );
 }
