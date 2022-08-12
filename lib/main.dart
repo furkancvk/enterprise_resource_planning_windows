@@ -2,6 +2,9 @@ import 'package:erp_windows/design/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 
+import 'design/app_theme_data.dart';
+import 'routes/routes.dart';
+
 void main() {
   runApp(const MyApp());
   doWhenWindowReady(() {
@@ -13,6 +16,7 @@ void main() {
     win.title = "Custom window with Flutter";
     win.show();
   });
+
 }
 
 const borderColor = AppColors.lightSecondary;
@@ -23,7 +27,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: "Solvio ERP",
       debugShowCheckedModeBanner: false,
+      theme: AppThemeData.lightTheme(context),
+      darkTheme: AppThemeData.darkTheme(context),
+      initialRoute: "login_view",
+      routes: routes,
       home: Scaffold(
         body: WindowBorder(
           color: borderColor,
