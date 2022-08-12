@@ -21,7 +21,7 @@ class AppThemeData {
       surface: Colors.cyan,
       onSurface: Colors.brown,
     ),
-    scaffoldBackgroundColor: AppColors.lightSecondary,
+    scaffoldBackgroundColor: AppColors.lightGrey,
 
     textTheme: const TextTheme(
       button: TextStyle(

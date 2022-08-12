@@ -158,8 +158,7 @@ class AppCards {
               ],
             )
           ],
-        )
-    );
+        ));
   }
 
   static Widget processCard({
@@ -208,9 +207,7 @@ class AppCards {
     );
   }
 
-  static Widget addImgCard({
-    required void Function() onTap
-  }){
+  static Widget addImgCard({required void Function() onTap}) {
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -246,8 +243,57 @@ class AppCards {
         ),
       ),
     );
+  }
 
+  static Widget panelDataCard(
+      {required IconData icon, required String label, required String data,required Color color}) {
+    return Container(
+      height: 68,
+      decoration: BoxDecoration(
+        color: AppColors.lightSecondary,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Icon(
+              icon,
+              color: color,
+              size: 40,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: Column(
 
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.4,
+                      color: color,
+                    ),
+                  ),
+                  Text(
+                    data,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.4,
+                      color: color,
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -276,68 +322,85 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){showModalBottomSheet(context: context, builder: (context) =>
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                leading: const Icon(FluentIcons.content_view_gallery_24_regular, color: AppColors.lightPrimary,),
-                title: Text('Galeriden fotoğraf seç', style: AppText.context),
-                onTap: () {pickImage(ImageSource.gallery);},
-                tileColor: AppColors.lightSecondary,
-              ),
-              ListTile(
-                leading: const Icon(FluentIcons.camera_24_regular, color: AppColors.lightPrimary,),
-                title: Text('Kamera ile fotoğraf çek', style: AppText.context),
-                onTap: () {pickImage(ImageSource.camera);},
-                tileColor: AppColors.lightSecondary,
-              ),
-            ],
-          ));},
-      child: image != null ? Container(
-        width: 171,
-        height: 156,
-        decoration: BoxDecoration(
-          color: AppColors.lightPrimary.withOpacity(0.04),
-          border: Border.all(
-            color: AppColors.lightPrimary,
-            style: BorderStyle.solid,
-          ),
-          borderRadius: BorderRadius.circular(4),
-        ),
-        child: Image.file(image!, fit: BoxFit.cover),
-      ) : Container(
-        height: 156,
-        decoration: BoxDecoration(
-          color: AppColors.lightPrimary.withOpacity(0.04),
-          border: Border.all(
-            color: AppColors.lightPrimary,
-            style: BorderStyle.solid,
-          ),
-          borderRadius: BorderRadius.circular(4),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            const Icon(
-              FluentIcons.image_24_regular,
-              size: 53,
-              color: AppColors.lightPrimary,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  FluentIcons.add_24_regular,
-                  size: 28,
+      onTap: () {
+        showModalBottomSheet(
+            context: context,
+            builder: (context) => Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    ListTile(
+                      leading: const Icon(
+                        FluentIcons.content_view_gallery_24_regular,
+                        color: AppColors.lightPrimary,
+                      ),
+                      title: Text('Galeriden fotoğraf seç',
+                          style: AppText.context),
+                      onTap: () {
+                        pickImage(ImageSource.gallery);
+                      },
+                      tileColor: AppColors.lightSecondary,
+                    ),
+                    ListTile(
+                      leading: const Icon(
+                        FluentIcons.camera_24_regular,
+                        color: AppColors.lightPrimary,
+                      ),
+                      title: Text('Kamera ile fotoğraf çek',
+                          style: AppText.context),
+                      onTap: () {
+                        pickImage(ImageSource.camera);
+                      },
+                      tileColor: AppColors.lightSecondary,
+                    ),
+                  ],
+                ));
+      },
+      child: image != null
+          ? Container(
+              width: 171,
+              height: 156,
+              decoration: BoxDecoration(
+                color: AppColors.lightPrimary.withOpacity(0.04),
+                border: Border.all(
                   color: AppColors.lightPrimary,
+                  style: BorderStyle.solid,
                 ),
-                Text('Görsel Ekle', style: AppText.contextSemiBold),
-              ],
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Image.file(image!, fit: BoxFit.cover),
+            )
+          : Container(
+              height: 156,
+              decoration: BoxDecoration(
+                color: AppColors.lightPrimary.withOpacity(0.04),
+                border: Border.all(
+                  color: AppColors.lightPrimary,
+                  style: BorderStyle.solid,
+                ),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Icon(
+                    FluentIcons.image_24_regular,
+                    size: 53,
+                    color: AppColors.lightPrimary,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        FluentIcons.add_24_regular,
+                        size: 28,
+                        color: AppColors.lightPrimary,
+                      ),
+                      Text('Görsel Ekle', style: AppText.contextSemiBold),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
     );
   }
 }
