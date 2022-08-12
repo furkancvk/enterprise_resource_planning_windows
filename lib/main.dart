@@ -1,4 +1,3 @@
-import 'package:erp_windows/design/app_colors.dart';
 import 'package:erp_windows/states/states.dart';
 import 'package:flutter/material.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
