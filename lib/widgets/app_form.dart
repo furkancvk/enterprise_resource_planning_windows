@@ -124,6 +124,27 @@ class AppForm {
     );
   }
 
+  static Widget appAutoCompleteTextFormFieldForSearch({
+    required String hint,
+    required TextEditingController controller,
+    required GlobalKey<AutoCompleteTextFieldState<String>> key,
+    required List<String> suggestions,
+    bool isRequired = false,
+    bool isEnabled = true,
+  }) {
+    return SimpleAutoCompleteTextField(
+      key: key,
+      controller: controller,
+      decoration: InputDecoration(
+        suffixIcon: const Icon(FluentIcons.search_24_filled, color: AppColors.lightPrimary,),
+        hintText: hint,
+      ),
+      suggestions: suggestions,
+      textSubmitted: (String value) {},
+      clearOnSubmit: false,
+    );
+  }
+
   static Widget appSearchableDropDownField({
     required List<String> items,
     required String label,
