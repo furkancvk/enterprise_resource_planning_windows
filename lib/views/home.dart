@@ -58,7 +58,7 @@ class _HomeState extends State<Home> {
         color: borderColor,
         width: 1,
         child: Row(
-          children: const [AppSidebar(), RightSide()],
+          children: [AppSidebar(), RightSide()],
         ),
       ),
     );
@@ -93,150 +93,134 @@ class _RightSideState extends State<RightSide> {
             ),
           ),
           Container(
+            padding: const EdgeInsets.symmetric(vertical: 0,horizontal: 24),
             color: AppColors.lightSecondary,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: AppForm.appAutoCompleteTextFormFieldForSearch(
+                        hint: 'Ara...',
+                        controller: TextEditingController(),
+                        key: GlobalKey(),
+                        suggestions: []),
+                  ),
+                  const Expanded(flex: 1, child: SizedBox()),
+                  Expanded(
+                    flex: 2,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Expanded(
-                          flex: 1,
-                          child: AppForm.appAutoCompleteTextFormFieldForSearch(
-                              hint: 'Ara...',
-                              controller: TextEditingController(),
-                              key: GlobalKey(),
-                              suggestions: []),
-                        ),
-                        const Expanded(flex: 1, child: SizedBox()),
-                        Expanded(
-                            flex: 1,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(
-                                        FluentIcons.alert_28_regular)),
-                                const SizedBox(width: 30),
-                                Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.lightGrey,
-                                    border: Border.all(
-                                        color: AppColors.lightPrimary),
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: PopupMenuButton<int>(
-                                    tooltip: "Profil Menüsü",
-                                    padding: const EdgeInsets.all(8),
-                                    itemBuilder: (context) => [
-                                      PopupMenuItem(
-                                        onTap: () {},
-                                        value: 1,
-                                        child: Row(
-                                          children: [
-                                            const Icon(
-                                              FluentIcons.person_28_regular,
-                                              color: AppColors.lightPrimary,
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Text("Profil",
-                                                style: AppText.contextSemiBold),
-                                          ],
-                                        ),
-                                      ),
-                                      PopupMenuItem(
-                                        onTap: () {},
-                                        value: 2,
-                                        child: Row(
-                                          children: [
-                                            const Icon(
-                                              FluentIcons.settings_24_regular,
-                                              color: AppColors.lightPrimary,
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Text("Ayarlar",
-                                                style: AppText.contextSemiBold),
-                                          ],
-                                        ),
-                                      ),
-                                      PopupMenuItem(
-                                        onTap: () {},
-                                        value: 3,
-                                        child: Row(
-                                          children: [
-                                            const Icon(
-                                              FluentIcons.chat_help_24_regular,
-                                              color: AppColors.lightPrimary,
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Text("Yardım",
-                                                style: AppText.contextSemiBold),
-                                          ],
-                                        ),
-                                      ),
-                                      PopupMenuItem(
-                                        onTap: () {},
-                                        value: 4,
-                                        child: Row(
-                                          children: [
-                                            const Icon(
-                                              FluentIcons.arrow_exit_20_regular,
-                                              color: AppColors.lightPrimary,
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Text("Çıkış Yap",
-                                                style: AppText.contextSemiBold),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(4),
-                                      side: const BorderSide(
-                                          color: AppColors.lightPrimary),
+                        IconButton(onPressed: (){}, icon: const Icon(FluentIcons.alert_24_regular)),
+                        const SizedBox(width: 30),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppColors.lightGrey,
+                            border: Border.all(color: AppColors.lightPrimary),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: PopupMenuButton<int>(
+                            tooltip: "Profil Menüsü",
+                            padding: const EdgeInsets.all(8),
+                            itemBuilder: (context) => [
+                              PopupMenuItem(
+                                onTap: () {},
+                                value: 1,
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      FluentIcons.person_28_regular,
+                                      color: AppColors.lightPrimary,
                                     ),
-                                    splashRadius: 20,
-                                    offset: const Offset(0, 44),
-                                    color: AppColors.lightSecondary,
-                                    elevation: 0,
-                                    child: Row(
-                                      children: [
-                                        //Profildeki resmin verildiği kısım
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                            image: const DecorationImage(
-                                                image: AssetImage(
-                                                    "assets/images/avatar.png"),
-                                                fit: BoxFit.fill),
-                                          ),
-                                          height: 28,
-                                          width: 28,
-                                        ),
-                                        const SizedBox(width: 16),
-                                        const Text('burak'),
-                                        const SizedBox(width: 16),
-                                        const Icon(
-                                            FluentIcons.chevron_down_24_filled),
-                                      ],
-                                    ),
-                                  ),
+                                    const SizedBox(width: 10),
+                                    Text("Profil",
+                                        style: AppText.contextSemiBold),
+                                  ],
                                 ),
-                                const SizedBox(width: 30),
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(
-                                        FluentIcons.settings_24_regular))
+                              ),
+                              PopupMenuItem(
+                                onTap: () {},
+                                value: 2,
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      FluentIcons.settings_24_regular,
+                                      color: AppColors.lightPrimary,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Text("Ayarlar",
+                                        style: AppText.contextSemiBold),
+                                  ],
+                                ),
+                              ),
+                              PopupMenuItem(
+                                onTap: () {},
+                                value: 3,
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      FluentIcons.chat_help_24_regular,
+                                      color: AppColors.lightPrimary,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Text("Yardım",
+                                        style: AppText.contextSemiBold),
+                                  ],
+                                ),
+                              ),
+                              PopupMenuItem(
+                                onTap: () {},
+                                value: 4,
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      FluentIcons.arrow_exit_20_regular,
+                                      color: AppColors.lightPrimary,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Text("Çıkış Yap",
+                                        style: AppText.contextSemiBold),
+                                  ],
+                                ),
+                              )
+                            ],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
+                              side: const BorderSide(
+                                  color: AppColors.lightPrimary),
+                            ),
+                            splashRadius: 20,
+                            offset: const Offset(0, 44),
+                            color: AppColors.lightSecondary,
+                            elevation: 0,
+                            child: Row(
+                              children: [
+                                //Profildeki resmin verildiği kısım
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    image: const DecorationImage(image: AssetImage("assets/images/avatar.png"), fit: BoxFit.fill),
+                                  ),
+                                  height: 28,
+                                  width: 28,
+                                ),
+                                const SizedBox(width: 16),
+                                const Text('burak'),
+                                const SizedBox(width: 16),
+                                const Icon(FluentIcons
+                                    .chevron_down_24_filled),
                               ],
-                            )),
-                      ]),
-                ),
-              ],
-            ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 30),
+                        IconButton(onPressed: (){}, icon: const Icon(FluentIcons.settings_24_regular)),
+                      ],
+                    )
+                  ),
+                ]),
           ),
           Expanded(
             child: contents[indexSidebar],

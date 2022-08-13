@@ -1,4 +1,4 @@
-import 'package:erp_windows/design/app_text.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,11 +7,19 @@ import '../states/states.dart';
 
 const sidebarColor = AppColors.lightSecondary; // left bar color
 
-class AppSidebar extends StatelessWidget {
-  const AppSidebar({Key? key}) : super(key: key);
+class AppSidebar extends StatefulWidget {
+  AppSidebar({Key? key}) : super(key: key);
+
+  @override
+  State<AppSidebar> createState() => _AppSidebarState();
+}
+
+class _AppSidebarState extends State<AppSidebar> {
+
   @override
   Widget build(BuildContext context) {
     Function setIndexSidebar = Provider.of<States>(context).setIndexSidebar;
+    int indexSidebar = Provider.of<States>(context).indexSidebar;
 
     return SizedBox(
         width: MediaQuery.of(context).size.width * 0.20,
@@ -20,250 +28,499 @@ class AppSidebar extends StatelessWidget {
             child: ListView(
               children: [
                 Image.asset('assets/images/logo-black.png'),
-                Column(
-                  children: [
-                    //PANEL
-                    ListTile(
-                      leading: const Icon(
-                        Icons.dashboard_outlined,
-                        color: AppColors.lightBlack,
-                      ),
-                      title: Text(
-                        "Panel",
-                        style: AppText.contextSemiBold,
-                      ),
-                      onTap: () {setIndexSidebar(0);},
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    //STOK
-                    ExpansionTile(
-                      collapsedTextColor: AppColors.lightBlack,
-                      collapsedIconColor: AppColors.lightBlack,
-                      collapsedBackgroundColor: AppColors.lightSecondary,
-                      leading: const Icon(
-                        Icons.storage_sharp,
-                        color: AppColors.lightBlack,
-                      ),
-                      title: Text(
-                        "Stok",
-                        style: AppText.contextSemiBold,
-                      ),
-                      children: [
-                        ListTile(
-                          leading: const Icon(
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      //PANEL
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          color: indexSidebar == 0 ? AppColors.lightPrimary.withOpacity(0.04): AppColors.lightSecondary,
+                        ),
+                        child: ListTile(
+                          onTap: () {
+                            setIndexSidebar(0);
+                            print(indexSidebar);
+                          },
+                          textColor: indexSidebar == 0 ? AppColors.lightPrimary : AppColors.lightBlack,
+                          leading: Icon(
                             Icons.dashboard_outlined,
-                            color: Colors.transparent,
+                            color: indexSidebar == 0 ? AppColors.lightPrimary : AppColors.lightBlack,
                           ),
                           title: Text(
-                            "Hammadde",
-                            style: AppText.label,
+                            "Panel",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.4,
+                              color: indexSidebar == 0 ? AppColors.lightPrimary : AppColors.lightBlack
+                            ),
                           ),
-                          onTap: () {setIndexSidebar(1);},
                         ),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.dashboard_outlined,
-                            color: Colors.transparent,
-                          ),
-                          title: Text(
-                            "Bitmiş Ürün",
-                            style: AppText.label,
-                          ),
-                          onTap: () {setIndexSidebar(2);},
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    //SİPARİŞ
-                    ExpansionTile(
-                      collapsedTextColor: AppColors.lightBlack,
-                      collapsedIconColor: AppColors.lightBlack,
-                      collapsedBackgroundColor: AppColors.lightSecondary,
-                      leading: const Icon(
-                        Icons.text_snippet_outlined,
-                        color: AppColors.lightBlack,
                       ),
-                      title: Text(
-                        "Sipariş",
-                        style: AppText.contextSemiBold,
+                      const SizedBox(
+                        height: 10,
                       ),
-                      children: [
-                        ListTile(
-                          leading: const Icon(
-                            Icons.text_snippet_outlined,
-                            color: Colors.transparent,
+                      //STOK
+                      ExpansionTile(
+                        backgroundColor: AppColors.lightSecondary,
+                        collapsedBackgroundColor: AppColors.lightSecondary,
+                        textColor: AppColors.lightPrimary,
+                        collapsedTextColor: AppColors.lightBlack,
+                        iconColor: AppColors.lightPrimary,
+                        collapsedIconColor: AppColors.lightBlack,
+                        leading: Icon(
+                          FluentIcons.box_toolbox_24_regular,
+                          color: (indexSidebar == 1 || indexSidebar == 2) ? AppColors.lightPrimary : AppColors.lightBlack,
+                        ),
+                        title: const Text(
+                          "Stok",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.4,
+                          ),
+                        ),
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(left: 16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: indexSidebar == 1 ? AppColors.lightPrimary.withOpacity(0.04): AppColors.lightSecondary,
+                            ),
+                            child: ListTile(
+                              onTap: () {
+                                setIndexSidebar(1);
+                                print(indexSidebar);
+                                },
+                              /*selectedTileColor: indexSidebar == 1 ? Colors.amber : Colors.red,*/
+                              textColor: indexSidebar == 1 ? AppColors.lightPrimary : AppColors.lightBlack,
+                              leading: const Icon(
+                                Icons.dashboard_outlined,
+                                color: Colors.transparent,
+                              ),
+                              title: const Text(
+                                "Hammadde",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.4,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: indexSidebar == 2 ? AppColors.lightPrimary.withOpacity(0.04): AppColors.lightSecondary,
+                            ),
+                            child: ListTile(
+                              onTap: () {
+                                setIndexSidebar(2);
+                                print(indexSidebar);
+                              },
+                              /*selectedTileColor: indexSidebar == 2 ? Colors.amber : Colors.red,*/
+                              textColor: indexSidebar == 2 ? AppColors.lightPrimary : AppColors.lightBlack,
+                              leading: const Icon(
+                                Icons.dashboard_outlined,
+                                color: Colors.transparent,
+                              ),
+                              title: const Text(
+                                  "Bitmiş Ürün",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.4,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      //SİPARİŞ
+                      ExpansionTile(
+                        backgroundColor: AppColors.lightSecondary,
+                        collapsedBackgroundColor: AppColors.lightSecondary,
+                        textColor: AppColors.lightPrimary,
+                        collapsedTextColor: AppColors.lightBlack,
+                        iconColor: AppColors.lightPrimary,
+                        collapsedIconColor: AppColors.lightBlack,
+                        leading: Icon(
+                          FluentIcons.book_24_regular,
+                          color: (indexSidebar == 3 || indexSidebar == 4|| indexSidebar == 5) ? AppColors.lightPrimary : AppColors.lightBlack,
+                        ),
+                        title: const Text(
+                          "Sipariş",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.4,
+                          ),
+                        ),
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(left: 16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: indexSidebar == 3 ? AppColors.lightPrimary.withOpacity(0.04): AppColors.lightSecondary,
+                            ),
+                            child: ListTile(
+                              onTap: () {
+                                setIndexSidebar(3);
+                                print(indexSidebar);
+                              },
+                              /*selectedTileColor: indexSidebar == 3 ? Colors.amber : Colors.red,*/
+                              textColor: indexSidebar == 3 ? AppColors.lightPrimary : AppColors.lightBlack,
+                              leading: const Icon(
+                                Icons.dashboard_outlined,
+                                color: Colors.transparent,
+                              ),
+                              title: const Text(
+                                "Gelen Sipariş",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.4,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: indexSidebar == 4 ? AppColors.lightPrimary.withOpacity(0.04): AppColors.lightSecondary,
+                            ),
+                            child: ListTile(
+                              onTap: () {
+                                setIndexSidebar(4);
+                                print(indexSidebar);
+                              },
+                              /*selectedTileColor: indexSidebar == 4 ? Colors.amber : Colors.red,*/
+                              textColor: indexSidebar == 4 ? AppColors.lightPrimary : AppColors.lightBlack,
+                              leading: const Icon(
+                                Icons.dashboard_outlined,
+                                color: Colors.transparent,
+                              ),
+                              title: const Text(
+                                "Hazırlanan Sipariş",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.4,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: indexSidebar == 5 ? AppColors.lightPrimary.withOpacity(0.04): AppColors.lightSecondary,
+                            ),
+                            child: ListTile(
+                              onTap: () {
+                                setIndexSidebar(5);
+                                print(indexSidebar);
+                              },
+                              /*selectedTileColor: indexSidebar == 5 ? Colors.amber : Colors.red,*/
+                              textColor: indexSidebar == 5 ? AppColors.lightPrimary : AppColors.lightBlack,
+                              leading: const Icon(
+                                Icons.dashboard_outlined,
+                                color: Colors.transparent,
+                              ),
+                              title: const Text(
+                                "Giden Sipariş",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.4,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      //PERSONEL
+                      Container(
+                        color: indexSidebar == 6 ? AppColors.lightPrimary.withOpacity(0.04): AppColors.lightSecondary,
+                        child: ListTile(
+                          onTap: () {
+                            setIndexSidebar(6);
+                            print(indexSidebar);
+                          },
+                          textColor: indexSidebar == 6 ? AppColors.lightPrimary : AppColors.lightBlack,
+                          leading: Icon(
+                            FluentIcons.people_team_24_regular,
+                            color: indexSidebar == 6 ? AppColors.lightPrimary : AppColors.lightBlack,
                           ),
                           title: Text(
-                            "Gelen Sipariş",
-                            style: AppText.label,
+                            "Personel",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.4,
+                                color: indexSidebar == 6 ? AppColors.lightPrimary : AppColors.lightBlack
+                            ),
                           ),
-                          onTap: () {setIndexSidebar(3);},
                         ),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.dashboard_outlined,
-                            color: Colors.transparent,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      //BİRİMLER
+                      ExpansionTile(
+                        backgroundColor: AppColors.lightSecondary,
+                        collapsedBackgroundColor: AppColors.lightSecondary,
+                        textColor: AppColors.lightPrimary,
+                        collapsedTextColor: AppColors.lightBlack,
+                        iconColor: AppColors.lightPrimary,
+                        collapsedIconColor: AppColors.lightBlack,
+                        leading: Icon(
+                          FluentIcons.arrow_circle_down_split_24_regular,
+                          color: (indexSidebar == 7 || indexSidebar == 8 || indexSidebar == 9 || indexSidebar == 10) ? AppColors.lightPrimary : AppColors.lightBlack,
+                        ),
+                        title: const Text(
+                          "Birimler",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.4,
+                          ),
+                        ),
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(left: 16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: indexSidebar == 7 ? AppColors.lightPrimary.withOpacity(0.04): AppColors.lightSecondary,
+                            ),
+                            child: ListTile(
+                              onTap: () {
+                                setIndexSidebar(7);
+                                print(indexSidebar);
+                              },
+                              /*selectedTileColor: indexSidebar == 7 ? Colors.amber : Colors.red,*/
+                              textColor: indexSidebar == 7 ? AppColors.lightPrimary : AppColors.lightBlack,
+                              leading: const Icon(
+                                Icons.dashboard_outlined,
+                                color: Colors.transparent,
+                              ),
+                              title: const Text(
+                                "Üretim",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.4,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: indexSidebar == 8 ? AppColors.lightPrimary.withOpacity(0.04): AppColors.lightSecondary,
+                            ),
+                            child: ListTile(
+                              onTap: () {
+                                setIndexSidebar(8);
+                                print(indexSidebar);
+                              },
+                              /*selectedTileColor: indexSidebar == 8 ? Colors.amber : Colors.red,*/
+                              textColor: indexSidebar == 8 ? AppColors.lightPrimary : AppColors.lightBlack,
+                              leading: const Icon(
+                                Icons.dashboard_outlined,
+                                color: Colors.transparent,
+                              ),
+                              title: const Text(
+                                "Depo",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.4,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: indexSidebar == 9
+                                  ? AppColors.lightPrimary.withOpacity(0.04): AppColors.lightSecondary,
+                            ),
+                            child: ListTile(
+                              onTap: () {
+                                setIndexSidebar(9);
+                                print(indexSidebar);
+                              },
+                              /*selectedTileColor: indexSidebar == 9 ? Colors.amber : Colors.red,*/
+                              textColor: indexSidebar == 9 ? AppColors.lightPrimary : AppColors.lightBlack,
+                              leading: const Icon(
+                                Icons.dashboard_outlined,
+                                color: Colors.transparent,
+                              ),
+                              title: const Text(
+                                "Transfer",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.4,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: indexSidebar == 10 ? AppColors.lightPrimary.withOpacity(0.04): AppColors.lightSecondary,
+                            ),
+                            child: ListTile(
+                              onTap: () {
+                                setIndexSidebar(10);
+                                print(indexSidebar);
+                              },
+                              /*selectedTileColor: indexSidebar == 10 ? Colors.amber : Colors.red,*/
+                              textColor: indexSidebar == 10 ? AppColors.lightPrimary : AppColors.lightBlack,
+                              leading: const Icon(
+                                Icons.dashboard_outlined,
+                                color: Colors.transparent,
+                              ),
+                              title: const Text(
+                                "İnsan Kaynakları",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.4,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      //ETİKET
+                      Container(
+                        color: indexSidebar == 11 ? AppColors.lightPrimary.withOpacity(0.04): AppColors.lightSecondary,
+                        child: ListTile(
+                          onTap: () {
+                            setIndexSidebar(11);
+                            print(indexSidebar);
+                          },
+                          textColor: indexSidebar == 11 ? AppColors.lightPrimary : AppColors.lightBlack,
+                          leading: Icon(
+                            FluentIcons.barcode_scanner_24_regular,
+                            color: indexSidebar == 11 ? AppColors.lightPrimary : AppColors.lightBlack,
                           ),
                           title: Text(
-                            "Hazırlanan Sipariş",
-                            style: AppText.label,
+                            "Barkod",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.4,
+                                color: indexSidebar == 11 ? AppColors.lightPrimary : AppColors.lightBlack
+                            ),
                           ),
-                          onTap: () {setIndexSidebar(4);},
                         ),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.dashboard_outlined,
-                            color: Colors.transparent,
-                          ),
-                          title: Text(
-                            "Giden Sipariş",
-                            style: AppText.label,
-                          ),
-                          onTap: () {setIndexSidebar(5);},
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      //BELGELER
+                      ExpansionTile(
+                        backgroundColor: AppColors.lightSecondary,
+                        collapsedBackgroundColor: AppColors.lightSecondary,
+                        textColor: AppColors.lightPrimary,
+                        collapsedTextColor: AppColors.lightBlack,
+                        iconColor: AppColors.lightPrimary,
+                        collapsedIconColor: AppColors.lightBlack,
+                        leading: Icon(
+                          FluentIcons.notepad_24_regular,
+                          color: (indexSidebar == 12 || indexSidebar == 13) ? AppColors.lightPrimary : AppColors.lightBlack,
                         ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    //PERSONEL
-                    ListTile(
-                      leading: const Icon(
-                        Icons.people_outline,
-                        color: AppColors.lightBlack,
-                      ),
-                      title: Text(
-                        "Personel",
-                        style: AppText.contextSemiBold,
-                      ),
-                      onTap: () {setIndexSidebar(6);},
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    //BİRİMLER
-                    ExpansionTile(
-                      collapsedTextColor: AppColors.lightBlack,
-                      collapsedIconColor: AppColors.lightBlack,
-                      collapsedBackgroundColor: AppColors.lightSecondary,
-                      leading: const Icon(
-                        Icons.text_snippet_outlined,
-                        color: AppColors.lightBlack,
-                      ),
-                      title: Text(
-                        "Birimler",
-                        style: AppText.contextSemiBold,
-                      ),
-                      children: [
-                        ListTile(
-                          leading: const Icon(
-                            Icons.text_snippet_outlined,
-                            color: Colors.transparent,
+                        title: const Text(
+                          "Sipariş",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.4,
                           ),
-                          title: Text(
-                            "Üretim",
-                            style: AppText.label,
-                          ),
-                          onTap: () {setIndexSidebar(7);},
                         ),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.dashboard_outlined,
-                            color: Colors.transparent,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(left: 16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: indexSidebar == 12 ? AppColors.lightPrimary.withOpacity(0.04): AppColors.lightSecondary,
+                            ),
+                            child: ListTile(
+                              onTap: () {
+                                setIndexSidebar(12);
+                                print(indexSidebar);
+                              },
+                              /*selectedTileColor: indexSidebar == 12 ? Colors.amber : Colors.red,*/
+                              textColor: indexSidebar == 12 ? AppColors.lightPrimary : AppColors.lightBlack,
+                              leading: const Icon(
+                                Icons.dashboard_outlined,
+                                color: Colors.transparent,
+                              ),
+                              title: const Text(
+                                "Belgeler",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.4,
+                                ),
+                              ),
+                            ),
                           ),
-                          title: Text(
-                            "Depo",
-                            style: AppText.label,
+                          Container(
+                            margin: const EdgeInsets.only(left: 16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: indexSidebar == 13 ? AppColors.lightPrimary.withOpacity(0.04): AppColors.lightSecondary,
+                            ),
+                            child: ListTile(
+                              onTap: () {
+                                setIndexSidebar(13);
+                                print(indexSidebar);
+                              },
+                              /*selectedTileColor: indexSidebar == 13 ? Colors.amber : Colors.red,*/
+                              textColor: indexSidebar == 13 ? AppColors.lightPrimary : AppColors.lightBlack,
+                              leading: const Icon(
+                                Icons.dashboard_outlined,
+                                color: Colors.transparent,
+                              ),
+                              title: const Text(
+                                "Raporlar",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.4,
+                                ),
+                              ),
+                            ),
                           ),
-                          onTap: () {setIndexSidebar(8);},
-                        ),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.dashboard_outlined,
-                            color: Colors.transparent,
-                          ),
-                          title: Text(
-                            "Transfer",
-                            style: AppText.label,
-                          ),
-                          onTap: () {setIndexSidebar(9);},
-                        ),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.dashboard_outlined,
-                            color: Colors.transparent,
-                          ),
-                          title: Text(
-                            "İnsan Kaynakları",
-                            style: AppText.label,
-                          ),
-                          onTap: () {setIndexSidebar(10);},
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    //ETİKET
-                    ListTile(
-                      leading: const Icon(
-                        Icons.qr_code,
-                        color: AppColors.lightBlack,
+                        ],
                       ),
-                      title: Text(
-                        "Etiket",
-                        style: AppText.contextSemiBold,
-                      ),
-                      onTap: () {setIndexSidebar(11);},
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    //BELGELER
-                    ExpansionTile(
-                      collapsedTextColor: AppColors.lightBlack,
-                      collapsedIconColor: AppColors.lightBlack,
-                      collapsedBackgroundColor: AppColors.lightSecondary,
-                      leading: const Icon(
-                        Icons.text_snippet_outlined,
-                        color: AppColors.lightBlack,
-                      ),
-                      title: Text(
-                        "Belgeler",
-                        style: AppText.contextSemiBold,
-                      ),
-                      children: [
-                        ListTile(
-                          leading: const Icon(
-                            Icons.text_snippet_outlined,
-                            color: Colors.transparent,
-                          ),
-                          title: Text(
-                            "Raporlar",
-                            style: AppText.label,
-                          ),
-                          onTap: () {setIndexSidebar(12);},
-                        ),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.dashboard_outlined,
-                            color: Colors.transparent,
-                          ),
-                          title: Text(
-                            "Faturalar",
-                            style: AppText.label,
-                          ),
-                          onTap: () {setIndexSidebar(13);},
-                        ),
-                      ],
-                    ),
-                  ],
+                    ],
+                  ),
                 )
               ],
-            )));
+            )
+        ));
   }
 }
+

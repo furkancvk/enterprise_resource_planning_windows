@@ -22,6 +22,7 @@ class AppCards {
           borderRadius: BorderRadius.circular(4),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
