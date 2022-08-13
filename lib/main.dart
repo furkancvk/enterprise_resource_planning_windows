@@ -15,7 +15,7 @@ void main() {
   );
   doWhenWindowReady(() {
     final win = appWindow;
-    const initialSize = Size(1064, 640);
+    const initialSize = Size(1085, 650);
     win.minSize = initialSize;
     win.size = initialSize;
     win.alignment = Alignment.center;
@@ -40,7 +40,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: AppThemeData.lightTheme(context),
       darkTheme: AppThemeData.darkTheme(context),
-      initialRoute: "login_view",
+      initialRoute: "home_view",
       routes: routes,
     );
   }

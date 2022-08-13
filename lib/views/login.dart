@@ -27,11 +27,13 @@ class Login extends StatelessWidget {
                   hint: 'hint',
                   controller: TextEditingController(),
                 ),
+                const SizedBox(height: 35),
                 AppForm.appTextFormField(
                   label: 'label',
                   hint: 'hint',
                   controller: TextEditingController(),
                 ),
+                const SizedBox(height: 35),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, "home_view");
