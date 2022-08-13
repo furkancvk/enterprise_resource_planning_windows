@@ -248,7 +248,8 @@ class AppCards {
   static Widget panelDataCard(
       {required IconData icon, required String label, required String data,required Color color}) {
     return Container(
-      height: 68,
+
+
       decoration: BoxDecoration(
         color: AppColors.lightSecondary,
         borderRadius: BorderRadius.circular(4),
@@ -264,7 +265,7 @@ class AppCards {
               size: 40,
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 16.0),
+              padding: const EdgeInsets.only(left: 12.0),
               child: Column(
 
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -281,7 +282,7 @@ class AppCards {
                   Text(
                     data,
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 28,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 0.4,
                       color: color,

@@ -1,6 +1,7 @@
 import 'package:erp_windows/design/app_colors.dart';
 import 'package:erp_windows/design/app_text.dart';
 import 'package:erp_windows/widgets/app_cards.dart';
+import 'package:erp_windows/widgets/app_form.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -13,51 +14,62 @@ class Panel extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.lightSecondary,
-          title: Row(children: [
-            Icon(Icons.dashboard_outlined,color: AppColors.lightBlack,),
-            Text("Panel",style: AppText.labelSemiBold,)
-          ],),
+          title: Row(
+            children: [
+              Icon(
+                Icons.dashboard_outlined,
+                color: AppColors.lightBlack,
+              ),
+              Text(
+                "Panel",
+                style: AppText.labelSemiBold,
+              )
+            ],
+          ),
         ),
         body: ListView(
           padding: const EdgeInsets.all(16),
           children: [
             Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    AppCards.panelDataCard(
-                        icon: Icons.people_outline,
-                        label: "Toplam Personel",
-                        data: "5",
-                        color: AppColors.lightBlack),
-                    AppCards.panelDataCard(
-                        icon: Icons.eject,
-                        label: "Toplam Hammadde",
-                        data: "3456",
-                        color: AppColors.lightBlack),
-                    AppCards.panelDataCard(
-                        icon: Icons.crop_square,
-                        label: "Toplam Bitmiş Ürün",
-                        data: "217",
-                        color: AppColors.lightBlack),
-                    AppCards.panelDataCard(
-                        icon: Icons.warning_amber_outlined,
-                        label: "Yetersiz Stok",
-                        data: "12",
-                        color: AppColors.lightError),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AppCards.panelDataCard(
+                          icon: Icons.people_outline,
+                          label: "Toplam Personel",
+                          data: "5",
+                          color: AppColors.lightBlack),
+                      AppCards.panelDataCard(
+                          icon: Icons.eject,
+                          label: "Toplam Hammadde",
+                          data: "3456",
+                          color: AppColors.lightBlack),
+                      AppCards.panelDataCard(
+                          icon: Icons.crop_square,
+                          label: "Toplam Bitmiş Ürün",
+                          data: "217",
+                          color: AppColors.lightBlack),
+                      AppCards.panelDataCard(
+                          icon: Icons.warning_amber_outlined,
+                          label: "Yetersiz Stok",
+                          data: "12",
+                          color: AppColors.lightError),
+                    ],
+                  ),
                 ),
                 const SizedBox(
-                  height: 64,
+                  height: 32,
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      flex: 1,
+                      flex: 2,
                       child: Container(
-                        height: 400,
+                        height: 460,
                         decoration: BoxDecoration(
                             color: AppColors.lightSecondary,
                             borderRadius: BorderRadius.circular(4)),
@@ -77,77 +89,81 @@ class Panel extends StatelessWidget {
                       width: 16,
                     ),
                     Expanded(
-                        flex: 2,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: AppColors.lightSecondary,
-                              borderRadius: BorderRadius.circular(4)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    OutlinedButton(
-                                        onPressed: () {},
-                                        child: Row(
-                                          children: const [
-                                            Icon(Icons.import_export),
-                                            Text(
-                                              "Dışa Aktar",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
-                                                letterSpacing: 0.4,
-                                                color: AppColors.lightPrimary,
-                                              ),
+                      flex: 3,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: AppColors.lightSecondary,
+                            borderRadius: BorderRadius.circular(4)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  OutlinedButton(
+                                      onPressed: () {},
+                                      child: Row(
+                                        children: const [
+                                          Icon(Icons.import_export),
+                                          Text(
+                                            "Dışa Aktar",
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                              letterSpacing: 0.4,
+                                              color: AppColors.lightPrimary,
                                             ),
-                                          ],
-                                        )),
-                                    OutlinedButton(
-                                        onPressed: () {},
-                                        child: Row(
-                                          children: const [
-                                            Icon(Icons.add),
-                                            Text(
-                                              "Yeni Görev Ekle",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
-                                                letterSpacing: 0.4,
-                                                color: AppColors.lightPrimary,
-                                              ),
+                                          ),
+                                        ],
+                                      )),
+                                  OutlinedButton(
+                                      onPressed: () {},
+                                      child: Row(
+                                        children: const [
+                                          Icon(Icons.add),
+                                          Text(
+                                            "Yeni Görev Ekle",
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                              letterSpacing: 0.4,
+                                              color: AppColors.lightPrimary,
                                             ),
-                                          ],
-                                        )),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                AppCards.taskCard(
-                                    color: AppColors.lightError,
-                                    title: "Başlık",
-                                    task:
-                                        "Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. ",
-                                    date: "03/08/2022",
-                                    fullName: "Burak Yalnız"),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                AppCards.taskCard(
-                                    color: AppColors.lightWarning,
-                                    title: "Başlık",
-                                    task:
-                                        "Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. ",
-                                    date: "03/08/2022",
-                                    fullName: "Burak Yalnız"),
-                              ],
-                            ),
+                                          ),
+                                        ],
+                                      )),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              AppCards.taskCard(
+                                  color: AppColors.lightError,
+                                  title: "Başlık",
+                                  task:
+                                      "Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. ",
+                                  date: "03/08/2022",
+                                  fullName: "Burak Yalnız"),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              AppCards.taskCard(
+                                  color: AppColors.lightWarning,
+                                  title: "Başlık",
+                                  task:
+                                      "Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı sahte metinler olarak kullanılmıştır. ",
+                                  date: "03/08/2022",
+                                  fullName: "Burak Yalnız"),
+                            ],
                           ),
-                        ))
+                        ),
+                      ),
+                    )
                   ],
                 ),
                 const SizedBox(
@@ -158,48 +174,81 @@ class Panel extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: AppColors.lightSecondary,
                       borderRadius: BorderRadius.circular(4)),
-                  child: Row(
-                    children: [
-                      Row(
-                        children: [
-                          OutlinedButton(
-                              onPressed: () {},
-                              child: Row(
-                                children: const [
-                                  Icon(Icons.shuffle),
-                                  Text(
-                                    "Toplu İşlemler",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: 0.4,
-                                      color: AppColors.lightPrimary,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            OutlinedButton(
+                                onPressed: () {},
+                                child: Row(
+                                  children: const [
+                                    Icon(Icons.shuffle),
+                                    Text(
+                                      "Toplu İşlemler",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        letterSpacing: 0.4,
+                                        color: AppColors.lightPrimary,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              )),
-                          const SizedBox(
-                            width: 16,
-                          ),
-                          OutlinedButton(
-                              onPressed: () {},
-                              child: Row(
-                                children: const [
-                                  Icon(Icons.import_export),
-                                  Text(
-                                    "Dışa Aktar",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: 0.4,
-                                      color: AppColors.lightPrimary,
+                                  ],
+                                )),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            OutlinedButton(
+                                onPressed: () {},
+                                child: Row(
+                                  children: const [
+                                    Icon(Icons.import_export),
+                                    Text(
+                                      "Dışa Aktar",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        letterSpacing: 0.4,
+                                        color: AppColors.lightPrimary,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              )),
-                        ],
-                      ),
-                    ],
+                                  ],
+                                )),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Container(
+                                width: 300,
+                                height: 32,
+                                child: AppForm
+                                    .appAutoCompleteTextFormFieldForSearch(
+                                        hint: "Ara...",
+                                        controller: TextEditingController(),
+                                        key: GlobalKey(),
+                                        suggestions: ["suggestions"])),
+                            OutlinedButton(
+                                onPressed: () {},
+                                child: Row(
+                                  children: const [
+                                    Icon(Icons.filter_alt_outlined),
+                                    Text(
+                                      "Filtrele",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        letterSpacing: 0.4,
+                                        color: AppColors.lightPrimary,
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 FittedBox(
@@ -237,7 +286,8 @@ class Panel extends StatelessWidget {
                         DataCell(Text("İşlem Türü")),
                         DataCell(Text("Tarih")),
                         DataCell(Text("Saat")),
-                      ]),DataRow(cells: [
+                      ]),
+                      DataRow(cells: [
                         DataCell(Text("İsim")),
                         DataCell(Text("Soyisim")),
                         DataCell(Text("Birim")),
