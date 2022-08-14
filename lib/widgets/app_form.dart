@@ -230,3 +230,71 @@ class _PasswordFieldWithVisibilityState extends State<PasswordFieldWithVisibilit
     );
   }
 }
+
+class IncDecInput extends StatefulWidget {
+  const IncDecInput({Key? key, required this.controller}) : super(key: key);
+
+  final TextEditingController controller;
+
+  @override
+  State<IncDecInput> createState() => _IncDecInputState();
+}
+
+class _IncDecInputState extends State<IncDecInput> {
+  int number = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    widget.controller.text = number.toString();
+    
+    return Stack(
+      children: [
+        SizedBox(
+          width: 100,
+          height: 40,
+          child: TextFormField(controller: widget.controller),
+        ),
+        Positioned(
+          top: 0,
+          right: 4,
+          bottom: 0,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    number++;
+                  });
+                },
+                child: const Icon(
+                  FluentIcons.chevron_up_24_filled,
+                  color: AppColors.lightPrimary,
+                  size: 16,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    if(number > 0) number--;
+                  });
+                },
+                child: const Icon(
+                  FluentIcons.chevron_down_24_filled,
+                  color: AppColors.lightPrimary,
+                  size: 16,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
