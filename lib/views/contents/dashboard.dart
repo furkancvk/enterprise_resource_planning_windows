@@ -200,108 +200,111 @@ class _DashboardState extends State<Dashboard> {
                   ],
                 ),
                 const SizedBox(height: 24),
-                FittedBox(
-                  child: DataTable(
-                    sortAscending: isAscending,
-                    sortColumnIndex: sortColumnIndex,
-                    columns: <DataColumn>[
-                      DataColumn(
-                          label: Text('İsim', style: AppText.contextSemiBoldBlue),
-                          onSort: (columnIndex, ascending) {
-                            print("columnIndex:$columnIndex");
-                            print("ascending:$ascending");
-                            setState(() {
-                              sortColumnIndex = columnIndex;
-                              isAscending = ascending;
-                            });
-                          }),
-                      DataColumn(label: Text('Soyisim', style: AppText.contextSemiBoldBlue), onSort: (columnIndex, ascending) {
-                        print("columnIndex:$columnIndex");
-                        print("ascending:$ascending");
-                        setState(() {
-                          sortColumnIndex = columnIndex;
-                          isAscending = ascending;
-                        });
-                      }),
-                      DataColumn(label: Text('Birim', style: AppText.contextSemiBoldBlue), onSort: (columnIndex, ascending) {
-                        print("columnIndex:$columnIndex");
-                        print("ascending:$ascending");
-                        setState(() {
-                          sortColumnIndex = columnIndex;
-                          isAscending = ascending;
-                        });
-                      }),
-                      DataColumn(label: Text('Nesne', style: AppText.contextSemiBoldBlue), onSort: (columnIndex, ascending) {
-                        print("columnIndex:$columnIndex");
-                        print("ascending:$ascending");
-                        setState(() {
-                          sortColumnIndex = columnIndex;
-                          isAscending = ascending;
-                        });
-                      }),
-                      DataColumn(label: Text('Miktar', style: AppText.contextSemiBoldBlue), numeric: true, onSort: (columnIndex, ascending) {
-                        print("columnIndex:$columnIndex");
-                        print("ascending:$ascending");
-                        setState(() {
-                          sortColumnIndex = columnIndex;
-                          isAscending = ascending;
-                        });
-                      }),
-                      DataColumn(label: Text('İşlem Türü', style: AppText.contextSemiBoldBlue), onSort: (columnIndex, ascending) {
-                        print("columnIndex:$columnIndex");
-                        print("ascending:$ascending");
-                        setState(() {
-                          sortColumnIndex = columnIndex;
-                          isAscending = ascending;
-                        });
-                      }),
-                      DataColumn(label: Text('Tarih', style: AppText.contextSemiBoldBlue), numeric: true, onSort: (columnIndex, ascending) {
-                        print("columnIndex:$columnIndex");
-                        print("ascending:$ascending");
-                        setState(() {
-                          sortColumnIndex = columnIndex;
-                          isAscending = ascending;
-                        });
-                      }),
-                      DataColumn(label: Text('Saat', style: AppText.contextSemiBoldBlue), numeric: true, onSort: (columnIndex, ascending) {
-                        print("columnIndex:$columnIndex");
-                        print("ascending:$ascending");
-                        setState(() {
-                          sortColumnIndex = columnIndex;
-                          isAscending = ascending;
-                        });
-                      }),
-                    ],
-                    rows: List<DataRow>.generate(10, (int index) => DataRow(
-                      color: MaterialStateProperty.resolveWith<Color?>(
-                              (Set<MaterialState> states) {
-                            // All rows will have the same selected color.
-                            if (states.contains(MaterialState.selected)) {
-                              return AppColors.lightPrimary.withOpacity(0.2);
-                            }
-                            // Even rows will have a grey color.
-                            if (index.isEven) {
-                              return AppColors.lightPrimary.withOpacity(0.04);
-                            }
-                            return null; // Use default value for other states and odd rows.
-                          }),
-                      cells: <DataCell>[
-                        DataCell(Text('isim $index', style: AppText.context)),
-                        DataCell(Text('Soyisim $index', style: AppText.context)),
-                        DataCell(Text('Birim $index', style: AppText.context)),
-                        DataCell(Text('Nesne $index', style: AppText.context)),
-                        DataCell(Text('Miktar $index', style: AppText.context)),
-                        DataCell(Text('İşlem Türü $index', style: AppText.context)),
-                        DataCell(Text('Tarih $index', style: AppText.context)),
-                        DataCell(Text('Saat $index', style: AppText.context)),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: FittedBox(
+                    child: DataTable(
+                      sortAscending: isAscending,
+                      sortColumnIndex: sortColumnIndex,
+                      columns: <DataColumn>[
+                        DataColumn(
+                            label: Text('İsim', style: AppText.contextSemiBoldBlue),
+                            onSort: (columnIndex, ascending) {
+                              print("columnIndex:$columnIndex");
+                              print("ascending:$ascending");
+                              setState(() {
+                                sortColumnIndex = columnIndex;
+                                isAscending = ascending;
+                              });
+                            }),
+                        DataColumn(label: Text('Soyisim', style: AppText.contextSemiBoldBlue), onSort: (columnIndex, ascending) {
+                          print("columnIndex:$columnIndex");
+                          print("ascending:$ascending");
+                          setState(() {
+                            sortColumnIndex = columnIndex;
+                            isAscending = ascending;
+                          });
+                        }),
+                        DataColumn(label: Text('Birim', style: AppText.contextSemiBoldBlue), onSort: (columnIndex, ascending) {
+                          print("columnIndex:$columnIndex");
+                          print("ascending:$ascending");
+                          setState(() {
+                            sortColumnIndex = columnIndex;
+                            isAscending = ascending;
+                          });
+                        }),
+                        DataColumn(label: Text('Nesne', style: AppText.contextSemiBoldBlue), onSort: (columnIndex, ascending) {
+                          print("columnIndex:$columnIndex");
+                          print("ascending:$ascending");
+                          setState(() {
+                            sortColumnIndex = columnIndex;
+                            isAscending = ascending;
+                          });
+                        }),
+                        DataColumn(label: Text('Miktar', style: AppText.contextSemiBoldBlue), numeric: true, onSort: (columnIndex, ascending) {
+                          print("columnIndex:$columnIndex");
+                          print("ascending:$ascending");
+                          setState(() {
+                            sortColumnIndex = columnIndex;
+                            isAscending = ascending;
+                          });
+                        }),
+                        DataColumn(label: Text('İşlem Türü', style: AppText.contextSemiBoldBlue), onSort: (columnIndex, ascending) {
+                          print("columnIndex:$columnIndex");
+                          print("ascending:$ascending");
+                          setState(() {
+                            sortColumnIndex = columnIndex;
+                            isAscending = ascending;
+                          });
+                        }),
+                        DataColumn(label: Text('Tarih', style: AppText.contextSemiBoldBlue), numeric: true, onSort: (columnIndex, ascending) {
+                          print("columnIndex:$columnIndex");
+                          print("ascending:$ascending");
+                          setState(() {
+                            sortColumnIndex = columnIndex;
+                            isAscending = ascending;
+                          });
+                        }),
+                        DataColumn(label: Text('Saat', style: AppText.contextSemiBoldBlue), numeric: true, onSort: (columnIndex, ascending) {
+                          print("columnIndex:$columnIndex");
+                          print("ascending:$ascending");
+                          setState(() {
+                            sortColumnIndex = columnIndex;
+                            isAscending = ascending;
+                          });
+                        }),
                       ],
-                      selected: selected[index],
-                      onSelectChanged: (bool? value) {
-                        setState(() {
-                          selected[index] = value!;
-                        });
-                      },
-                    ),),
+                      rows: List<DataRow>.generate(10, (int index) => DataRow(
+                        color: MaterialStateProperty.resolveWith<Color?>(
+                                (Set<MaterialState> states) {
+                              // All rows will have the same selected color.
+                              if (states.contains(MaterialState.selected)) {
+                                return AppColors.lightPrimary.withOpacity(0.2);
+                              }
+                              // Even rows will have a grey color.
+                              if (index.isEven) {
+                                return AppColors.lightPrimary.withOpacity(0.04);
+                              }
+                              return null; // Use default value for other states and odd rows.
+                            }),
+                        cells: <DataCell>[
+                          DataCell(Text('isim $index', style: AppText.context)),
+                          DataCell(Text('Soyisim $index', style: AppText.context)),
+                          DataCell(Text('Birim $index', style: AppText.context)),
+                          DataCell(Text('Nesne $index', style: AppText.context)),
+                          DataCell(Text('Miktar $index', style: AppText.context)),
+                          DataCell(Text('İşlem Türü $index', style: AppText.context)),
+                          DataCell(Text('Tarih $index', style: AppText.context)),
+                          DataCell(Text('Saat $index', style: AppText.context)),
+                        ],
+                        selected: selected[index],
+                        onSelectChanged: (bool? value) {
+                          setState(() {
+                            selected[index] = value!;
+                          });
+                        },
+                      ),),
+                    ),
                   ),
                 ),
               ],

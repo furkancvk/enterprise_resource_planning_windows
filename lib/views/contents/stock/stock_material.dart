@@ -94,156 +94,159 @@ class _StockMaterialState extends State<StockMaterial> {
                   ],
                 ),
                 const SizedBox(height: 24),
-                FittedBox(
-                  child: DataTable(
-                    sortAscending: isAscending,
-                    sortColumnIndex: sortColumnIndex,
-                    columns: <DataColumn>[
-                      DataColumn(
-                          label: Text('Görsel', style: AppText.contextSemiBoldBlue),
-                          onSort: (columnIndex, ascending) {
-                            print("columnIndex:$columnIndex");
-                            print("ascending:$ascending");
-                            setState(() {
-                              sortColumnIndex = columnIndex;
-                              isAscending = ascending;
-                            });
-                          }),
-                      DataColumn(
-                          label: Text('İsim', style: AppText.contextSemiBoldBlue),
-                          onSort: (columnIndex, ascending) {
-                            print("columnIndex:$columnIndex");
-                            print("ascending:$ascending");
-                            setState(() {
-                              sortColumnIndex = columnIndex;
-                              isAscending = ascending;
-                            });
-                          }),
-                      DataColumn(
-                          label: Text('Cins', style: AppText.contextSemiBoldBlue),
-                          onSort: (columnIndex, ascending) {
-                            print("columnIndex:$columnIndex");
-                            print("ascending:$ascending");
-                            setState(() {
-                              sortColumnIndex = columnIndex;
-                              isAscending = ascending;
-                            });
-                          }),
-                      DataColumn(
-                          label: Text('Renk', style: AppText.contextSemiBoldBlue),
-                          onSort: (columnIndex, ascending) {
-                            print("columnIndex:$columnIndex");
-                            print("ascending:$ascending");
-                            setState(() {
-                              sortColumnIndex = columnIndex;
-                              isAscending = ascending;
-                            });
-                          }),
-                      DataColumn(
-                          label: Text('Boyut', style: AppText.contextSemiBoldBlue),
-
-                          onSort: (columnIndex, ascending) {
-                            print("columnIndex:$columnIndex");
-                            print("ascending:$ascending");
-                            setState(() {
-                              sortColumnIndex = columnIndex;
-                              isAscending = ascending;
-                            });
-                          }),
-                      DataColumn(
-                          label: Text('Miktar', style: AppText.contextSemiBoldBlue),
-                          onSort: (columnIndex, ascending) {
-                            print("columnIndex:$columnIndex");
-                            print("ascending:$ascending");
-                            setState(() {
-                              sortColumnIndex = columnIndex;
-                              isAscending = ascending;
-                            });
-                          }),
-                      DataColumn(
-                          label: Text('Stok Durumu',
-                              style: AppText.contextSemiBoldBlue),
-
-                          onSort: (columnIndex, ascending) {
-                            print("columnIndex:$columnIndex");
-                            print("ascending:$ascending");
-                            setState(() {
-                              sortColumnIndex = columnIndex;
-                              isAscending = ascending;
-                            });
-                          }),
-                      DataColumn(
-                          label:
-                          Text('İşlemler', style: AppText.contextSemiBoldBlue),
-
-                          onSort: (columnIndex, ascending) {
-                            print("columnIndex:$columnIndex");
-                            print("ascending:$ascending");
-                            setState(() {
-                              sortColumnIndex = columnIndex;
-                              isAscending = ascending;
-                            });
-                          }),
-                    ],
-                    rows: List<DataRow>.generate(
-                      10,
-                          (int index) => DataRow(
-                        color: MaterialStateProperty.resolveWith<Color?>(
-                                (Set<MaterialState> states) {
-                              // All rows will have the same selected color.
-                              if (states.contains(MaterialState.selected)) {
-                                return AppColors.lightPrimary.withOpacity(0.2);
-                              }
-                              // Even rows will have a grey color.
-                              if (index.isEven) {
-                                return AppColors.lightPrimary.withOpacity(0.04);
-                              }
-                              return null; // Use default value for other states and odd rows.
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: FittedBox(
+                    child: DataTable(
+                      sortAscending: isAscending,
+                      sortColumnIndex: sortColumnIndex,
+                      columns: <DataColumn>[
+                        DataColumn(
+                            label: Text('Görsel', style: AppText.contextSemiBoldBlue),
+                            onSort: (columnIndex, ascending) {
+                              print("columnIndex:$columnIndex");
+                              print("ascending:$ascending");
+                              setState(() {
+                                sortColumnIndex = columnIndex;
+                                isAscending = ascending;
+                              });
                             }),
-                        cells: <DataCell>[
-                          DataCell(Container(
-                            height: 36,
-                            width: 36,
-                            decoration: BoxDecoration(
-                                color: AppColors.lightGrey,
-                                borderRadius: BorderRadius.circular(4),
-                                image: DecorationImage(
-                                    image: AssetImage('assets/images/avatar.png'),
-                                    fit: BoxFit.cover)),
-                          )),
-                          DataCell(Text('İsim $index', style: AppText.context)),
-                          DataCell(Text('Cins $index', style: AppText.context)),
-                          DataCell(Text('Renk $index', style: AppText.context)),
-                          DataCell(Text('Boyut $index', style: AppText.context)),
-                          DataCell(Text('Miktar $index', style: AppText.context)),
-                          DataCell(Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: AppCards.stockSituationCard(color: AppColors.lightWarning,data: "Kritik"),
-                          )),
-                          DataCell(Row(
-                            children: [
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(FluentIcons.edit_24_regular),
-                                splashRadius: 20,
-                                color: AppColors.lightPrimary,
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(FluentIcons.delete_24_regular),
-                                splashRadius: 20,
-                                color: AppColors.lightPrimary,
-                              )
-                            ],
-                          )),
+                        DataColumn(
+                            label: Text('İsim', style: AppText.contextSemiBoldBlue),
+                            onSort: (columnIndex, ascending) {
+                              print("columnIndex:$columnIndex");
+                              print("ascending:$ascending");
+                              setState(() {
+                                sortColumnIndex = columnIndex;
+                                isAscending = ascending;
+                              });
+                            }),
+                        DataColumn(
+                            label: Text('Cins', style: AppText.contextSemiBoldBlue),
+                            onSort: (columnIndex, ascending) {
+                              print("columnIndex:$columnIndex");
+                              print("ascending:$ascending");
+                              setState(() {
+                                sortColumnIndex = columnIndex;
+                                isAscending = ascending;
+                              });
+                            }),
+                        DataColumn(
+                            label: Text('Renk', style: AppText.contextSemiBoldBlue),
+                            onSort: (columnIndex, ascending) {
+                              print("columnIndex:$columnIndex");
+                              print("ascending:$ascending");
+                              setState(() {
+                                sortColumnIndex = columnIndex;
+                                isAscending = ascending;
+                              });
+                            }),
+                        DataColumn(
+                            label: Text('Boyut', style: AppText.contextSemiBoldBlue),
 
-                        ],
-                        selected: selected[index],
-                        onSelectChanged: (bool? value) {
-                          setState(() {
-                            selected[index] = value!;
-                          });
-                        },
+                            onSort: (columnIndex, ascending) {
+                              print("columnIndex:$columnIndex");
+                              print("ascending:$ascending");
+                              setState(() {
+                                sortColumnIndex = columnIndex;
+                                isAscending = ascending;
+                              });
+                            }),
+                        DataColumn(
+                            label: Text('Miktar', style: AppText.contextSemiBoldBlue),
+                            onSort: (columnIndex, ascending) {
+                              print("columnIndex:$columnIndex");
+                              print("ascending:$ascending");
+                              setState(() {
+                                sortColumnIndex = columnIndex;
+                                isAscending = ascending;
+                              });
+                            }),
+                        DataColumn(
+                            label: Text('Stok Durumu',
+                                style: AppText.contextSemiBoldBlue),
+
+                            onSort: (columnIndex, ascending) {
+                              print("columnIndex:$columnIndex");
+                              print("ascending:$ascending");
+                              setState(() {
+                                sortColumnIndex = columnIndex;
+                                isAscending = ascending;
+                              });
+                            }),
+                        DataColumn(
+                            label:
+                            Text('İşlemler', style: AppText.contextSemiBoldBlue),
+
+                            onSort: (columnIndex, ascending) {
+                              print("columnIndex:$columnIndex");
+                              print("ascending:$ascending");
+                              setState(() {
+                                sortColumnIndex = columnIndex;
+                                isAscending = ascending;
+                              });
+                            }),
+                      ],
+                      rows: List<DataRow>.generate(
+                        10,
+                            (int index) => DataRow(
+                          color: MaterialStateProperty.resolveWith<Color?>(
+                                  (Set<MaterialState> states) {
+                                // All rows will have the same selected color.
+                                if (states.contains(MaterialState.selected)) {
+                                  return AppColors.lightPrimary.withOpacity(0.2);
+                                }
+                                // Even rows will have a grey color.
+                                if (index.isEven) {
+                                  return AppColors.lightPrimary.withOpacity(0.04);
+                                }
+                                return null; // Use default value for other states and odd rows.
+                              }),
+                          cells: <DataCell>[
+                            DataCell(Container(
+                              height: 36,
+                              width: 36,
+                              decoration: BoxDecoration(
+                                  color: AppColors.lightGrey,
+                                  borderRadius: BorderRadius.circular(4),
+                                  image: DecorationImage(
+                                      image: AssetImage('assets/images/avatar.png'),
+                                      fit: BoxFit.cover)),
+                            )),
+                            DataCell(Text('İsim $index', style: AppText.context)),
+                            DataCell(Text('Cins $index', style: AppText.context)),
+                            DataCell(Text('Renk $index', style: AppText.context)),
+                            DataCell(Text('Boyut $index', style: AppText.context)),
+                            DataCell(Text('Miktar $index', style: AppText.context)),
+                            DataCell(Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: AppCards.stockSituationCard(color: AppColors.lightWarning,data: "Kritik"),
+                            )),
+                            DataCell(Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(FluentIcons.edit_24_regular),
+                                  splashRadius: 20,
+                                  color: AppColors.lightPrimary,
+                                ),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(FluentIcons.delete_24_regular),
+                                  splashRadius: 20,
+                                  color: AppColors.lightPrimary,
+                                )
+                              ],
+                            )),
+
+                          ],
+                          selected: selected[index],
+                          onSelectChanged: (bool? value) {
+                            setState(() {
+                              selected[index] = value!;
+                            });
+                          },
+                        ),
                       ),
                     ),
                   ),
