@@ -1,4 +1,16 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:erp_windows/views/contents/departments/department_human_resources.dart';
+import 'package:erp_windows/views/contents/departments/department_inventory.dart';
+import 'package:erp_windows/views/contents/departments/department_manufacturing.dart';
+import 'package:erp_windows/views/contents/departments/department_transfer.dart';
+import 'package:erp_windows/views/contents/documents/document_bills.dart';
+import 'package:erp_windows/views/contents/documents/document_reports.dart';
+import 'package:erp_windows/views/contents/employee.dart';
+import 'package:erp_windows/views/contents/order/order_incoming.dart';
+import 'package:erp_windows/views/contents/order/order_outgoing.dart';
+import 'package:erp_windows/views/contents/order/order_preparing.dart';
+import 'package:erp_windows/views/contents/stock/stock_material.dart';
+import 'package:erp_windows/views/contents/stock/stock_product.dart';
 import 'package:erp_windows/widgets/app_form.dart';
 import 'package:erp_windows/widgets/app_sidebar.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -10,19 +22,7 @@ import '../../design/app_colors.dart';
 import '../design/app_text.dart';
 import '../states/states.dart';
 import '../views/contents/barcode.dart';
-import 'package:erp_windows/views/contents/panel.dart';
-import 'package:erp_windows/views/contents/stock_material.dart';
-import 'package:erp_windows/views/contents/order_incoming.dart';
-import 'package:erp_windows/views/contents/order_outgoing.dart';
-import 'package:erp_windows/views/contents/order_prepared.dart';
-import 'package:erp_windows/views/contents/staff.dart';
-import 'package:erp_windows/views/contents/stock_product.dart';
-import 'package:erp_windows/views/contents/department_human_resources.dart';
-import 'package:erp_windows/views/contents/department_production.dart';
-import 'package:erp_windows/views/contents/department_store.dart';
-import 'package:erp_windows/views/contents/department_transfer.dart';
-import 'package:erp_windows/views/contents/doc_bills.dart';
-import 'package:erp_windows/views/contents/doc_reports.dart';
+import 'package:erp_windows/views/contents/dashboard.dart';
 
 const borderColor = AppColors.lightSecondary;
 
@@ -33,8 +33,9 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-List<Widget> contents = const [
-  Panel(), // 0
+
+/*List<Widget> contents = const [
+  Dashboard(), // 0
   MaterialStock(), // 1
   ProductStock(), // 2
   IncomingOrder(), // 3
@@ -48,24 +49,209 @@ List<Widget> contents = const [
   Barcode(), //11
   Reports(), //12
   Bills(), //13
-];
+];*/
 
 class _HomeState extends State<Home> {
+  List<Widget> contents = const [
+    Dashboard(), // 0
+    StockMaterial(), // 1
+    StockProduct(), // 2
+    OrderIncoming(), // 3
+    OrderPreparing(), // 4
+    OrderOutgoing(), // 5
+    Employee(), // 6
+    DepartmentManufacturing(), // 7
+    DepartmentInventory(), // 8
+    DepartmentTransfer(), // 9
+    DepartmentHumanResources(), //10
+    Barcode(), //11
+    DocumentReports(), //12
+    DocumentBills(), //13
+  ];
+
   @override
   Widget build(BuildContext context) {
+    // int indexSidebar = Provider.of<States>(context).indexSidebar;
+    int indexContent = Provider.of<States>(context).indexContent;
+
     return Scaffold(
       body: WindowBorder(
         color: borderColor,
         width: 1,
         child: Row(
-          children: [AppSidebar(), RightSide()],
+          children: [
+            const AppSidebar(),
+            Expanded(
+              child: Column(
+                children: [
+                  Container(
+                    color: AppColors.lightSecondary,
+                    child: WindowTitleBarBox(
+                      child: Row(
+                        children: [
+                          Expanded(child: MoveWindow()),
+                          const WindowButtons()
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                    color: AppColors.lightSecondary,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: 300,
+                          height: 44,
+                          child: AppForm.appAutoCompleteTextFormFieldForSearch(
+                            hint: 'Ara...',
+                            controller: TextEditingController(),
+                            key: GlobalKey(),
+                            suggestions: [],
+                          ),
+                        ),
+                        /*Expanded(
+                          flex: 1,
+                          child: AppForm.appAutoCompleteTextFormFieldForSearch(
+                              hint: 'Ara...',
+                              controller: TextEditingController(),
+                              key: GlobalKey(),
+                              suggestions: []),
+                        ),*/
+                        // const Expanded(flex: 1, child: SizedBox()),
+                        Row(
+                          // mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                              onPressed: (){},
+                              icon: const Icon(FluentIcons.alert_24_regular),
+                            ),
+                            const SizedBox(width: 24),
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: AppColors.lightGrey,
+                                border: Border.all(color: AppColors.lightPrimary),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: PopupMenuButton<int>(
+                                tooltip: "Profil Menüsü",
+                                padding: const EdgeInsets.all(8),
+                                itemBuilder: (context) => [
+                                  PopupMenuItem(
+                                    onTap: () {},
+                                    value: 1,
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          FluentIcons.person_28_regular,
+                                          color: AppColors.lightPrimary,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Text("Profil",
+                                            style: AppText.contextSemiBold),
+                                      ],
+                                    ),
+                                  ),
+                                  PopupMenuItem(
+                                    onTap: () {},
+                                    value: 2,
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          FluentIcons.settings_24_regular,
+                                          color: AppColors.lightPrimary,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Text("Ayarlar",
+                                            style: AppText.contextSemiBold),
+                                      ],
+                                    ),
+                                  ),
+                                  PopupMenuItem(
+                                    onTap: () {},
+                                    value: 3,
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          FluentIcons.chat_help_24_regular,
+                                          color: AppColors.lightPrimary,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Text("Yardım",
+                                            style: AppText.contextSemiBold),
+                                      ],
+                                    ),
+                                  ),
+                                  PopupMenuItem(
+                                    onTap: () {},
+                                    value: 4,
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          FluentIcons.arrow_exit_20_regular,
+                                          color: AppColors.lightPrimary,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Text("Çıkış Yap",
+                                            style: AppText.contextSemiBold),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                  side: const BorderSide(color: AppColors.lightPrimary),
+                                ),
+                                splashRadius: 20,
+                                offset: const Offset(0, 44),
+                                color: AppColors.lightSecondary,
+                                elevation: 0,
+                                child: Row(
+                                  children: [
+                                    //Profildeki resmin verildiği kısım
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        image: const DecorationImage(
+                                          image: AssetImage("assets/images/avatar.png"),
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
+                                      height: 28,
+                                      width: 28,
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Text('Burak', style: AppText.contextSemiBold),
+                                    const SizedBox(width: 16),
+                                    const Icon(FluentIcons.chevron_down_12_regular, size: 20),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 24),
+                            IconButton(
+                              onPressed: (){},
+                              icon: const Icon(FluentIcons.settings_24_regular),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(child: contents[indexContent]),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-class RightSide extends StatefulWidget {
+/*class RightSide extends StatefulWidget {
   const RightSide({Key? key}) : super(key: key);
 
   @override
@@ -229,7 +415,7 @@ class _RightSideState extends State<RightSide> {
       ),
     );
   }
-}
+}*/
 
 /// KAPATMA ALTA ALMA VE TAM EKRAN YAPMA BUTONLARI BUNDAN SONRASI
 

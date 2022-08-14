@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class States with ChangeNotifier {
   int indexTabBar = 0;
   int indexSidebar = 0;
+  int indexContent = 0;
   Map<String, dynamic> currentUser = {};
 
   void setIndexTabBar(int index) {
@@ -12,6 +13,11 @@ class States with ChangeNotifier {
 
   void setIndexSidebar(int index) {
     indexSidebar = index;
+    notifyListeners();
+  }
+
+  void setIndexContent(int index) {
+    indexContent = index;
     notifyListeners();
   }
 

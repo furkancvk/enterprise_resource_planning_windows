@@ -15,7 +15,7 @@ void main() {
   );
   doWhenWindowReady(() {
     final win = appWindow;
-    const initialSize = Size(1140, 650);
+    const initialSize = Size(1111, 650);
     win.minSize = initialSize;
     win.size = initialSize;
     win.alignment = Alignment.center;
@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
       title: "Solvio Kurumsal Kaynak Planlama Programlama",
       debugShowCheckedModeBanner: false,
       theme: AppThemeData.lightTheme(context),
-      darkTheme: AppThemeData.darkTheme(context),
+      // darkTheme: AppThemeData.darkTheme(context),
       initialRoute: "home_view",
       routes: routes,
     );

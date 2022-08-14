@@ -1,8 +1,9 @@
+import 'dart:io';
+
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../design/app_colors.dart';
 import '../design/app_text.dart';
@@ -162,30 +163,6 @@ class AppCards {
         ));
   }
 
-  static Widget stockSituationCard(
-      {required Color color, required String data}) {
-    return Container(
-      height: 44,
-      width: 85,
-      decoration: BoxDecoration(
-        border: Border.all(color: color),
-        color: color.withOpacity(0.16),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Center(
-        child: Text(
-          data,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.4,
-            color: color,
-          ),
-        ),
-      ),
-    );
-  }
-
   static Widget processCard({
     required IconData icon,
     required String text,
@@ -270,53 +247,69 @@ class AppCards {
     );
   }
 
-  static Widget panelDataCard(
-      {required IconData icon,
-      required String label,
-      required String data,
-      required Color color}) {
+  static Widget panelDataCard({
+    required IconData icon,
+    required String label,
+    required String data,
+    required Color color,
+  }) {
     return Container(
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.lightSecondary,
         borderRadius: BorderRadius.circular(4),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Icon(
-              icon,
-              color: color,
-              size: 40,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    label,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.4,
-                      color: color,
-                    ),
-                  ),
-                  Text(
-                    data,
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.4,
-                      color: color,
-                    ),
-                  )
-                ],
+      child: Row(
+        children: [
+          Icon(icon, color: color, size: 40),
+          const SizedBox(width: 20),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.4,
+                  color: color,
+                ),
               ),
-            )
-          ],
+              Text(
+                data,
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.4,
+                  color: color,
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  static Widget stockSituationCard(
+      {required Color color, required String data}) {
+    return Container(
+      height: 44,
+      width: 85,
+      decoration: BoxDecoration(
+        border: Border.all(color: color),
+        color: color.withOpacity(0.16),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Center(
+        child: Text(
+          data,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.4,
+            color: color,
+          ),
         ),
       ),
     );
@@ -352,81 +345,81 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
         showModalBottomSheet(
             context: context,
             builder: (context) => Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    ListTile(
-                      leading: const Icon(
-                        FluentIcons.content_view_gallery_24_regular,
-                        color: AppColors.lightPrimary,
-                      ),
-                      title: Text('Galeriden fotoğraf seç',
-                          style: AppText.context),
-                      onTap: () {
-                        pickImage(ImageSource.gallery);
-                      },
-                      tileColor: AppColors.lightSecondary,
-                    ),
-                    ListTile(
-                      leading: const Icon(
-                        FluentIcons.camera_24_regular,
-                        color: AppColors.lightPrimary,
-                      ),
-                      title: Text('Kamera ile fotoğraf çek',
-                          style: AppText.context),
-                      onTap: () {
-                        pickImage(ImageSource.camera);
-                      },
-                      tileColor: AppColors.lightSecondary,
-                    ),
-                  ],
-                ));
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  leading: const Icon(
+                    FluentIcons.content_view_gallery_24_regular,
+                    color: AppColors.lightPrimary,
+                  ),
+                  title: Text('Galeriden fotoğraf seç',
+                      style: AppText.context),
+                  onTap: () {
+                    pickImage(ImageSource.gallery);
+                  },
+                  tileColor: AppColors.lightSecondary,
+                ),
+                ListTile(
+                  leading: const Icon(
+                    FluentIcons.camera_24_regular,
+                    color: AppColors.lightPrimary,
+                  ),
+                  title: Text('Kamera ile fotoğraf çek',
+                      style: AppText.context),
+                  onTap: () {
+                    pickImage(ImageSource.camera);
+                  },
+                  tileColor: AppColors.lightSecondary,
+                ),
+              ],
+            ));
       },
       child: image != null
           ? Container(
-              width: 171,
-              height: 156,
-              decoration: BoxDecoration(
-                color: AppColors.lightPrimary.withOpacity(0.04),
-                border: Border.all(
-                  color: AppColors.lightPrimary,
-                  style: BorderStyle.solid,
-                ),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Image.file(image!, fit: BoxFit.cover),
-            )
+        width: 171,
+        height: 156,
+        decoration: BoxDecoration(
+          color: AppColors.lightPrimary.withOpacity(0.04),
+          border: Border.all(
+            color: AppColors.lightPrimary,
+            style: BorderStyle.solid,
+          ),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Image.file(image!, fit: BoxFit.cover),
+      )
           : Container(
-              height: 156,
-              decoration: BoxDecoration(
-                color: AppColors.lightPrimary.withOpacity(0.04),
-                border: Border.all(
-                  color: AppColors.lightPrimary,
-                  style: BorderStyle.solid,
-                ),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Icon(
-                    FluentIcons.image_24_regular,
-                    size: 53,
-                    color: AppColors.lightPrimary,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        FluentIcons.add_24_regular,
-                        size: 28,
-                        color: AppColors.lightPrimary,
-                      ),
-                      Text('Görsel Ekle', style: AppText.contextSemiBold),
-                    ],
-                  ),
-                ],
-              ),
+        height: 156,
+        decoration: BoxDecoration(
+          color: AppColors.lightPrimary.withOpacity(0.04),
+          border: Border.all(
+            color: AppColors.lightPrimary,
+            style: BorderStyle.solid,
+          ),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Icon(
+              FluentIcons.image_24_regular,
+              size: 53,
+              color: AppColors.lightPrimary,
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  FluentIcons.add_24_regular,
+                  size: 28,
+                  color: AppColors.lightPrimary,
+                ),
+                Text('Görsel Ekle', style: AppText.contextSemiBold),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -31,32 +31,36 @@ class AppThemeData {
       ),
     ),
 
-    appBarTheme: const AppBarTheme(
-      centerTitle: true,
-      elevation: 0,
-      titleTextStyle: TextStyle(
+    appBarTheme: AppBarTheme(
+      elevation: 1,
+      shadowColor: const Color(0xffE4E3E3).withOpacity(0.25),
+      color: AppColors.lightSecondary,
+      titleTextStyle: const TextStyle(
+        color: AppColors.lightBlack,
         fontSize: 20,
         fontWeight: FontWeight.w600,
-        letterSpacing: 1,
+        letterSpacing: 0.4,
       ),
+      iconTheme: const IconThemeData(color: AppColors.lightBlack),
+      titleSpacing: 16,
     ),
 
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        padding: const EdgeInsets.all(16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         side: const BorderSide(color: Color(0xFF273469)),
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        padding: const EdgeInsets.all(16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        padding: const EdgeInsets.all(16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       ),
     ),
