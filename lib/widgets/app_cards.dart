@@ -162,6 +162,30 @@ class AppCards {
         ));
   }
 
+  static Widget stockSituationCard(
+      {required Color color, required String data}) {
+    return Container(
+      height: 44,
+      width: 85,
+      decoration: BoxDecoration(
+        border: Border.all(color: color),
+        color: color.withOpacity(0.16),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Center(
+        child: Text(
+          data,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.4,
+            color: color,
+          ),
+        ),
+      ),
+    );
+  }
+
   static Widget processCard({
     required IconData icon,
     required String text,
@@ -247,10 +271,11 @@ class AppCards {
   }
 
   static Widget panelDataCard(
-      {required IconData icon, required String label, required String data,required Color color}) {
+      {required IconData icon,
+      required String label,
+      required String data,
+      required Color color}) {
     return Container(
-
-
       decoration: BoxDecoration(
         color: AppColors.lightSecondary,
         borderRadius: BorderRadius.circular(4),
@@ -268,7 +293,6 @@ class AppCards {
             Padding(
               padding: const EdgeInsets.only(left: 12.0),
               child: Column(
-
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
