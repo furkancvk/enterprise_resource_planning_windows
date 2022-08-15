@@ -59,10 +59,85 @@ class _StockMaterialState extends State<StockMaterial> {
                   children: [
                     Row(
                       children: [
-                        OutlinedButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(FluentIcons.options_24_regular),
-                          label: const Text("Toplu İşlemler"),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppColors.lightSecondary,
+                            border: Border.all(color: AppColors.lightPrimary),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: PopupMenuButton<int>(
+                            tooltip: "",
+                            padding: const EdgeInsets.all(8),
+                            itemBuilder: (context) => [
+                              PopupMenuItem(
+                                onTap: () {},
+                                value: 1,
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      FluentIcons.edit_24_regular,
+                                      color: AppColors.lightPrimary,
+                                      size: 16,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    const Text("Düzenle",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: 0.4,
+                                          color: AppColors.lightPrimary,
+                                        )),
+                                  ],
+                                ),
+                              ),
+                              PopupMenuItem(
+                                onTap: () {},
+                                value: 2,
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      FluentIcons.delete_24_regular,
+                                      color: AppColors.lightPrimary,
+                                      size: 16,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    const Text("Sil",
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: 0.4,
+                                          color: AppColors.lightPrimary,
+                                        )),
+                                  ],
+                                ),
+                              ),
+
+                            ],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
+                              side: const BorderSide(color: AppColors.lightPrimary),
+                            ),
+                            splashRadius: 20,
+                            offset: const Offset(47, 32),
+                            color: AppColors.lightSecondary,
+                            elevation: 0,
+                            child: Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: Row(children: [
+                                const Icon(FluentIcons.options_16_filled,color: AppColors.lightPrimary,size:16 ,),
+                                const SizedBox(width: 12,),
+                                const Text("Toplu işlemler",style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.4,
+                                  color: AppColors.lightPrimary,
+                                )),
+                                const SizedBox(width: 12,),
+                                const Icon(FluentIcons.chevron_down_16_filled,color: AppColors.lightPrimary,size:16 )
+                              ],),
+                            ),
+                          ),
                         ),
                         const SizedBox(width: 16),
                         OutlinedButton.icon(
@@ -209,8 +284,8 @@ class _StockMaterialState extends State<StockMaterial> {
                               decoration: BoxDecoration(
                                   color: AppColors.lightGrey,
                                   borderRadius: BorderRadius.circular(4),
-                                  image: DecorationImage(
-                                      image: AssetImage('assets/images/avatar.png'),
+                                  image: const DecorationImage(
+                                      image: const AssetImage('assets/images/avatar.png'),
                                       fit: BoxFit.cover)),
                             )),
                             DataCell(Text('İsim $index', style: AppText.context)),

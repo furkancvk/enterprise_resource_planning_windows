@@ -38,11 +38,7 @@ class _BarcodeState extends State<Barcode> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    OutlinedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(FluentIcons.options_24_regular),
-                      label: const Text("Toplu İşlemler"),
-                    ),
+
                     Row(
                       children: [
                         SizedBox(
@@ -177,7 +173,7 @@ class _BarcodeState extends State<Barcode> {
                               decoration: BoxDecoration(
                                   color: AppColors.lightGrey,
                                   borderRadius: BorderRadius.circular(4),
-                                  image: DecorationImage(
+                                  image: const DecorationImage(
                                       image: AssetImage('assets/images/avatar.png'),
                                       fit: BoxFit.cover)),
                             )),
@@ -187,8 +183,8 @@ class _BarcodeState extends State<Barcode> {
                               decoration: BoxDecoration(
                                   color: AppColors.lightGrey,
                                   borderRadius: BorderRadius.circular(4),
-                                  image: DecorationImage(
-                                      image: AssetImage('assets/images/avatar.png'),
+                                  image: const DecorationImage(
+                                      image:  AssetImage('assets/images/avatar.png'),
                                       fit: BoxFit.cover)),
                             )),
                             DataCell(Text('İsim $index', style: AppText.context)),
