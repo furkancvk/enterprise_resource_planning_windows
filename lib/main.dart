@@ -40,9 +40,9 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: AppThemeData.lightTheme(context),
       // darkTheme: AppThemeData.darkTheme(context),
-      home: const Login(),
-      // initialRoute: "home_view",
-      // routes: routes,
+      // home: const Login(),
+      initialRoute: "login_view",
+      routes: routes,
     );
   }
 }

@@ -293,7 +293,7 @@ class _LoginState extends State<Login> {
                             Align(
                               alignment: Alignment.centerRight,
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {Navigator.pushReplacementNamed(context, "home_view");},
                                 child: const Text("Giriş Yap"),
                               ),
                             ),
