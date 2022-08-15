@@ -1,4 +1,5 @@
 import 'package:erp_windows/states/states.dart';
+import 'package:erp_windows/views/login.dart';
 import 'package:flutter/material.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:provider/provider.dart';
@@ -39,8 +40,9 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: AppThemeData.lightTheme(context),
       // darkTheme: AppThemeData.darkTheme(context),
-      initialRoute: "home_view",
-      routes: routes,
+      home: const Login(),
+      // initialRoute: "home_view",
+      // routes: routes,
     );
   }
 }
