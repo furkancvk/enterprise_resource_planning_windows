@@ -276,14 +276,14 @@ class ExampleSource extends AdvancedDataTableSource<RowData> {
 
   @override
   DataRow? getRow(int index) {
-    Function setProcessSelectedRows = Provider.of<States>(context).setMaterialSelectedRows;
-    List<int> processSelectedRows = Provider.of<States>(context).materialSelectedRows;
+    Function setMaterialSelectedRows = Provider.of<States>(context).setMaterialSelectedRows;
+    List<int> materialSelectedRows = Provider.of<States>(context).materialSelectedRows;
 
     final currentRowData = materialStock[index];
     return DataRow(
-      selected: processSelectedRows.contains(currentRowData.materialId) ? true : false,
+      selected: materialSelectedRows.contains(currentRowData.materialId) ? true : false,
       onSelectChanged: (value) {
-        setProcessSelectedRows(currentRowData.materialId);
+        setMaterialSelectedRows(currentRowData.materialId);
       },
       cells: [
         DataCell(
