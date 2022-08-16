@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
     OrderIncoming(), // 3
     OrderPreparing(), // 4
     OrderOutgoing(), // 5
-    Employee(), // 6
+    EmployeeManagement(), // 6
     DepartmentManufacturing(), // 7
     DepartmentInventory(), // 8
     DepartmentTransfer(), // 9
