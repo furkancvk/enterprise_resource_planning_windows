@@ -19,7 +19,7 @@ class AppThemeData {
       background: Colors.amber,
       onBackground: Colors.teal,
       surface: Colors.cyan,
-      onSurface: Colors.brown,
+      onSurface: AppColors.lightPrimary,
     ),
     scaffoldBackgroundColor: AppColors.lightGrey,
 
@@ -127,7 +127,6 @@ class AppThemeData {
       shadowColor: Colors.transparent,
     ),
     dividerColor: AppColors.lightPrimary,
-
   );
 
   static ThemeData darkTheme(BuildContext context) => ThemeData(
