@@ -1,5 +1,5 @@
-import 'package:advanced_datatable/advanced_datatable_source.dart';
-import 'package:advanced_datatable/datatable.dart';
+
+
 import 'package:erp_windows/models/app_material.dart';
 import 'package:erp_windows/models/user.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -8,9 +8,12 @@ import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter/material.dart';
 
+
 import '../../design/app_colors.dart';
 import '../../design/app_text.dart';
 import '../../models/app_process.dart';
+import '../../packages/edited_advanced_PDT.dart';
+import '../../packages/edited_advanced_datatable_source.dart';
 import '../../states/states.dart';
 import '../../widgets/app_cards.dart';
 import '../../widgets/app_form.dart';
@@ -272,85 +275,6 @@ class _DashboardState extends State<Dashboard> {
                               ),
                             ),
                           ),
-                          /*Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: AppColors.lightSecondary,
-                            border: Border.all(color: AppColors.lightPrimary),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: PopupMenuButton<int>(
-                            tooltip: "",
-                            padding: const EdgeInsets.all(8),
-                            itemBuilder: (context) => [
-                              PopupMenuItem(
-                                onTap: () {},
-                                value: 1,
-                                child: Row(
-                                  children: const [
-                                    Icon(
-                                      FluentIcons.edit_24_regular,
-                                      color: AppColors.lightPrimary,
-                                      size: 16,
-                                    ),
-                                    SizedBox(width: 10),
-                                    Text("Düzenle",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          letterSpacing: 0.4,
-                                          color: AppColors.lightPrimary,
-                                        )),
-                                  ],
-                                ),
-                              ),
-                              PopupMenuItem(
-                                onTap: () {},
-                                value: 2,
-                                child: Row(
-                                  children: const [
-                                    Icon(
-                                      FluentIcons.delete_24_regular,
-                                      color: AppColors.lightPrimary,
-                                      size: 16,
-                                    ),
-                                    SizedBox(width: 10),
-                                    Text("Sil",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          letterSpacing: 0.4,
-                                          color: AppColors.lightPrimary,
-                                        )),
-                                  ],
-                                ),
-                              ),
-                            ],
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                              side: const BorderSide(color: AppColors.lightPrimary),
-                            ),
-                            splashRadius: 20,
-                            offset: const Offset(47, 32),
-                            color: AppColors.lightSecondary,
-                            elevation: 0,
-                            child: Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: Row(children: const [
-                                Icon(FluentIcons.options_16_filled,color: AppColors.lightPrimary,size:16 ,),
-                                SizedBox(width: 12,),
-                                Text("Toplu işlemler",style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 0.4,
-                                  color: AppColors.lightPrimary,
-                                )),
-                                SizedBox(width: 12,),
-                                Icon(FluentIcons.chevron_down_16_filled,color: AppColors.lightPrimary,size:16 )
-                              ],),
-                            ),
-                          ),
-                        ),*/
                           const SizedBox(width: 16),
                           OutlinedButton.icon(
                             onPressed: () {},
