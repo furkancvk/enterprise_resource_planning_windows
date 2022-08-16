@@ -122,75 +122,12 @@ class AppThemeData {
       side: const BorderSide(color: AppColors.lightPrimary),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
     ),
+    cardTheme: const CardTheme(
+      color: AppColors.lightSecondary,
+      shadowColor: Colors.transparent,
+    ),
+    dividerColor: AppColors.lightPrimary,
 
-    /*textTheme: const TextTheme(
-      headline1: TextStyle(
-        fontSize: 10,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 1,
-      ),
-
-      headline2: TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 1,
-      ),
-
-      headline3: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 1,
-      ),
-
-      headline4: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 1,
-      ),
-
-      headline5: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 1,
-      ),
-
-      headline6: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 1,
-      ),
-
-      subtitle1: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 1,
-      ),
-
-      subtitle2: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 1,
-      ),
-
-      bodyText1: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF273469),
-        letterSpacing: 1,
-      ),
-
-      bodyText2: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-        letterSpacing: 1,
-      ),
-
-      button: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 1,
-      ),
-    ),*/
   );
 
   static ThemeData darkTheme(BuildContext context) => ThemeData(

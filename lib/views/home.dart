@@ -68,6 +68,7 @@ class _HomeState extends State<Home> {
     DocumentReports(), //12
     DocumentBills(), //13
   ];
+  bool _isSelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -111,15 +112,6 @@ class _HomeState extends State<Home> {
                             suggestions: [],
                           ),
                         ),
-                        /*Expanded(
-                          flex: 1,
-                          child: AppForm.appAutoCompleteTextFormFieldForSearch(
-                              hint: 'Ara...',
-                              controller: TextEditingController(),
-                              key: GlobalKey(),
-                              suggestions: []),
-                        ),*/
-                        // const Expanded(flex: 1, child: SizedBox()),
                         Row(
                           // mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -136,6 +128,12 @@ class _HomeState extends State<Home> {
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: PopupMenuButton<int>(
+                                onCanceled: (){
+                                  _isSelected = false ;
+                                },
+                                onSelected: (value){
+                                  _isSelected = true;
+                                },
                                 tooltip: "Profil Menüsü",
                                 padding: const EdgeInsets.all(8),
                                 itemBuilder: (context) => [
@@ -225,7 +223,7 @@ class _HomeState extends State<Home> {
                                     const SizedBox(width: 16),
                                     Text('Burak', style: AppText.contextSemiBold),
                                     const SizedBox(width: 16),
-                                    const Icon(FluentIcons.chevron_down_12_regular, size: 20),
+                                    _isSelected == true ? const Icon(FluentIcons.chevron_down_12_regular, size: 20) : const Icon(FluentIcons.chevron_up_12_regular, size: 20),
                                   ],
                                 ),
                               ),

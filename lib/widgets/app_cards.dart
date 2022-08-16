@@ -262,14 +262,14 @@ class AppCards {
       child: Row(
         children: [
           Icon(icon, color: color, size: 40),
-          const SizedBox(width: 20),
+          const SizedBox(width: 32),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 label,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 20,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.4,
                   color: color,
@@ -278,7 +278,7 @@ class AppCards {
               Text(
                 data,
                 style: TextStyle(
-                  fontSize: 32,
+                  fontSize: 40,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.4,
                   color: color,
