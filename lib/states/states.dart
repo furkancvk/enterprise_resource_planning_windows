@@ -10,6 +10,8 @@ class States with ChangeNotifier {
 
   List<int> processSelectedRows = [];
 
+  List<int> materialSelectedRows = [];
+
   List<int> employeeSelectedRows = [];
 
   void setIndexTabBar(int index) {
@@ -42,6 +44,15 @@ class States with ChangeNotifier {
       processSelectedRows.removeAt(processSelectedRows.indexOf(index));
     } else {
       processSelectedRows.add(index);
+    }
+    notifyListeners();
+  }
+
+  void setMaterialSelectedRows(int index) {
+    if(materialSelectedRows.contains(index)) {
+      materialSelectedRows.removeAt(materialSelectedRows.indexOf(index));
+    } else {
+      materialSelectedRows.add(index);
     }
     notifyListeners();
   }

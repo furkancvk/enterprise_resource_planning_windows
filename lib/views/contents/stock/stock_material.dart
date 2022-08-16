@@ -1,9 +1,14 @@
+import 'package:erp_windows/widgets/app_cards.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../design/app_colors.dart';
 import '../../../design/app_text.dart';
-import '../../../widgets/app_cards.dart';
+import '../../../models/app_material.dart';
+import '../../../packages/edited_advanced_PDT.dart';
+import '../../../packages/edited_advanced_datatable_source.dart';
+import '../../../states/states.dart';
 import '../../../widgets/app_form.dart';
 
 class StockMaterial extends StatefulWidget {
@@ -15,11 +20,22 @@ class StockMaterial extends StatefulWidget {
 
 class _StockMaterialState extends State<StockMaterial> {
   List<bool> selected = List<bool>.generate(10, (int index) => false);
-  var isAscending = true;
-  var sortColumnIndex = 0;
+  int? sortColumnIndex;
+  bool isAscending = false;
+  List<AppMaterial> materialStock = [
+    AppMaterial(materialId: 13, referenceNumber: 3315, imageUrl: '', materialName: 'Gizli Ayak', typeName: '12CM', unitName: 'Adet', amount: 200, colorName: 'Kahverengi', sizeName: '24', description: '', createdAt: '16/08/2022', updatedAt: ''),
+    AppMaterial(materialId: 14, referenceNumber: 1, imageUrl: '', materialName: 'Vida', typeName: '14CM', unitName: 'Torba', amount: 400, colorName: '', sizeName: '', description: '', createdAt: '17/08/2022', updatedAt: ''),
+    AppMaterial(materialId: 15, referenceNumber: 2, imageUrl: '', materialName: 'Kumaş', typeName: '5', unitName: 'CM2', amount: 1000, colorName: 'Sarı', sizeName: '', description: '', createdAt: '16/08/2002', updatedAt: ''),
+    AppMaterial(materialId: 16, referenceNumber: 3, imageUrl: '', materialName: 'İskelet', typeName: 'a', unitName: 'Adet', amount: 20, colorName: '', sizeName: '', description: '', createdAt: '18/08/2022', updatedAt: ''),
+  ];
+
+  var rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
 
   @override
   Widget build(BuildContext context) {
+
+    final source = ExampleSource(context, materialStock);
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -54,283 +70,278 @@ class _StockMaterialState extends State<StockMaterial> {
             ),
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: AppColors.lightSecondary,
-                            border: Border.all(color: AppColors.lightPrimary),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: PopupMenuButton<int>(
-                            tooltip: "",
-                            padding: const EdgeInsets.all(8),
-                            itemBuilder: (context) => [
-                              PopupMenuItem(
-                                onTap: () {},
-                                value: 1,
-                                child: Row(
-                                  children: [
-                                    const Icon(
-                                      FluentIcons.edit_24_regular,
-                                      color: AppColors.lightPrimary,
-                                      size: 16,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    const Text("Düzenle",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          letterSpacing: 0.4,
-                                          color: AppColors.lightPrimary,
-                                        )),
-                                  ],
-                                ),
-                              ),
-                              PopupMenuItem(
-                                onTap: () {},
-                                value: 2,
-                                child: Row(
-                                  children: [
-                                    const Icon(
-                                      FluentIcons.delete_24_regular,
-                                      color: AppColors.lightPrimary,
-                                      size: 16,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    const Text("Sil",
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          letterSpacing: 0.4,
-                                          color: AppColors.lightPrimary,
-                                        )),
-                                  ],
-                                ),
-                              ),
-
-                            ],
-                            shape: RoundedRectangleBorder(
+                Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(6.9),
+                            decoration: BoxDecoration(
+                              color: AppColors.lightSecondary,
+                              border: Border.all(color: AppColors.lightPrimary),
                               borderRadius: BorderRadius.circular(4),
-                              side: const BorderSide(color: AppColors.lightPrimary),
                             ),
-                            splashRadius: 20,
-                            offset: const Offset(47, 32),
-                            color: AppColors.lightSecondary,
-                            elevation: 0,
-                            child: Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: Row(children: [
-                                const Icon(FluentIcons.options_16_filled,color: AppColors.lightPrimary,size:16 ,),
-                                const SizedBox(width: 12,),
-                                const Text("Toplu işlemler",style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 0.4,
-                                  color: AppColors.lightPrimary,
-                                )),
-                                const SizedBox(width: 12,),
-                                const Icon(FluentIcons.chevron_down_16_filled,color: AppColors.lightPrimary,size:16 )
-                              ],),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        OutlinedButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(FluentIcons.database_search_24_regular),
-                          label: const Text("Dışa Aktar"),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 300,
-                          height: 40,
-                          child: AppForm.appAutoCompleteTextFormFieldForSearch(
-                            hint: "Ara...",
-                            controller: TextEditingController(),
-                            key: GlobalKey(),
-                            suggestions: [],
-                          ),
-                        ),
-                        OutlinedButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(FluentIcons.filter_24_regular),
-                          label: const Text("Filtrele"),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: FittedBox(
-                    child: DataTable(
-                      sortAscending: isAscending,
-                      sortColumnIndex: sortColumnIndex,
-                      columns: <DataColumn>[
-                        DataColumn(
-                            label: Text('Görsel', style: AppText.contextSemiBoldBlue),
-                            onSort: (columnIndex, ascending) {
-                              print("columnIndex:$columnIndex");
-                              print("ascending:$ascending");
-                              setState(() {
-                                sortColumnIndex = columnIndex;
-                                isAscending = ascending;
-                              });
-                            }),
-                        DataColumn(
-                            label: Text('İsim', style: AppText.contextSemiBoldBlue),
-                            onSort: (columnIndex, ascending) {
-                              print("columnIndex:$columnIndex");
-                              print("ascending:$ascending");
-                              setState(() {
-                                sortColumnIndex = columnIndex;
-                                isAscending = ascending;
-                              });
-                            }),
-                        DataColumn(
-                            label: Text('Cins', style: AppText.contextSemiBoldBlue),
-                            onSort: (columnIndex, ascending) {
-                              print("columnIndex:$columnIndex");
-                              print("ascending:$ascending");
-                              setState(() {
-                                sortColumnIndex = columnIndex;
-                                isAscending = ascending;
-                              });
-                            }),
-                        DataColumn(
-                            label: Text('Renk', style: AppText.contextSemiBoldBlue),
-                            onSort: (columnIndex, ascending) {
-                              print("columnIndex:$columnIndex");
-                              print("ascending:$ascending");
-                              setState(() {
-                                sortColumnIndex = columnIndex;
-                                isAscending = ascending;
-                              });
-                            }),
-                        DataColumn(
-                            label: Text('Boyut', style: AppText.contextSemiBoldBlue),
-
-                            onSort: (columnIndex, ascending) {
-                              print("columnIndex:$columnIndex");
-                              print("ascending:$ascending");
-                              setState(() {
-                                sortColumnIndex = columnIndex;
-                                isAscending = ascending;
-                              });
-                            }),
-                        DataColumn(
-                            label: Text('Miktar', style: AppText.contextSemiBoldBlue),
-                            onSort: (columnIndex, ascending) {
-                              print("columnIndex:$columnIndex");
-                              print("ascending:$ascending");
-                              setState(() {
-                                sortColumnIndex = columnIndex;
-                                isAscending = ascending;
-                              });
-                            }),
-                        DataColumn(
-                            label: Text('Stok Durumu',
-                                style: AppText.contextSemiBoldBlue),
-
-                            onSort: (columnIndex, ascending) {
-                              print("columnIndex:$columnIndex");
-                              print("ascending:$ascending");
-                              setState(() {
-                                sortColumnIndex = columnIndex;
-                                isAscending = ascending;
-                              });
-                            }),
-                        DataColumn(
-                            label:
-                            Text('İşlemler', style: AppText.contextSemiBoldBlue),
-
-                            onSort: (columnIndex, ascending) {
-                              print("columnIndex:$columnIndex");
-                              print("ascending:$ascending");
-                              setState(() {
-                                sortColumnIndex = columnIndex;
-                                isAscending = ascending;
-                              });
-                            }),
-                      ],
-                      rows: List<DataRow>.generate(
-                        10,
-                            (int index) => DataRow(
-                          color: MaterialStateProperty.resolveWith<Color?>(
-                                  (Set<MaterialState> states) {
-                                // All rows will have the same selected color.
-                                if (states.contains(MaterialState.selected)) {
-                                  return AppColors.lightPrimary.withOpacity(0.2);
-                                }
-                                // Even rows will have a grey color.
-                                if (index.isEven) {
-                                  return AppColors.lightPrimary.withOpacity(0.04);
-                                }
-                                return null; // Use default value for other states and odd rows.
-                              }),
-                          cells: <DataCell>[
-                            DataCell(Container(
-                              height: 36,
-                              width: 36,
-                              decoration: BoxDecoration(
-                                  color: AppColors.lightGrey,
-                                  borderRadius: BorderRadius.circular(4),
-                                  image: const DecorationImage(
-                                      image: const AssetImage('assets/images/avatar.png'),
-                                      fit: BoxFit.cover)),
-                            )),
-                            DataCell(Text('İsim $index', style: AppText.context)),
-                            DataCell(Text('Cins $index', style: AppText.context)),
-                            DataCell(Text('Renk $index', style: AppText.context)),
-                            DataCell(Text('Boyut $index', style: AppText.context)),
-                            DataCell(Text('Miktar $index', style: AppText.context)),
-                            DataCell(Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: AppCards.stockSituationCard(color: AppColors.lightWarning,data: "Kritik"),
-                            )),
-                            DataCell(Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(FluentIcons.edit_24_regular),
-                                  splashRadius: 20,
-                                  color: AppColors.lightPrimary,
+                            child: PopupMenuButton<int>(
+                              tooltip: "Toplu İşlemler",
+                              padding: const EdgeInsets.all(8),
+                              itemBuilder: (context) => [
+                                PopupMenuItem(
+                                  onTap: () {},
+                                  value: 1,
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        FluentIcons.person_28_regular,
+                                        color: AppColors.lightPrimary,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Text("Profil",
+                                          style: AppText.contextSemiBold),
+                                    ],
+                                  ),
                                 ),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(FluentIcons.delete_24_regular),
-                                  splashRadius: 20,
-                                  color: AppColors.lightPrimary,
+                                PopupMenuItem(
+                                  onTap: () {},
+                                  value: 2,
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        FluentIcons.settings_24_regular,
+                                        color: AppColors.lightPrimary,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Text("Ayarlar",
+                                          style: AppText.contextSemiBold),
+                                    ],
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  onTap: () {},
+                                  value: 3,
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        FluentIcons.chat_help_24_regular,
+                                        color: AppColors.lightPrimary,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Text("Yardım",
+                                          style: AppText.contextSemiBold),
+                                    ],
+                                  ),
+                                ),
+                                PopupMenuItem(
+                                  onTap: () {},
+                                  value: 4,
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        FluentIcons.arrow_exit_20_regular,
+                                        color: AppColors.lightPrimary,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Text("Çıkış Yap",
+                                          style: AppText.contextSemiBold),
+                                    ],
+                                  ),
                                 )
                               ],
-                            )),
-
-                          ],
-                          selected: selected[index],
-                          onSelectChanged: (bool? value) {
-                            setState(() {
-                              selected[index] = value!;
-                            });
-                          },
-                        ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4),
+                                side: const BorderSide(color: AppColors.lightPrimary),
+                              ),
+                              splashRadius: 20,
+                              offset: const Offset(0, 44),
+                              color: AppColors.lightSecondary,
+                              elevation: 0,
+                              child: Row(
+                                children: [
+                                  const Icon(FluentIcons.options_16_filled,color: AppColors.lightPrimary),
+                                  const SizedBox(width: 16),
+                                  Text("Toplu İşlemler", style: AppText.contextSemiBoldBlue),
+                                  const SizedBox(width: 16),
+                                  const Icon(FluentIcons.chevron_down_12_regular, size: 20),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          OutlinedButton.icon(
+                            onPressed: () {},
+                            icon: const Icon(FluentIcons.database_search_24_regular),
+                            label: const Text("Dışa Aktar"),
+                          ),
+                        ],
                       ),
-                    ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 300,
+                            height: 40,
+                            child: AppForm.appAutoCompleteTextFormFieldForSearch(
+                              hint: "Ara...",
+                              controller: TextEditingController(),
+                              key: GlobalKey(),
+                              suggestions: [],
+                            ),
+                          ),
+                          OutlinedButton.icon(
+                            onPressed: () {},
+                            icon: const Icon(FluentIcons.filter_24_regular),
+                            label: const Text("Filtrele",style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.4,
+                              color: AppColors.lightPrimary,
+                            )),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
+                ),
+                AdvancedPaginatedDataTable(
+                  sortAscending: isAscending,
+                  sortColumnIndex: sortColumnIndex,
+                  /*customTableFooter: ,*/
+                  addEmptyRows: false,
+                  source: source,
+                  showFirstLastButtons: true,
+                  rowsPerPage: rowsPerPage,
+                  availableRowsPerPage: const [10, 16, 20, 56],
+                  onRowsPerPageChanged: (newRowsPerPage) {
+                    if (newRowsPerPage != null) {
+                      setState(() {
+                        rowsPerPage = newRowsPerPage;
+                      });
+                    }
+                  },
+                  columns: [
+                    DataColumn(label: Text('Görsel', style: AppText.contextSemiBoldBlue)),
+                    DataColumn(label: Text('İsim', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                    DataColumn(label: Text('Cins', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                    DataColumn(label: Text('Renk', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                    DataColumn(label: Text('Boyut', style: AppText.contextSemiBoldBlue)),
+                    DataColumn(label: Text('Miktar', style: AppText.contextSemiBoldBlue)),
+                    DataColumn(label: Text('Stok Durumu', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                    DataColumn(label: Text('İşlemler', style: AppText.contextSemiBoldBlue)),
+                  ],
                 ),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+  ///Sorting Functions
+  void onSort(int columnIndex, bool ascending) {
+    if(columnIndex == 1){
+      materialStock.sort((material1, material2) => compareString(ascending, material1.materialName, material2.materialName));
+    }else if(columnIndex == 2){
+      materialStock.sort((material1, material2) => compareString(ascending, material1.typeName, material2.typeName));
+    }else if(columnIndex == 3){
+      materialStock.sort((material1, material2) => compareString(ascending, material1.colorName, material2.colorName));
+    }else if(columnIndex == 6){///Stok durumuna göre değişmeli burası
+      materialStock.sort((material1, material2) => compareString(ascending, material1.amount.toString(), material2.amount.toString()));
+    }
+    setState(() {
+      sortColumnIndex = columnIndex;
+      isAscending = ascending;
+    });
+  }
+}
+
+int compareString(bool ascending, String value1, String value2) {return ascending ? value1.compareTo(value2) : value2.compareTo(value1);}
+
+///Sorting işlemleri bitiş
+///DataTable Source Kısmı
+class RowData {
+  final int index;
+  final String value;
+
+  RowData(this.index, this.value);
+}
+
+class ExampleSource extends AdvancedDataTableSource<RowData> {
+  final data = List<RowData>.generate(30, (index) => RowData(index+1, 'Value for no. ${index+1}'));
+  final List<AppMaterial> materialStock;
+
+  ExampleSource(this.context, this.materialStock);
+
+  final BuildContext context;
+
+  @override
+  DataRow? getRow(int index) {
+    Function setProcessSelectedRows = Provider.of<States>(context).setMaterialSelectedRows;
+    List<int> processSelectedRows = Provider.of<States>(context).materialSelectedRows;
+
+    final currentRowData = materialStock[index];
+    return DataRow(
+      selected: processSelectedRows.contains(currentRowData.materialId) ? true : false,
+      onSelectChanged: (value) {
+        setProcessSelectedRows(currentRowData.materialId);
+      },
+      cells: [
+        DataCell(
+          Text(currentRowData.imageUrl, style: AppText.context),
+        ),
+        DataCell(
+          Text(currentRowData.materialName , style: AppText.context),
+        ),
+        DataCell(
+          Text(currentRowData.typeName, style: AppText.context),
+        ),
+        DataCell(
+          Text(currentRowData.colorName, style: AppText.context),
+        ),
+        DataCell(
+          Text(currentRowData.sizeName, style: AppText.context),
+        ),
+        DataCell(
+          Text(currentRowData.amount.toString(), style: AppText.context),
+        ),
+        DataCell(
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: AppCards.stockSituationCard(
+                color: currentRowData.amount > 200 ? (currentRowData.amount < 500 ? AppColors.lightWarning : AppColors.lightSuccess) : AppColors.lightError,
+                data: currentRowData.amount > 200 ? (currentRowData.amount < 500 ? 'Kritik' : 'Yeterli') : 'Yetersiz',
+            ),
+          )
+        ), ///Yeterli-Kritik-Yetersiz değerleri statik yapılcak
+        DataCell(
+         Row(
+           children: [
+             IconButton(onPressed: (){print('edited');}, icon: const Icon(FluentIcons.edit_16_regular, color: AppColors.lightPrimary), splashRadius: 20),
+             IconButton(onPressed: (){print('deleted');}, icon: const Icon(FluentIcons.delete_16_regular, color: AppColors.lightPrimary), splashRadius: 20),
+           ],
+         )
+        ), /// İşlem butonlarına popUpButtonları konucak
+      ],
+      color: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+            if (states.contains(MaterialState.selected)) {return AppColors.lightPrimary.withOpacity(0.5);}
+            if (index.isEven) {return AppColors.lightPrimary.withOpacity(0.08);}
+            return null;
+          }),
+    );
+  }
+
+  @override
+  int get selectedRowCount => 0;
+
+  @override
+  Future<RemoteDataSourceDetails<RowData>> getNextPage(NextPageRequest pageRequest) async {
+    return RemoteDataSourceDetails(
+      materialStock.length,
+      data
+          .skip(pageRequest.offset)
+          .take(pageRequest.pageSize)
+          .toList(), //again in a real world example you would only get the right amount of rows
     );
   }
 }

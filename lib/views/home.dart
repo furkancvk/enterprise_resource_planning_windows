@@ -33,24 +33,6 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-
-/*List<Widget> contents = const [
-  Dashboard(), // 0
-  MaterialStock(), // 1
-  ProductStock(), // 2
-  IncomingOrder(), // 3
-  PreparedOrder(), // 4
-  OutgoingOrder(), // 5
-  Staff(), // 6
-  ProductionDepartment(), // 7
-  StoreDepartment(), // 8
-  TransferDepartment(), // 9
-  HumanResourcesDepartment(), //10
-  Barcode(), //11
-  Reports(), //12
-  Bills(), //13
-];*/
-
 class _HomeState extends State<Home> {
   List<Widget> contents = const [
     Dashboard(), // 0

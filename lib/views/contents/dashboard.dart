@@ -33,7 +33,6 @@ class _DashboardState extends State<Dashboard> {
     AppProcess(processId: 1, user: User(userId: 2, username: 'abdulakdireyigül', firstName: 'abdulkadir', lastName: 'eyigül', email: 'abulkadir@gmail.com', password: 'test123', phoneNumber: '5054718110', departmentName: 'Depo', imageUrl: '', isAdmin: true, createdAt: '08/08/2022', updatedAt: '09/08/2022'), material: AppMaterial(materialId: 24, referenceNumber: 56, imageUrl: '', materialName: 'Gizli Ayak', typeName: '24 CM', unitName: 'Adet', amount: 500, colorName: 'Kahverengi', sizeName: 'Uzun', description: '', createdAt: '05/08/2022', updatedAt: '06/08/2022'), amount: 200, processTypeName: 'Giriş', createdAt: '16/08/2022', updatedAt: '17/08/2022'),
     AppProcess(processId: 2, user: User(userId: 3, username: 'furkancevik', firstName: 'Furkan', lastName: 'Çevik', email: 'furkan@gmail.com', password: 'test123', phoneNumber: '5063045562', departmentName: 'Transfer', imageUrl: '', isAdmin: false, createdAt: '02/08/2022', updatedAt: '04/08/2022'), material: AppMaterial(materialId: 25, referenceNumber: 99, imageUrl: '', materialName: 'Kumaş', typeName: '344', unitName: 'CM3', amount: 422, colorName: 'siyah', sizeName: '', description: '', createdAt: '05/08/2022', updatedAt: '05/08/2022'), amount: 250, processTypeName: 'Çıkış', createdAt: '05/08/2022', updatedAt: '05/08/2022'),
   ];
-
   var rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
 
   @override
@@ -368,7 +367,6 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 }
-
   int compareString(bool ascending, String value1, String value2) {return ascending ? value1.compareTo(value2) : value2.compareTo(value1);}
 
 ///Sorting işlemleri bitiş
