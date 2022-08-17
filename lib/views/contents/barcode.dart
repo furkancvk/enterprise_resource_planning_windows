@@ -286,8 +286,8 @@ class ExampleSource extends AdvancedDataTableSource<RowData> {
         DataCell(
           Text(currentRowData.sizeName, style: AppText.context),
         ),
-        DataCell(
-            IncDecInput(controller: TextEditingController()),
+         DataCell(
+            NumberTextField(controller: TextEditingController(),),
         ),
         DataCell(
             Row(
