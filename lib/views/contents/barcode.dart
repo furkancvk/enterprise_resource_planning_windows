@@ -7,6 +7,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../design/app_colors.dart';
 import '../../design/app_text.dart';
+import '../modals/preview_pdf.dart';
 import '../../packages/edited_advanced_PDT.dart';
 import '../../packages/edited_advanced_datatable_source.dart';
 import '../../states/states.dart';
@@ -26,8 +27,8 @@ class _BarcodeState extends State<Barcode> {
   List<AppMaterial> materialStock = [
     AppMaterial(materialId: 13, referenceNumber: 3315, imageUrl: '', materialName: 'Gizli Ayak', typeName: '12CM', unitName: 'Adet', amount: 200, colorName: 'Kahverengi', sizeName: '24', description: '', createdAt: '16/08/2022', updatedAt: ''),
     AppMaterial(materialId: 14, referenceNumber: 1, imageUrl: '', materialName: 'Vida', typeName: '14CM', unitName: 'Torba', amount: 400, colorName: '', sizeName: '', description: '', createdAt: '17/08/2022', updatedAt: ''),
-    AppMaterial(materialId: 15, referenceNumber: 2, imageUrl: '', materialName: 'Kumaş', typeName: '5', unitName: 'CM2', amount: 1000, colorName: 'Sarı', sizeName: '', description: '', createdAt: '16/08/2002', updatedAt: ''),
-    AppMaterial(materialId: 16, referenceNumber: 3, imageUrl: '', materialName: 'İskelet', typeName: 'a', unitName: 'Adet', amount: 20, colorName: '', sizeName: '', description: '', createdAt: '18/08/2022', updatedAt: ''),
+    AppMaterial(materialId: 15, referenceNumber: 2, imageUrl: '', materialName: 'Kumas', typeName: '5', unitName: 'CM2', amount: 1000, colorName: 'Sari', sizeName: '', description: '', createdAt: '16/08/2002', updatedAt: ''),
+    AppMaterial(materialId: 16, referenceNumber: 3, imageUrl: '', materialName: 'iskelet', typeName: 'a', unitName: 'Adet', amount: 20, colorName: 'asdsd', sizeName: '', description: '', createdAt: '18/08/2022', updatedAt: ''),
   ];
 
   var rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
@@ -225,17 +226,27 @@ class RowData {
 class ExampleSource extends AdvancedDataTableSource<RowData> {
   final data = List<RowData>.generate(30, (index) => RowData(index+1, 'Value for no. ${index+1}'));
   final List<AppMaterial> materialStock;
-
+  final TextEditingController _amountController = TextEditingController();
   ExampleSource(this.context, this.materialStock);
 
   final BuildContext context;
 
+  void showPreviewPdfModal(AppMaterial materialStock) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return PreviewPdf(material: materialStock);
+      },
+    );
+  }
   @override
   DataRow? getRow(int index) {
     Function setMaterialSelectedRows = Provider.of<States>(context).setMaterialSelectedRows;
     List<int> materialSelectedRows = Provider.of<States>(context).materialSelectedRows;
 
     final currentRowData = materialStock[index];
+
+    _amountController.text = currentRowData.amount.toString();
     return DataRow(
       selected: materialSelectedRows.contains(currentRowData.materialId) ? true : false,
       onSelectChanged: (value) {
@@ -267,15 +278,13 @@ class ExampleSource extends AdvancedDataTableSource<RowData> {
           Text(currentRowData.sizeName, style: AppText.context),
         ),
          DataCell(
-            NumberTextField(controller: TextEditingController(),),
+            NumberTextField(amount: currentRowData.amount),
         ),
         DataCell(
             Row(
               children: [
                 OutlinedButton(
-                    onPressed: (){
-                      print('printe basıldı');
-                    },
+                    onPressed: (){showPreviewPdfModal(currentRowData);},
                     child: Row(
                       children:
                       const[

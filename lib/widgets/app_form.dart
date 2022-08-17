@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -7,7 +5,6 @@ import 'package:flutter/widgets.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import 'package:flutter/material.dart';
 
 import '../design/app_colors.dart';
 import '../design/app_text.dart';
@@ -251,6 +248,7 @@ class _PasswordFieldWithVisibilityState extends State<PasswordFieldWithVisibilit
 }
 
 class NumberTextField extends StatefulWidget {
+  final int amount;
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final int min;
@@ -264,6 +262,7 @@ class NumberTextField extends StatefulWidget {
 
   const NumberTextField({
     Key? key,
+    required this.amount,
     this.controller,
     this.focusNode,
     this.min = 0,
@@ -290,6 +289,7 @@ class _NumberTextFieldState extends State<NumberTextField> {
   void initState() {
     super.initState();
     _controller = widget.controller ?? TextEditingController();
+    _controller.text = widget.amount.toString();
     _focusNode = widget.focusNode ?? FocusNode();
     _updateArrows(int.tryParse(_controller.text));
   }
