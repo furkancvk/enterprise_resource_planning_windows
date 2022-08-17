@@ -65,5 +65,4 @@ class States with ChangeNotifier {
     }
     notifyListeners();
   }
-
 }
