@@ -119,51 +119,7 @@ class _HomeState extends State<Home> {
                                 tooltip: "Profil Menüsü",
                                 padding: const EdgeInsets.all(8),
                                 itemBuilder: (context) => [
-                                  PopupMenuItem(
-                                    onTap: () {},
-                                    value: 1,
-                                    child: Row(
-                                      children: [
-                                        const Icon(
-                                          FluentIcons.person_28_regular,
-                                          color: AppColors.lightPrimary,
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Text("Profil",
-                                            style: AppText.contextSemiBold),
-                                      ],
-                                    ),
-                                  ),
-                                  PopupMenuItem(
-                                    onTap: () {},
-                                    value: 2,
-                                    child: Row(
-                                      children: [
-                                        const Icon(
-                                          FluentIcons.settings_24_regular,
-                                          color: AppColors.lightPrimary,
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Text("Ayarlar",
-                                            style: AppText.contextSemiBold),
-                                      ],
-                                    ),
-                                  ),
-                                  PopupMenuItem(
-                                    onTap: () {},
-                                    value: 3,
-                                    child: Row(
-                                      children: [
-                                        const Icon(
-                                          FluentIcons.chat_help_24_regular,
-                                          color: AppColors.lightPrimary,
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Text("Yardım",
-                                            style: AppText.contextSemiBold),
-                                      ],
-                                    ),
-                                  ),
+
                                   PopupMenuItem(
                                     onTap: () {},
                                     value: 4,
@@ -185,7 +141,7 @@ class _HomeState extends State<Home> {
                                   side: const BorderSide(color: AppColors.lightPrimary),
                                 ),
                                 splashRadius: 20,
-                                offset: const Offset(0, 44),
+                                offset: const Offset(9, 37),
                                 color: AppColors.lightSecondary,
                                 elevation: 0,
                                 child: Row(
