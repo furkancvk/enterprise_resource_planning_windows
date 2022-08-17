@@ -3,6 +3,8 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:qr_flutter/qr_flutter.dart';
+
 import '../../design/app_colors.dart';
 import '../../design/app_text.dart';
 import '../../packages/edited_advanced_PDT.dart';
@@ -269,11 +271,17 @@ class ExampleSource extends AdvancedDataTableSource<RowData> {
       },
       cells: [
         DataCell(
-          Text(currentRowData.referenceNumber.toString(), style: AppText.context),
+          SizedBox(
+            width: 36,
+            height: 36,
+            child: QrImage(
+              data: currentRowData.referenceNumber.toString(),
+            ),
+          ),
         ),
         DataCell(
           Text(currentRowData.imageUrl, style: AppText.context),
-        ),
+        ),///Görsel eklenmesi için değişcek
         DataCell(
           Text(currentRowData.materialName , style: AppText.context),
         ),
