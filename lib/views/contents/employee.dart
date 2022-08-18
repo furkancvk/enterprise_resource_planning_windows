@@ -1,6 +1,8 @@
 import 'package:erp_windows/services/employee_service.dart';
+import 'package:erp_windows/widgets/app_cards.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:erp_windows/models/employee.dart';
@@ -28,6 +30,15 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
   var rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
 
   List<Employee> employees = [];
+  final TextEditingController _firstNameController =TextEditingController();
+  final TextEditingController _lastNameController =TextEditingController();
+  final TextEditingController _eMailController =TextEditingController();
+  final TextEditingController _phoneNumberController =TextEditingController();
+  final TextEditingController _departmenController =TextEditingController();
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +50,89 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
           Container(
             margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
             child: ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          title: Text(
+                            "Personel Ekle",
+                            style: AppText.headerSemiBold,
+                          ),
+                          content: SizedBox(
+                            height: 380,
+                            width: 360,
+                            child: ListView(
+                              children: [
+                                Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: Column(
+                                            children: [
+                                              AppForm.appTextFormFieldRegex(
+                                                formatter:  FilteringTextInputFormatter.deny(RegExp(r'([1-9][0-9]*)')),
+                                                  label: "İsim",
+                                                  hint: "ör. Ali",
+                                                  controller:
+                                                  _firstNameController),
+                                              const SizedBox(height: 24),
+                                              AppForm.appTextFormFieldRegex(
+                                                  formatter:  FilteringTextInputFormatter.deny(RegExp(r'([1-9][0-9]*)')),
+                                                  label: "Soyisim",
+                                                  hint: "ör. Demir",
+                                                  controller:
+                                                      _lastNameController),
+                                              const SizedBox(height: 24),
+                                              AppForm.appTextFormField(
+                                                  label: "Email",
+                                                  hint: "ör. ",
+                                                  controller:
+                                                  _eMailController
+                                              ),
+                                              const SizedBox(height: 24),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 24,
+                                        ),
+                                        Expanded(
+                                            flex: 1,
+                                            child: Column(
+                                              children: [
+                                                const SizedBox(height: 12),
+                                                const ImagePickerWidget(),
+                                                const SizedBox(height: 26),
+                                                AppForm.appTextFormFieldRegex(
+                                                  formatter: FilteringTextInputFormatter.allow(RegExp(r'([1-9][0-9]*)')),
+                                                    label: "Telefon",
+                                                    hint: "ör.5123456789",
+                                                    controller:
+                                                        _phoneNumberController),
+                                                const SizedBox(height: 26),
+                                              ],
+                                            )),
+                                      ],
+                                    ),
+                                    AppForm.appTextFormField(
+                                        label: "Birim",
+                                        hint: "ör. İnsan Kaynakları",
+                                        controller: _departmenController),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                      actions: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16,right: 16),
+                          child: ElevatedButton.icon(onPressed: (){}, label: Text("Kaydet"),icon: Icon(FluentIcons.save_24_regular),),
+                        )
+                      ],
+                        ));
+              },
               icon: const Icon(FluentIcons.add_24_regular),
               label: const Text("Personel Ekle"),
             ),
@@ -85,7 +178,8 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                                         color: AppColors.lightPrimary,
                                       ),
                                       const SizedBox(width: 10),
-                                      Text("Düzenle", style: AppText.contextSemiBold),
+                                      Text("Düzenle",
+                                          style: AppText.contextSemiBold),
                                     ],
                                   ),
                                 ),
@@ -99,14 +193,16 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                                         color: AppColors.lightPrimary,
                                       ),
                                       const SizedBox(width: 10),
-                                      Text("Sil", style: AppText.contextSemiBold),
+                                      Text("Sil",
+                                          style: AppText.contextSemiBold),
                                     ],
                                   ),
                                 ),
                               ],
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4),
-                                side: const BorderSide(color: AppColors.lightPrimary),
+                                side: const BorderSide(
+                                    color: AppColors.lightPrimary),
                               ),
                               splashRadius: 20,
                               offset: const Offset(18, 34),
@@ -114,11 +210,14 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                               elevation: 0,
                               child: Row(
                                 children: [
-                                  const Icon(FluentIcons.options_24_regular,color: AppColors.lightPrimary),
+                                  const Icon(FluentIcons.options_24_regular,
+                                      color: AppColors.lightPrimary),
                                   const SizedBox(width: 16),
-                                  Text("Toplu İşlemler", style: AppText.contextSemiBoldBlue),
+                                  Text("Toplu İşlemler",
+                                      style: AppText.contextSemiBoldBlue),
                                   const SizedBox(width: 16),
-                                  const Icon(FluentIcons.chevron_down_24_filled, size: 20, color: AppColors.lightPrimary),
+                                  const Icon(FluentIcons.chevron_down_24_filled,
+                                      size: 20, color: AppColors.lightPrimary),
                                 ],
                               ),
                             ),
@@ -127,7 +226,8 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                           const SizedBox(width: 16),
                           OutlinedButton.icon(
                             onPressed: () {},
-                            icon: const Icon(FluentIcons.database_search_24_regular),
+                            icon: const Icon(
+                                FluentIcons.database_search_24_regular),
                             label: const Text("Dışa Aktar"),
                           ),
                         ],
@@ -137,7 +237,8 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                           SizedBox(
                             width: 300,
                             height: 40,
-                            child: AppForm.appAutoCompleteTextFormFieldForSearch(
+                            child:
+                                AppForm.appAutoCompleteTextFormFieldForSearch(
                               hint: "Ara...",
                               controller: TextEditingController(),
                               key: GlobalKey(),
@@ -147,12 +248,13 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                           OutlinedButton.icon(
                             onPressed: () {},
                             icon: const Icon(FluentIcons.filter_24_regular),
-                            label: const Text("Filtrele",style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 0.4,
-                              color: AppColors.lightPrimary,
-                            )),
+                            label: const Text("Filtrele",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.4,
+                                  color: AppColors.lightPrimary,
+                                )),
                           ),
                         ],
                       ),
@@ -162,24 +264,35 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                 const SizedBox(height: 16),
                 FutureBuilder(
                   future: getAllEmployee(),
-                  builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                    if(snapshot.data == null) {
+                  builder:
+                      (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                    if (snapshot.data == null) {
                       return AppAlerts.error("Herhangi bir kayıt bulunamadı.");
                     } else {
-                      employees = List.generate(snapshot.data!["data"].length, (index) => Employee.fromJson(snapshot.data!["data"][index]));
+                      employees = List.generate(
+                          snapshot.data!["data"].length,
+                          (index) =>
+                              Employee.fromJson(snapshot.data!["data"][index]));
                       void onSort(int columnIndex, bool ascending) {
-                        if(columnIndex == 1){
-                          employees.sort((employee1, employee2) => compareString(ascending, employee1.firstName, employee2.firstName));
-                        }else if(columnIndex == 2){
-                          employees.sort((employee1, employee2) => compareString(ascending, employee1.lastName, employee2.lastName));
-                        }else if(columnIndex == 3){
-                          employees.sort((employee1, employee2) => compareString(ascending, employee1.departmentName, employee2.departmentName));
+                        if (columnIndex == 1) {
+                          employees.sort((employee1, employee2) =>
+                              compareString(ascending, employee1.firstName,
+                                  employee2.firstName));
+                        } else if (columnIndex == 2) {
+                          employees.sort((employee1, employee2) =>
+                              compareString(ascending, employee1.lastName,
+                                  employee2.lastName));
+                        } else if (columnIndex == 3) {
+                          employees.sort((employee1, employee2) =>
+                              compareString(ascending, employee1.departmentName,
+                                  employee2.departmentName));
                         }
                         setState(() {
                           sortColumnIndex = columnIndex;
                           isAscending = ascending;
                         });
                       }
+
                       final source = EmployeeSource(context, employees);
                       return AdvancedPaginatedDataTable(
                         sortAscending: isAscending,
@@ -198,13 +311,30 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                           }
                         },
                         columns: [
-                          DataColumn(label: Text('Görsel', style: AppText.contextSemiBoldBlue)),
-                          DataColumn(label: Text('İsim', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                          DataColumn(label: Text('Soyisim', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                          DataColumn(label: Text('Birim', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                          DataColumn(label: Text('Email', style: AppText.contextSemiBoldBlue)),
-                          DataColumn(label: Text('Telefon', style: AppText.contextSemiBoldBlue)),
-                          DataColumn(label: Text('İşlemler', style: AppText.contextSemiBoldBlue)),
+                          DataColumn(
+                              label: Text('Görsel',
+                                  style: AppText.contextSemiBoldBlue)),
+                          DataColumn(
+                              label: Text('İsim',
+                                  style: AppText.contextSemiBoldBlue),
+                              onSort: onSort),
+                          DataColumn(
+                              label: Text('Soyisim',
+                                  style: AppText.contextSemiBoldBlue),
+                              onSort: onSort),
+                          DataColumn(
+                              label: Text('Birim',
+                                  style: AppText.contextSemiBoldBlue),
+                              onSort: onSort),
+                          DataColumn(
+                              label: Text('Email',
+                                  style: AppText.contextSemiBoldBlue)),
+                          DataColumn(
+                              label: Text('Telefon',
+                                  style: AppText.contextSemiBoldBlue)),
+                          DataColumn(
+                              label: Text('İşlemler',
+                                  style: AppText.contextSemiBoldBlue)),
                         ],
                       );
                     }
@@ -225,7 +355,6 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
   int compareString(bool ascending, String value1, String value2) {
     return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
   }
-
 }
 
 class EmployeeSource extends AdvancedDataTableSource<Employee> {
@@ -236,16 +365,22 @@ class EmployeeSource extends AdvancedDataTableSource<Employee> {
 
   @override
   DataRow? getRow(int index) {
-    Function setEmployeeSelectedRows = Provider.of<States>(context).setEmployeeSelectedRows;
-    List<int> employeeSelectedRows = Provider.of<States>(context).employeeSelectedRows;
+    Function setEmployeeSelectedRows =
+        Provider.of<States>(context).setEmployeeSelectedRows;
+    List<int> employeeSelectedRows =
+        Provider.of<States>(context).employeeSelectedRows;
 
     final employee = employees[index];
 
-    String imageUrl = "${"${BaseService.baseUrl}/images/materials/${employee.employeeId}"}/${employee.imageUrl}";
+    String imageUrl =
+        "${"${BaseService.baseUrl}/images/materials/${employee.employeeId}"}/${employee.imageUrl}";
 
     return DataRow(
-      selected: employeeSelectedRows.contains(employee.employeeId) ? true : false,
-      onSelectChanged: (value) {setEmployeeSelectedRows(employee.employeeId);},
+      selected:
+          employeeSelectedRows.contains(employee.employeeId) ? true : false,
+      onSelectChanged: (value) {
+        setEmployeeSelectedRows(employee.employeeId);
+      },
       cells: [
         DataCell(
           Container(
@@ -253,13 +388,15 @@ class EmployeeSource extends AdvancedDataTableSource<Employee> {
             height: 36,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
-              image: employee.imageUrl.isEmpty ? const DecorationImage(
-                image: AssetImage("assets/images/placeholder-image.jpg"),
-                fit: BoxFit.cover,
-              ) : DecorationImage(
-                image: NetworkImage(imageUrl),
-                fit: BoxFit.cover,
-              ),
+              image: employee.imageUrl.isEmpty
+                  ? const DecorationImage(
+                      image: AssetImage("assets/images/placeholder-image.jpg"),
+                      fit: BoxFit.cover,
+                    )
+                  : DecorationImage(
+                      image: NetworkImage(imageUrl),
+                      fit: BoxFit.cover,
+                    ),
             ),
           ),
         ),
@@ -287,21 +424,37 @@ class EmployeeSource extends AdvancedDataTableSource<Employee> {
         DataCell(
           Text(employee.phoneNumber, style: AppText.context),
         ),
-        DataCell(
-            Row(
-              children: [
-                IconButton(onPressed: (){print('edited');}, icon: const Icon(FluentIcons.edit_16_regular, color: AppColors.lightPrimary), splashRadius: 20),
-                IconButton(onPressed: (){print('deleted');}, icon: const Icon(FluentIcons.delete_16_regular, color: AppColors.lightPrimary), splashRadius: 20),
-              ],
-            )
-        ), /// İşlem butonlarına popUpButtonları konucak
+        DataCell(Row(
+          children: [
+            IconButton(
+                onPressed: () {
+                  print('edited');
+                },
+                icon: const Icon(FluentIcons.edit_16_regular,
+                    color: AppColors.lightPrimary),
+                splashRadius: 20),
+            IconButton(
+                onPressed: () {
+                  print('deleted');
+                },
+                icon: const Icon(FluentIcons.delete_16_regular,
+                    color: AppColors.lightPrimary),
+                splashRadius: 20),
+          ],
+        )),
+
+        /// İşlem butonlarına popUpButtonları konucak
       ],
       color: MaterialStateProperty.resolveWith<Color?>(
-              (Set<MaterialState> states) {
-            if (states.contains(MaterialState.selected)) {return AppColors.lightPrimary.withOpacity(0.5);}
-            if (index.isEven) {return AppColors.lightPrimary.withOpacity(0.08);}
-            return null;
-          }),
+          (Set<MaterialState> states) {
+        if (states.contains(MaterialState.selected)) {
+          return AppColors.lightPrimary.withOpacity(0.5);
+        }
+        if (index.isEven) {
+          return AppColors.lightPrimary.withOpacity(0.08);
+        }
+        return null;
+      }),
     );
   }
 
@@ -309,7 +462,8 @@ class EmployeeSource extends AdvancedDataTableSource<Employee> {
   int get selectedRowCount => 0;
 
   @override
-  Future<RemoteDataSourceDetails<Employee>> getNextPage(NextPageRequest pageRequest) async {
+  Future<RemoteDataSourceDetails<Employee>> getNextPage(
+      NextPageRequest pageRequest) async {
     return RemoteDataSourceDetails(
       employees.length,
       employees
