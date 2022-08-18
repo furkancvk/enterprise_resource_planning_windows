@@ -171,7 +171,9 @@ class _StockMaterialState extends State<StockMaterial> {
                 FutureBuilder(
                   future: getAllMaterial(),
                   builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                    if(snapshot.data == null) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if(snapshot.data == null) {
                       return AppAlerts.error("Herhangi bir kayıt bulunamadı.");
                     } else {
                       materials = List.generate(snapshot.data!["data"].length, (index) => AppMaterial.fromJson(snapshot.data!["data"][index]));

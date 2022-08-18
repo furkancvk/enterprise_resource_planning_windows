@@ -145,69 +145,67 @@ class _HomeState extends State<Home> {
                         SizedBox(
                           width: 300,
                           height: 44,
-                          child: Stack(
-                            children: [
-                              Autocomplete<Map<String, dynamic>>(
-                                optionsBuilder: (TextEditingValue textEditingValue) {
-                                  return contentSuggestions
-                                      .where((Map<String, dynamic> item) => item["contentName"].toLowerCase()
-                                      .startsWith(textEditingValue.text.toLowerCase())
-                                  ).toList();
-                                },
-                                displayStringForOption: (Map<String, dynamic> item) => item["contentName"],
-                                fieldViewBuilder: (
-                                    BuildContext context,
-                                    TextEditingController fieldTextEditingController,
-                                    FocusNode fieldFocusNode,
-                                    VoidCallback onFieldSubmitted
-                                    ) {
-                                  return TextField(
-                                    controller: fieldTextEditingController,
-                                    focusNode: fieldFocusNode,
-                                    style: const TextStyle(fontWeight: FontWeight.bold),
-                                  );
-                                },
-                                onSelected: (Map<String, dynamic> item) {
-                                  print('Selected: ${item["contentName"]}');
-                                  setIndexContent(item["index"]);
-                                },
-                                optionsViewBuilder: (
-                                    BuildContext context,
-                                    AutocompleteOnSelected<Map<String, dynamic>> onSelected,
-                                    Iterable<Map<String, dynamic>> options
-                                    ) {
-                                  return Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Material(
-                                      child: Container(
-                                        width: 300,
-                                        height: 300,
-                                        color: AppColors.lightSecondary,
-                                        child: ListView.builder(
-                                          padding: const EdgeInsets.all(8),
-                                          itemCount: options.length,
-                                          itemBuilder: (BuildContext context, int index) {
-                                            final Map<String, dynamic> option = options.elementAt(index);
-                                            return ListTile(
-                                              onTap: () {onSelected(option);},
-                                              title: Text(
-                                                option["contentName"],
-                                                style: AppText.contextSemiBold,
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
+                          child: Autocomplete<Map<String, dynamic>>(
+                            optionsBuilder: (TextEditingValue textEditingValue) {
+                              return contentSuggestions
+                                  .where((Map<String, dynamic> item) => item["contentName"].toLowerCase()
+                                  .startsWith(textEditingValue.text.toLowerCase())
+                              ).toList();
+                            },
+                            displayStringForOption: (Map<String, dynamic> item) => item["contentName"],
+                            fieldViewBuilder: (
+                                BuildContext context,
+                                TextEditingController fieldTextEditingController,
+                                FocusNode fieldFocusNode,
+                                VoidCallback onFieldSubmitted
+                                ) {
+                              return TextFormField(
+                                controller: fieldTextEditingController,
+                                focusNode: fieldFocusNode,
+                                decoration: const InputDecoration(
+                                  suffixIcon: Icon(
+                                    FluentIcons.search_24_filled,
+                                    color: AppColors.lightPrimary,
+                                  ),
+                                  hintText: "Ara...",
+                                ),
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              );
+                            },
+                            onSelected: (Map<String, dynamic> item) {
+                              print('Selected: ${item["contentName"]}');
+                              setIndexContent(item["index"]);
+                            },
+                            optionsViewBuilder: (
+                                BuildContext context,
+                                AutocompleteOnSelected<Map<String, dynamic>> onSelected,
+                                Iterable<Map<String, dynamic>> options
+                                ) {
+                              return Align(
+                                alignment: Alignment.topLeft,
+                                child: Material(
+                                  child: Container(
+                                    width: 300,
+                                    height: 300,
+                                    color: AppColors.lightSecondary,
+                                    child: ListView.builder(
+                                      padding: const EdgeInsets.all(8),
+                                      itemCount: options.length,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        final Map<String, dynamic> option = options.elementAt(index);
+                                        return ListTile(
+                                          onTap: () {onSelected(option);},
+                                          title: Text(
+                                            option["contentName"],
+                                            style: AppText.contextSemiBold,
+                                          ),
+                                        );
+                                      },
                                     ),
-                                  );
-                                },
-                              ),
-                              const Positioned(
-                                top: 8,
-                                right: 12,
-                                child: Icon(FluentIcons.search_24_filled, color: AppColors.lightPrimary),
-                              ),
-                            ],
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                         Row(

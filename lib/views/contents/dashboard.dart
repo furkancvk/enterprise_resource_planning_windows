@@ -400,9 +400,10 @@ class _DashboardState extends State<Dashboard> {
                 const SizedBox(height: 16),
                 FutureBuilder(
                   future: getAllProcess(),
-                  builder:
-                      (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                    if (snapshot.data == null) {
+                  builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.data == null) {
                       return AppAlerts.error("Herhangi bir kayıt bulunamadı.");
                     } else {
                       processes = List.generate(
