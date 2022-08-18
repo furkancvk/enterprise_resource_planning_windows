@@ -237,10 +237,7 @@ class AppForm {
         hintText: hint,
       ),
       suggestions: suggestions,
-      textSubmitted: (String value) {
-        print(value);
-      },
-      clearOnSubmit: false,
+      textSubmitted: (String value) {},
     );
   }
 

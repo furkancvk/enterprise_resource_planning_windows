@@ -1,3 +1,4 @@
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:erp_windows/views/contents/departments/department_human_resources.dart';
 import 'package:erp_windows/views/contents/departments/department_inventory.dart';
@@ -55,7 +56,8 @@ class _HomeState extends State<Home> {
     DocumentReports(), //12
     DocumentBills(), //13
   ];
-  List<String> contentSuggestions = const [
+
+  /*List<String> contentSuggestions = [
     "Panel", // 0
     "Stok > Hammadde", // 1
     "Stok > Bitmiş Ürün", // 2
@@ -70,12 +72,46 @@ class _HomeState extends State<Home> {
     "Etiket", //11
     // DocumentReports(), //12
     // DocumentBills(), //13
+  ];*/
+
+  List<Map<String, dynamic>> contentSuggestions = [
+    {
+      "contentName": "Panel",
+      "index": 0,
+    },
+    {
+      "contentName": "Stok > Hammadde",
+      "index": 1,
+    },
+    {
+      "contentName": "Stok > Bitmiş Ürün",
+      "index": 2,
+    },
+    // OrderIncoming(), // 3
+    // OrderPreparing(), // 4
+    // OrderOutgoing(), // 5
+    {
+      "contentName": "Personel",
+      "index": 6,
+    },
+    // DepartmentManufacturing(), // 7
+    // DepartmentInventory(), // 8
+    // DepartmentTransfer(), // 9
+    // DepartmentHumanResources(), //10
+    {
+      "contentName": "Etiket",
+      "index": 11,
+    },
+    // DocumentReports(), //12
+    // DocumentBills(), //13
   ];
+
   bool _isSelected = false;
 
   @override
   Widget build(BuildContext context) {
     // int indexSidebar = Provider.of<States>(context).indexSidebar;
+    Function setIndexContent = Provider.of<States>(context).setIndexContent;
     int indexContent = Provider.of<States>(context).indexContent;
 
     return Scaffold(
@@ -109,11 +145,69 @@ class _HomeState extends State<Home> {
                         SizedBox(
                           width: 300,
                           height: 44,
-                          child: AppForm.appAutoCompleteTextFormFieldForSearch(
-                            hint: 'Ara...',
-                            controller: _searchController,
-                            key: GlobalKey(),
-                            suggestions: contentSuggestions,
+                          child: Stack(
+                            children: [
+                              Autocomplete<Map<String, dynamic>>(
+                                optionsBuilder: (TextEditingValue textEditingValue) {
+                                  return contentSuggestions
+                                      .where((Map<String, dynamic> item) => item["contentName"].toLowerCase()
+                                      .startsWith(textEditingValue.text.toLowerCase())
+                                  ).toList();
+                                },
+                                displayStringForOption: (Map<String, dynamic> item) => item["contentName"],
+                                fieldViewBuilder: (
+                                    BuildContext context,
+                                    TextEditingController fieldTextEditingController,
+                                    FocusNode fieldFocusNode,
+                                    VoidCallback onFieldSubmitted
+                                    ) {
+                                  return TextField(
+                                    controller: fieldTextEditingController,
+                                    focusNode: fieldFocusNode,
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                  );
+                                },
+                                onSelected: (Map<String, dynamic> item) {
+                                  print('Selected: ${item["contentName"]}');
+                                  setIndexContent(item["index"]);
+                                },
+                                optionsViewBuilder: (
+                                    BuildContext context,
+                                    AutocompleteOnSelected<Map<String, dynamic>> onSelected,
+                                    Iterable<Map<String, dynamic>> options
+                                    ) {
+                                  return Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Material(
+                                      child: Container(
+                                        width: 300,
+                                        height: 300,
+                                        color: AppColors.lightSecondary,
+                                        child: ListView.builder(
+                                          padding: const EdgeInsets.all(8),
+                                          itemCount: options.length,
+                                          itemBuilder: (BuildContext context, int index) {
+                                            final Map<String, dynamic> option = options.elementAt(index);
+                                            return ListTile(
+                                              onTap: () {onSelected(option);},
+                                              title: Text(
+                                                option["contentName"],
+                                                style: AppText.contextSemiBold,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              const Positioned(
+                                top: 8,
+                                right: 12,
+                                child: Icon(FluentIcons.search_24_filled, color: AppColors.lightPrimary),
+                              ),
+                            ],
                           ),
                         ),
                         Row(
