@@ -6,6 +6,9 @@ class States with ChangeNotifier {
   int indexContent = 0;
   Map<String, dynamic> currentUser = {};
 
+  List tasks =[];
+  String input ="";
+
   int employeeIndexRow = 0;
 
   List<int> processSelectedRows = [];
@@ -13,6 +16,16 @@ class States with ChangeNotifier {
   List<int> materialSelectedRows = [];
 
   List<int> employeeSelectedRows = [];
+
+  void setTasks(List tasks){
+    this.tasks=tasks;
+    notifyListeners();
+  }
+
+  void setInput(String input){
+    this.input=input;
+    notifyListeners();
+  }
 
   void setIndexTabBar(int index) {
     indexTabBar = index;

@@ -1,6 +1,7 @@
 import 'package:erp_windows/models/app_material.dart';
 import 'package:erp_windows/services/process_service.dart';
 import 'package:erp_windows/utils/helpers.dart';
+import 'package:erp_windows/views/modals/notes.dart';
 
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +31,8 @@ class _DashboardState extends State<Dashboard> {
   int? sortColumnIndex;
   bool isAscending = false;
   var rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
-
+  List tasks=[];
+  String input="";
   List<AppProcess> processes = [];
 
   DateTime selectedDay = DateTime.now();
@@ -199,7 +201,89 @@ class _DashboardState extends State<Dashboard> {
                   height: 500,
                   child: Column(
                     children: [
-                      Row(
+                      Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: AppColors.lightSecondary,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                " NOTLARIM ",
+                                style: AppText.headerSemiBold,
+                                textAlign: TextAlign.center,
+                              ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              Function setTasks =Provider.of<States>(context).setTasks;
+                                              Function setInput =Provider.of<States>(context).setInput;
+                                              return AlertDialog(
+                                                title: Text(
+                                                  "Yapılacak Not Ekle",
+                                                  style: AppText.contextSemiBold,
+                                                ),
+                                                content: TextField(
+                                                  onChanged: (String value) {
+                                                    input = value;
+                                                    setInput(input);
+                                                  },
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          tasks.add(input);
+                                                          setTasks(tasks);
+                                                        });
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                      child: Text("Ekle"))
+                                                ],
+                                              );
+                                            });
+                                      },
+                                      icon: Icon(
+                                        FluentIcons.add_circle_24_regular,
+                                        color: AppColors.lightPrimary,
+                                      )),
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return NotePad();
+                                          });
+                                    },
+                                    label: Text("Notları Aç"),
+                                    icon: Icon(
+                                      FluentIcons.note_24_regular,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: AppColors.lightSecondary,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+
+                      /*Row(
                         children: [
                           TextButton(
                             onPressed: () {
@@ -270,7 +354,7 @@ class _DashboardState extends State<Dashboard> {
                             : (indexTabBar == 1
                                 ? const InProgress()
                                 : const Completed()),
-                      ),
+                      ),*/
                     ],
                   ),
                 ),
