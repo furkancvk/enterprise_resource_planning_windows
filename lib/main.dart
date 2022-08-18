@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'design/app_theme_data.dart';
 import 'routes/routes.dart';
+import 'storage/storage.dart';
 
 void main() {
   runApp(
@@ -33,16 +34,27 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final SecureStorage secureStorage = SecureStorage();
+
+  Future<String> getToken() async {
+    return await secureStorage.readSecureData('token');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Solvio Kurumsal Kaynak Planlama Programlama",
-      debugShowCheckedModeBanner: false,
-      theme: AppThemeData.lightTheme(context),
-      // darkTheme: AppThemeData.darkTheme(context),
-      // home: const Login(),
-      initialRoute: "login_view",
-      routes: routes,
+    return FutureBuilder(
+      future: getToken(),
+      builder: (context, snapshot) {
+        return MaterialApp(
+          title: "Solvio Kurumsal Kaynak Planlama Programlama",
+          debugShowCheckedModeBanner: false,
+          theme: AppThemeData.lightTheme(context),
+          // darkTheme: AppThemeData.darkTheme(context),
+          // home: const Login(),
+          initialRoute: snapshot.data == null ? "home_view" : "login_view",
+          routes: routes,
+        );
+      },
     );
   }
 }

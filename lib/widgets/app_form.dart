@@ -37,6 +37,17 @@ class AppForm {
         ),
         const SizedBox(height: 4),
         TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "${label.toLowerCase()} alanı boş bırakılamaz.";
+            } else if (isEmail) {
+              return FormValidation.validateEmail(value);
+            } else if (isPassword) {
+              return FormValidation.validatePassword(value);
+            } else {
+              return null;
+            }
+          },
           expands: isExpands,
           maxLines: maxLines,
           enabled: isEnabled,
@@ -77,6 +88,17 @@ class AppForm {
         ),
         const SizedBox(height: 4),
         TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "${label.toLowerCase()} alanı boş bırakılamaz.";
+            } else if (isEmail) {
+              return FormValidation.validateEmail(value);
+            } else if (isPassword) {
+              return FormValidation.validatePassword(value);
+            } else {
+              return null;
+            }
+          },
           enabled: isEnabled,
           controller: controller,
           keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
@@ -144,7 +166,7 @@ class AppForm {
         hintText: hint,
       ),
       suggestions: suggestions,
-      textSubmitted: (String value) {},
+      textSubmitted: (String value) {print(value);},
       clearOnSubmit: false,
     );
   }

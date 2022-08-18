@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:erp_windows/widgets/app_form.dart';
 import 'package:flutter/material.dart';
 
 import '../design/app_colors.dart';
 import '../design/app_text.dart';
+import '../services/user_service.dart';
+import '../widgets/app_alerts.dart';
 
 const borderColor = AppColors.lightSecondary;
 
@@ -293,7 +297,7 @@ class _LoginState extends State<Login> {
                             Align(
                               alignment: Alignment.centerRight,
                               child: ElevatedButton(
-                                onPressed: () {Navigator.pushReplacementNamed(context, "home_view");},
+                                onPressed: logIn,
                                 child: const Text("Giriş Yap"),
                               ),
                             ),
@@ -310,6 +314,68 @@ class _LoginState extends State<Login> {
       ),
     );
   }
+
+  void logIn() async {
+    try {
+      if (_formKey.currentState!.validate()) {
+        await UserService.logIn(
+          _usernameController.text,
+          _passwordController.text,
+        ).then((value) => {
+          if (value["success"]){
+            Navigator.pushReplacementNamed(context, 'home_view'),
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                padding: const EdgeInsets.all(0),
+                content: AppAlerts.success(value["message"]),
+                duration: const Duration(milliseconds: 1500),
+                backgroundColor: AppColors.lightSecondary,
+              ),
+            ),
+            // AppAlerts.toast(message: value["message"]),
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                padding: const EdgeInsets.all(0),
+                content: AppAlerts.error(value["message"]),
+                duration: const Duration(milliseconds: 1500),
+                backgroundColor: AppColors.lightSecondary,
+              ),
+            ),
+            // AppAlerts.toast(message: value["message"]),
+          },
+        },
+        );
+      }
+    } on SocketException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          padding: EdgeInsets.all(20),
+          content: Text("İnternet bağlantınızı kontrol ediniz."),
+          duration: Duration(milliseconds: 1500),
+          backgroundColor: AppColors.lightSecondary,
+        ),
+      );
+      // AppAlerts.toast(message: "İnternet bağlantınızı kontrol ediniz.");
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          padding: const EdgeInsets.all(20),
+          content: Text(e.toString()),
+          duration: const Duration(milliseconds: 1500),
+          backgroundColor: AppColors.lightSecondary,
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
 }
 
 /// KAPATMA ALTA ALMA VE TAM EKRAN YAPMA BUTONLARI BUNDAN SONRASI

@@ -1,3 +1,4 @@
+import 'package:erp_windows/services/employee_service.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +9,10 @@ import '../../design/app_colors.dart';
 import '../../design/app_text.dart';
 import '../../packages/edited_advanced_PDT.dart';
 import '../../packages/edited_advanced_datatable_source.dart';
+import '../../services/base_service.dart';
 import '../../states/states.dart';
+import '../../utils/helpers.dart';
+import '../../widgets/app_alerts.dart';
 import '../../widgets/app_form.dart';
 
 class EmployeeManagement extends StatefulWidget {
@@ -19,21 +23,14 @@ class EmployeeManagement extends StatefulWidget {
 }
 
 class _EmployeeManagementState extends State<EmployeeManagement> {
-  List<bool> selected = List<bool>.generate(10, (int index) => false);
   int? sortColumnIndex;
   bool isAscending = false;
-  List<Employee> employee = [
-    Employee(employeeId: 24, firstName: 'Abdulkadir', lastName: 'Eyigül', email: 'abdulkadir@gmail.com', phoneNumber: '5054718110', departmentName: 'Transfer', imageUrl: '', isAdmin: true, createdAt: '08/08/2022', updatedAt: ''),
-    Employee(employeeId: 27, firstName: 'Furkan', lastName: 'Çevik', email: 'furkan@gmail.com', phoneNumber: '5054718140', departmentName: 'Depo', imageUrl: '', isAdmin: false, createdAt: '07/08/2022', updatedAt: ''),
-    Employee(employeeId: 5, firstName: 'Ömer Faruk', lastName: 'Demirsoy', email: 'omer@gmail.com', phoneNumber: '5054718150', departmentName: 'Üretim', imageUrl: '', isAdmin: true, createdAt: '07/09/2022', updatedAt: ''),
-    ];
-
   var rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
+
+  List<Employee> employees = [];
 
   @override
   Widget build(BuildContext context) {
-    final source = ExampleSource(context, employee);
-
     return Scaffold(
       appBar: AppBar(
         leading: const Icon(FluentIcons.people_team_24_regular),
@@ -88,8 +85,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                                         color: AppColors.lightPrimary,
                                       ),
                                       const SizedBox(width: 10),
-                                      Text("Düzenle",
-                                          style: AppText.contextSemiBold),
+                                      Text("Düzenle", style: AppText.contextSemiBold),
                                     ],
                                   ),
                                 ),
@@ -103,13 +99,10 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                                         color: AppColors.lightPrimary,
                                       ),
                                       const SizedBox(width: 10),
-                                      Text("Sil",
-                                          style: AppText.contextSemiBold),
+                                      Text("Sil", style: AppText.contextSemiBold),
                                     ],
                                   ),
                                 ),
-
-
                               ],
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4),
@@ -121,15 +114,16 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                               elevation: 0,
                               child: Row(
                                 children: [
-                                  const Icon(FluentIcons.options_16_filled,color: AppColors.lightPrimary),
+                                  const Icon(FluentIcons.options_24_regular,color: AppColors.lightPrimary),
                                   const SizedBox(width: 16),
                                   Text("Toplu İşlemler", style: AppText.contextSemiBoldBlue),
                                   const SizedBox(width: 16),
-                                  const Icon(FluentIcons.chevron_down_12_regular, size: 20),
+                                  const Icon(FluentIcons.chevron_down_24_filled, size: 20, color: AppColors.lightPrimary),
                                 ],
                               ),
                             ),
                           ),
+                          // DropdownButtonFormField()
                           const SizedBox(width: 16),
                           OutlinedButton.icon(
                             onPressed: () {},
@@ -165,31 +159,56 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                     ],
                   ),
                 ),
-                AdvancedPaginatedDataTable(
-                  sortAscending: isAscending,
-                  sortColumnIndex: sortColumnIndex,
-                  /*customTableFooter: ,*/
-                  addEmptyRows: false,
-                  source: source,
-                  showFirstLastButtons: true,
-                  rowsPerPage: rowsPerPage,
-                  availableRowsPerPage: const [10, 16, 20, 56],
-                  onRowsPerPageChanged: (newRowsPerPage) {
-                    if (newRowsPerPage != null) {
-                      setState(() {
-                        rowsPerPage = newRowsPerPage;
-                      });
+                const SizedBox(height: 16),
+                FutureBuilder(
+                  future: getAllEmployee(),
+                  builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                    if(snapshot.data == null) {
+                      return AppAlerts.error("Herhangi bir kayıt bulunamadı.");
+                    } else {
+                      employees = List.generate(snapshot.data!["data"].length, (index) => Employee.fromJson(snapshot.data!["data"][index]));
+                      void onSort(int columnIndex, bool ascending) {
+                        if(columnIndex == 1){
+                          employees.sort((employee1, employee2) => compareString(ascending, employee1.firstName, employee2.firstName));
+                        }else if(columnIndex == 2){
+                          employees.sort((employee1, employee2) => compareString(ascending, employee1.lastName, employee2.lastName));
+                        }else if(columnIndex == 3){
+                          employees.sort((employee1, employee2) => compareString(ascending, employee1.departmentName, employee2.departmentName));
+                        }
+                        setState(() {
+                          sortColumnIndex = columnIndex;
+                          isAscending = ascending;
+                        });
+                      }
+                      final source = EmployeeSource(context, employees);
+                      return AdvancedPaginatedDataTable(
+                        sortAscending: isAscending,
+                        sortColumnIndex: sortColumnIndex,
+                        /*customTableFooter: ,*/
+                        addEmptyRows: false,
+                        source: source,
+                        showFirstLastButtons: true,
+                        rowsPerPage: rowsPerPage,
+                        availableRowsPerPage: const [10, 16, 20, 56],
+                        onRowsPerPageChanged: (newRowsPerPage) {
+                          if (newRowsPerPage != null) {
+                            setState(() {
+                              rowsPerPage = newRowsPerPage;
+                            });
+                          }
+                        },
+                        columns: [
+                          DataColumn(label: Text('Görsel', style: AppText.contextSemiBoldBlue)),
+                          DataColumn(label: Text('İsim', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                          DataColumn(label: Text('Soyisim', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                          DataColumn(label: Text('Birim', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                          DataColumn(label: Text('Email', style: AppText.contextSemiBoldBlue)),
+                          DataColumn(label: Text('Telefon', style: AppText.contextSemiBoldBlue)),
+                          DataColumn(label: Text('İşlemler', style: AppText.contextSemiBoldBlue)),
+                        ],
+                      );
                     }
                   },
-                  columns: [
-                    DataColumn(label: Text('Resim', style: AppText.contextSemiBoldBlue)),
-                    DataColumn(label: Text('İsim', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                    DataColumn(label: Text('Soyisim', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                    DataColumn(label: Text('Birim', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                    DataColumn(label: Text('Email', style: AppText.contextSemiBoldBlue)),
-                    DataColumn(label: Text('Telefon', style: AppText.contextSemiBoldBlue)),
-                    DataColumn(label: Text('İşlemler', style: AppText.contextSemiBoldBlue)),
-                  ],
                 ),
               ],
             ),
@@ -198,71 +217,75 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
       ),
     );
   }
-  ///Sorting Functions
-  void onSort(int columnIndex, bool ascending) {
-    if(columnIndex == 1){
-      employee.sort((employee1, employee2) => compareString(ascending, employee1.firstName, employee2.firstName));
-    }else if(columnIndex == 2){
-      employee.sort((employee1, employee2) => compareString(ascending, employee1.lastName, employee2.lastName));
-    }else if(columnIndex == 3){
-      employee.sort((employee1, employee2) => compareString(ascending, employee1.departmentName, employee2.departmentName));
-    }
-    setState(() {
-      sortColumnIndex = columnIndex;
-      isAscending = ascending;
-    });
+
+  Future<Map<String, dynamic>> getAllEmployee() async {
+    return await EmployeeService.getAllEmployee();
   }
+
+  int compareString(bool ascending, String value1, String value2) {
+    return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
+  }
+
 }
 
+class EmployeeSource extends AdvancedDataTableSource<Employee> {
+  EmployeeSource(this.context, this.employees);
 
-int compareString(bool ascending, String value1, String value2) {return ascending ? value1.compareTo(value2) : value2.compareTo(value1);}
-
-///Sorting işlemleri bitiş
-///DataTable Source Kısmı
-class RowData {
-  final int index;
-  final String value;
-
-  RowData(this.index, this.value);
-}
-
-class ExampleSource extends AdvancedDataTableSource<RowData> {
-  final data = List<RowData>.generate(30, (index) => RowData(index+1, 'Value for no. ${index+1}'));
-  final List<Employee> employee;
-
-  ExampleSource(this.context, this.employee);
-
+  final List<Employee> employees;
   final BuildContext context;
 
   @override
   DataRow? getRow(int index) {
-    Function setProcessSelectedRows = Provider.of<States>(context).setEmployeeSelectedRows;
-    List<int> processSelectedRows = Provider.of<States>(context).employeeSelectedRows;
+    Function setEmployeeSelectedRows = Provider.of<States>(context).setEmployeeSelectedRows;
+    List<int> employeeSelectedRows = Provider.of<States>(context).employeeSelectedRows;
 
-    final currentRowData = employee[index];
+    final employee = employees[index];
+
+    String imageUrl = "${"${BaseService.baseUrl}/images/materials/${employee.employeeId}"}/${employee.imageUrl}";
+
     return DataRow(
-      selected: processSelectedRows.contains(currentRowData.employeeId) ? true : false,
-      onSelectChanged: (value) {
-        setProcessSelectedRows(currentRowData.employeeId);
-      },
+      selected: employeeSelectedRows.contains(employee.employeeId) ? true : false,
+      onSelectChanged: (value) {setEmployeeSelectedRows(employee.employeeId);},
       cells: [
         DataCell(
-          Text(currentRowData.imageUrl, style: AppText.context),
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              image: employee.imageUrl.isEmpty ? const DecorationImage(
+                image: AssetImage("assets/images/placeholder-image.jpg"),
+                fit: BoxFit.cover,
+              ) : DecorationImage(
+                image: NetworkImage(imageUrl),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
         ),
         DataCell(
-          Text(currentRowData.firstName , style: AppText.context),
+          Text(
+            Helpers.titleCase(employee.firstName),
+            style: AppText.context,
+          ),
         ),
         DataCell(
-          Text(currentRowData.lastName, style: AppText.context),
+          Text(
+            Helpers.titleCase(employee.lastName),
+            style: AppText.context,
+          ),
         ),
         DataCell(
-          Text(currentRowData.departmentName, style: AppText.context),
+          Text(
+            Helpers.titleCase(employee.departmentName),
+            style: AppText.context,
+          ),
         ),
         DataCell(
-          Text(currentRowData.email, style: AppText.context),
+          Text(employee.email, style: AppText.context),
         ),
         DataCell(
-          Text(currentRowData.phoneNumber, style: AppText.context),
+          Text(employee.phoneNumber, style: AppText.context),
         ),
         DataCell(
             Row(
@@ -286,10 +309,10 @@ class ExampleSource extends AdvancedDataTableSource<RowData> {
   int get selectedRowCount => 0;
 
   @override
-  Future<RemoteDataSourceDetails<RowData>> getNextPage(NextPageRequest pageRequest) async {
+  Future<RemoteDataSourceDetails<Employee>> getNextPage(NextPageRequest pageRequest) async {
     return RemoteDataSourceDetails(
-      employee.length,
-      data
+      employees.length,
+      employees
           .skip(pageRequest.offset)
           .take(pageRequest.pageSize)
           .toList(), //again in a real world example you would only get the right amount of rows

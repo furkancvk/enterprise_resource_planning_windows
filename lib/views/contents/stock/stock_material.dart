@@ -1,3 +1,4 @@
+import 'package:erp_windows/utils/helpers.dart';
 import 'package:erp_windows/widgets/app_cards.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,10 @@ import '../../../design/app_text.dart';
 import '../../../models/app_material.dart';
 import '../../../packages/edited_advanced_PDT.dart';
 import '../../../packages/edited_advanced_datatable_source.dart';
+import '../../../services/base_service.dart';
+import '../../../services/material_service.dart';
 import '../../../states/states.dart';
+import '../../../widgets/app_alerts.dart';
 import '../../../widgets/app_form.dart';
 
 class StockMaterial extends StatefulWidget {
@@ -19,23 +23,14 @@ class StockMaterial extends StatefulWidget {
 }
 
 class _StockMaterialState extends State<StockMaterial> {
-  List<bool> selected = List<bool>.generate(10, (int index) => false);
   int? sortColumnIndex;
   bool isAscending = false;
-  List<AppMaterial> materialStock = [
-    AppMaterial(materialId: 13, referenceNumber: 3315, imageUrl: '', materialName: 'Gizli Ayak', typeName: '12CM', unitName: 'Adet', amount: 200, colorName: 'Kahverengi', sizeName: '24', description: '', createdAt: '16/08/2022', updatedAt: ''),
-    AppMaterial(materialId: 14, referenceNumber: 1, imageUrl: '', materialName: 'Vida', typeName: '14CM', unitName: 'Torba', amount: 400, colorName: '', sizeName: '', description: '', createdAt: '17/08/2022', updatedAt: ''),
-    AppMaterial(materialId: 15, referenceNumber: 2, imageUrl: '', materialName: 'Kumaş', typeName: '5', unitName: 'CM2', amount: 1000, colorName: 'Sarı', sizeName: '', description: '', createdAt: '16/08/2002', updatedAt: ''),
-    AppMaterial(materialId: 16, referenceNumber: 3, imageUrl: '', materialName: 'İskelet', typeName: 'a', unitName: 'Adet', amount: 20, colorName: '', sizeName: '', description: '', createdAt: '18/08/2022', updatedAt: ''),
-  ];
-
   var rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
+
+  List<AppMaterial> materials = [];
 
   @override
   Widget build(BuildContext context) {
-
-    final source = ExampleSource(context, materialStock);
-
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -98,8 +93,7 @@ class _StockMaterialState extends State<StockMaterial> {
                                         color: AppColors.lightPrimary,
                                       ),
                                       const SizedBox(width: 10),
-                                      Text("Düzenle",
-                                          style: AppText.contextSemiBold),
+                                      Text("Düzenle", style: AppText.contextSemiBold),
                                     ],
                                   ),
                                 ),
@@ -113,13 +107,10 @@ class _StockMaterialState extends State<StockMaterial> {
                                         color: AppColors.lightPrimary,
                                       ),
                                       const SizedBox(width: 10),
-                                      Text("Sil",
-                                          style: AppText.contextSemiBold),
+                                      Text("Sil", style: AppText.contextSemiBold),
                                     ],
                                   ),
                                 ),
-
-
                               ],
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4),
@@ -131,15 +122,16 @@ class _StockMaterialState extends State<StockMaterial> {
                               elevation: 0,
                               child: Row(
                                 children: [
-                                  const Icon(FluentIcons.options_16_filled,color: AppColors.lightPrimary),
+                                  const Icon(FluentIcons.options_24_regular,color: AppColors.lightPrimary),
                                   const SizedBox(width: 16),
                                   Text("Toplu İşlemler", style: AppText.contextSemiBoldBlue),
                                   const SizedBox(width: 16),
-                                  const Icon(FluentIcons.chevron_down_12_regular, size: 20),
+                                  const Icon(FluentIcons.chevron_down_24_filled, size: 20, color: AppColors.lightPrimary),
                                 ],
                               ),
                             ),
                           ),
+                          // DropdownButtonFormField()
                           const SizedBox(width: 16),
                           OutlinedButton.icon(
                             onPressed: () {},
@@ -175,32 +167,59 @@ class _StockMaterialState extends State<StockMaterial> {
                     ],
                   ),
                 ),
-                AdvancedPaginatedDataTable(
-                  sortAscending: isAscending,
-                  sortColumnIndex: sortColumnIndex,
-                  /*customTableFooter: ,*/
-                  addEmptyRows: false,
-                  source: source,
-                  showFirstLastButtons: true,
-                  rowsPerPage: rowsPerPage,
-                  availableRowsPerPage: const [10, 16, 20, 56],
-                  onRowsPerPageChanged: (newRowsPerPage) {
-                    if (newRowsPerPage != null) {
-                      setState(() {
-                        rowsPerPage = newRowsPerPage;
-                      });
+                const SizedBox(height: 16),
+                FutureBuilder(
+                  future: getAllMaterial(),
+                  builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                    if(snapshot.data == null) {
+                      return AppAlerts.error("Herhangi bir kayıt bulunamadı.");
+                    } else {
+                      materials = List.generate(snapshot.data!["data"].length, (index) => AppMaterial.fromJson(snapshot.data!["data"][index]));
+                      void onSort(int columnIndex, bool ascending) {
+                        if(columnIndex == 1){
+                          materials.sort((material1, material2) => compareString(ascending, material1.materialName, material2.materialName));
+                        }else if(columnIndex == 2){
+                          materials.sort((material1, material2) => compareString(ascending, material1.typeName, material2.typeName));
+                        }else if(columnIndex == 3){
+                          materials.sort((material1, material2) => compareString(ascending, material1.colorName, material2.colorName));
+                        }else if(columnIndex == 6){///Stok durumuna göre değişmeli burası
+                          materials.sort((material1, material2) => compareString(ascending, material1.amount.toString(), material2.amount.toString()));
+                        }
+                        setState(() {
+                          sortColumnIndex = columnIndex;
+                          isAscending = ascending;
+                        });
+                      }
+                      final source = StockMaterialSource(context, materials);
+                      return AdvancedPaginatedDataTable(
+                        sortAscending: isAscending,
+                        sortColumnIndex: sortColumnIndex,
+                        /*customTableFooter: ,*/
+                        addEmptyRows: false,
+                        source: source,
+                        showFirstLastButtons: true,
+                        rowsPerPage: rowsPerPage,
+                        availableRowsPerPage: const [10, 16, 20, 56],
+                        onRowsPerPageChanged: (newRowsPerPage) {
+                          if (newRowsPerPage != null) {
+                            setState(() {
+                              rowsPerPage = newRowsPerPage;
+                            });
+                          }
+                        },
+                        columns: [
+                          DataColumn(label: Text('Görsel', style: AppText.contextSemiBoldBlue)),
+                          DataColumn(label: Text('İsim', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                          DataColumn(label: Text('Cins', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                          DataColumn(label: Text('Renk', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                          DataColumn(label: Text('Boyut', style: AppText.contextSemiBoldBlue)),
+                          DataColumn(label: Text('Miktar', style: AppText.contextSemiBoldBlue)),
+                          DataColumn(label: Text('Stok Durumu', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                          DataColumn(label: Text('İşlemler', style: AppText.contextSemiBoldBlue)),
+                        ],
+                      );
                     }
                   },
-                  columns: [
-                    DataColumn(label: Text('Görsel', style: AppText.contextSemiBoldBlue)),
-                    DataColumn(label: Text('İsim', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                    DataColumn(label: Text('Cins', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                    DataColumn(label: Text('Renk', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                    DataColumn(label: Text('Boyut', style: AppText.contextSemiBoldBlue)),
-                    DataColumn(label: Text('Miktar', style: AppText.contextSemiBoldBlue)),
-                    DataColumn(label: Text('Stok Durumu', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                    DataColumn(label: Text('İşlemler', style: AppText.contextSemiBoldBlue)),
-                  ],
                 ),
               ],
             ),
@@ -209,41 +228,21 @@ class _StockMaterialState extends State<StockMaterial> {
       ),
     );
   }
-  ///Sorting Functions
-  void onSort(int columnIndex, bool ascending) {
-    if(columnIndex == 1){
-      materialStock.sort((material1, material2) => compareString(ascending, material1.materialName, material2.materialName));
-    }else if(columnIndex == 2){
-      materialStock.sort((material1, material2) => compareString(ascending, material1.typeName, material2.typeName));
-    }else if(columnIndex == 3){
-      materialStock.sort((material1, material2) => compareString(ascending, material1.colorName, material2.colorName));
-    }else if(columnIndex == 6){///Stok durumuna göre değişmeli burası
-      materialStock.sort((material1, material2) => compareString(ascending, material1.amount.toString(), material2.amount.toString()));
-    }
-    setState(() {
-      sortColumnIndex = columnIndex;
-      isAscending = ascending;
-    });
+
+  Future<Map<String, dynamic>> getAllMaterial() async {
+    return await MaterialService.getAllMaterials();
   }
+
+  int compareString(bool ascending, String value1, String value2) {
+    return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
+  }
+
 }
 
-int compareString(bool ascending, String value1, String value2) {return ascending ? value1.compareTo(value2) : value2.compareTo(value1);}
+class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
+  StockMaterialSource(this.context, this.materials);
 
-///Sorting işlemleri bitiş
-///DataTable Source Kısmı
-class RowData {
-  final int index;
-  final String value;
-
-  RowData(this.index, this.value);
-}
-
-class ExampleSource extends AdvancedDataTableSource<RowData> {
-  final data = List<RowData>.generate(30, (index) => RowData(index+1, 'Value for no. ${index+1}'));
-  final List<AppMaterial> materialStock;
-
-  ExampleSource(this.context, this.materialStock);
-
+  final List<AppMaterial> materials;
   final BuildContext context;
 
   @override
@@ -251,37 +250,68 @@ class ExampleSource extends AdvancedDataTableSource<RowData> {
     Function setMaterialSelectedRows = Provider.of<States>(context).setMaterialSelectedRows;
     List<int> materialSelectedRows = Provider.of<States>(context).materialSelectedRows;
 
-    final currentRowData = materialStock[index];
+    final material = materials[index];
+
+    String imageUrl = "${"${BaseService.baseUrl}/images/materials/${material.materialId}"}/${material.imageUrl}";
+
     return DataRow(
-      selected: materialSelectedRows.contains(currentRowData.materialId) ? true : false,
+      selected: materialSelectedRows.contains(material.materialId) ? true : false,
       onSelectChanged: (value) {
-        setMaterialSelectedRows(currentRowData.materialId);
+        setMaterialSelectedRows(material.materialId);
       },
       cells: [
         DataCell(
-          Text(currentRowData.imageUrl, style: AppText.context),
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              image: material.imageUrl.isEmpty ? const DecorationImage(
+                image: AssetImage("assets/images/placeholder-image.jpg"),
+                fit: BoxFit.cover,
+              ) : DecorationImage(
+                image: NetworkImage(imageUrl),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
         ),
         DataCell(
-          Text(currentRowData.materialName , style: AppText.context),
+          Text(
+            Helpers.titleCase(material.materialName),
+            style: AppText.context,
+          ),
         ),
         DataCell(
-          Text(currentRowData.typeName, style: AppText.context),
+          Text(
+            Helpers.titleCase(material.typeName),
+            style: AppText.context,
+          ),
         ),
         DataCell(
-          Text(currentRowData.colorName, style: AppText.context),
+          Text(
+            Helpers.titleCase(material.colorName),
+            style: AppText.context,
+          ),
         ),
         DataCell(
-          Text(currentRowData.sizeName, style: AppText.context),
+          Text(
+            material.sizeName,
+            style: AppText.context,
+          ),
         ),
         DataCell(
-          Text(currentRowData.amount.toString(), style: AppText.context),
+          Text(
+            "${material.amount} ${Helpers.titleCase(material.unitName)}",
+            style: AppText.context,
+          ),
         ),
         DataCell(
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: AppCards.stockSituationCard(
-                color: currentRowData.amount > 200 ? (currentRowData.amount < 500 ? AppColors.lightWarning : AppColors.lightSuccess) : AppColors.lightError,
-                data: currentRowData.amount > 200 ? (currentRowData.amount < 500 ? 'Kritik' : 'Yeterli') : 'Yetersiz',
+              color: material.amount > 100 ? (material.amount <= 300 ? AppColors.lightWarning : AppColors.lightSuccess) : AppColors.lightError,
+              data: material.amount > 100 ? (material.amount <= 300 ? 'Kritik' : 'Yeterli') : 'Yetersiz',
             ),
           )
         ), ///Yeterli-Kritik-Yetersiz değerleri statik yapılcak
@@ -307,10 +337,10 @@ class ExampleSource extends AdvancedDataTableSource<RowData> {
   int get selectedRowCount => 0;
 
   @override
-  Future<RemoteDataSourceDetails<RowData>> getNextPage(NextPageRequest pageRequest) async {
+  Future<RemoteDataSourceDetails<AppMaterial>> getNextPage(NextPageRequest pageRequest) async {
     return RemoteDataSourceDetails(
-      materialStock.length,
-      data
+      materials.length,
+      materials
           .skip(pageRequest.offset)
           .take(pageRequest.pageSize)
           .toList(), //again in a real world example you would only get the right amount of rows

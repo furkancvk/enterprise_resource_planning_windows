@@ -11,4 +11,9 @@ class EmployeeService {
     return body;
   }
 
+  static Future<Map<String, dynamic>> getAllEmployee() async {
+    var body = await BaseService.getRequest('/api/v1/employees/getAllEmployee');
+    return body;
+  }
+
 }

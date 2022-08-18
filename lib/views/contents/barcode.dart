@@ -7,6 +7,10 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../design/app_colors.dart';
 import '../../design/app_text.dart';
+import '../../services/base_service.dart';
+import '../../services/material_service.dart';
+import '../../utils/helpers.dart';
+import '../../widgets/app_alerts.dart';
 import '../modals/preview_pdf.dart';
 import '../../packages/edited_advanced_PDT.dart';
 import '../../packages/edited_advanced_datatable_source.dart';
@@ -21,22 +25,14 @@ class Barcode extends StatefulWidget {
 }
 
 class _BarcodeState extends State<Barcode> {
-  List<bool> selected = List<bool>.generate(10, (int index) => false);
   int? sortColumnIndex;
   bool isAscending = false;
-  List<AppMaterial> materialStock = [
-    AppMaterial(materialId: 13, referenceNumber: 3315, imageUrl: '', materialName: 'Gizli Ayak', typeName: '12CM', unitName: 'Adet', amount: 200, colorName: 'Kahverengi', sizeName: '24', description: '', createdAt: '16/08/2022', updatedAt: ''),
-    AppMaterial(materialId: 14, referenceNumber: 1, imageUrl: '', materialName: 'Vida', typeName: '14CM', unitName: 'Torba', amount: 400, colorName: '', sizeName: '', description: '', createdAt: '17/08/2022', updatedAt: ''),
-    AppMaterial(materialId: 15, referenceNumber: 2, imageUrl: '', materialName: 'Kumas', typeName: '5', unitName: 'CM2', amount: 1000, colorName: 'Sari', sizeName: '', description: '', createdAt: '16/08/2002', updatedAt: ''),
-    AppMaterial(materialId: 16, referenceNumber: 3, imageUrl: '', materialName: 'iskelet', typeName: 'a', unitName: 'Adet', amount: 20, colorName: 'asdsd', sizeName: '', description: '', createdAt: '18/08/2022', updatedAt: ''),
-  ];
-
   var rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
+
+  List<AppMaterial> materials = [];
 
   @override
   Widget build(BuildContext context) {
-    final source = ExampleSource(context, materialStock);
-
     return Scaffold(
       appBar: AppBar(
         leading: const Icon(FluentIcons.barcode_scanner_24_regular),
@@ -81,8 +77,7 @@ class _BarcodeState extends State<Barcode> {
                                         color: AppColors.lightPrimary,
                                       ),
                                       const SizedBox(width: 10),
-                                      Text("Düzenle",
-                                          style: AppText.contextSemiBold),
+                                      Text("Düzenle", style: AppText.contextSemiBold),
                                     ],
                                   ),
                                 ),
@@ -96,13 +91,10 @@ class _BarcodeState extends State<Barcode> {
                                         color: AppColors.lightPrimary,
                                       ),
                                       const SizedBox(width: 10),
-                                      Text("Sil",
-                                          style: AppText.contextSemiBold),
+                                      Text("Sil", style: AppText.contextSemiBold),
                                     ],
                                   ),
                                 ),
-
-
                               ],
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4),
@@ -114,15 +106,16 @@ class _BarcodeState extends State<Barcode> {
                               elevation: 0,
                               child: Row(
                                 children: [
-                                  const Icon(FluentIcons.options_16_filled,color: AppColors.lightPrimary),
+                                  const Icon(FluentIcons.options_24_regular,color: AppColors.lightPrimary),
                                   const SizedBox(width: 16),
                                   Text("Toplu İşlemler", style: AppText.contextSemiBoldBlue),
                                   const SizedBox(width: 16),
-                                  const Icon(FluentIcons.chevron_down_12_regular, size: 20),
+                                  const Icon(FluentIcons.chevron_down_24_filled, size: 20, color: AppColors.lightPrimary),
                                 ],
                               ),
                             ),
                           ),
+                          // DropdownButtonFormField()
                           const SizedBox(width: 16),
                           OutlinedButton.icon(
                             onPressed: () {},
@@ -158,32 +151,61 @@ class _BarcodeState extends State<Barcode> {
                     ],
                   ),
                 ),
-                AdvancedPaginatedDataTable(
-                  sortAscending: isAscending,
-                  sortColumnIndex: sortColumnIndex,
-                  /*customTableFooter: ,*/
-                  addEmptyRows: false,
-                  source: source,
-                  showFirstLastButtons: true,
-                  rowsPerPage: rowsPerPage,
-                  availableRowsPerPage: const [10, 16, 20, 56],
-                  onRowsPerPageChanged: (newRowsPerPage) {
-                    if (newRowsPerPage != null) {
-                      setState(() {
-                        rowsPerPage = newRowsPerPage;
-                      });
+                const SizedBox(height: 16),
+                FutureBuilder(
+                  future: getAllMaterial(),
+                  builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                    if(snapshot.data == null) {
+                      return AppAlerts.error("Herhangi bir kayıt bulunamadı.");
+                    } else {
+                      materials = List.generate(snapshot.data!["data"].length, (index) => AppMaterial.fromJson(snapshot.data!["data"][index]));
+                      void onSort(int columnIndex, bool ascending) {
+                        if(columnIndex == 0){
+                          materials.sort((material1, material2) => compareString(ascending, material1.referenceNumber.toString(), material1.referenceNumber.toString()));
+                        }else if(columnIndex == 2){
+                          materials.sort((material1, material2) => compareString(ascending, material1.materialName, material1.materialName));
+                        }else if(columnIndex == 3){
+                          materials.sort((material1, material2) => compareString(ascending, material1.typeName, material1.typeName));
+                        }else if(columnIndex == 4){
+                          materials.sort((material1, material2) => compareString(ascending, material1.colorName, material1.colorName));
+                        }else if(columnIndex == 5){
+                          materials.sort((material1, material2) => compareString(ascending, material1.sizeName, material1.sizeName));
+                        }
+                        setState(() {
+                          sortColumnIndex = columnIndex;
+                          isAscending = ascending;
+                        });
+                      }
+                      final source = BarcodeSource(context, materials);
+                      return AdvancedPaginatedDataTable(
+                        sortAscending: isAscending,
+                        sortColumnIndex: sortColumnIndex,
+                        /*customTableFooter: ,*/
+                        addEmptyRows: false,
+                        source: source,
+                        showFirstLastButtons: true,
+                        rowsPerPage: rowsPerPage,
+                        availableRowsPerPage: const [10, 16, 20, 56],
+                        onRowsPerPageChanged: (newRowsPerPage) {
+                          if (newRowsPerPage != null) {
+                            setState(() {
+                              rowsPerPage = newRowsPerPage;
+                            });
+                          }
+                        },
+                        columns: [
+                          DataColumn(label: Text('Etiket', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                          DataColumn(label: Text('Görsel', style: AppText.contextSemiBoldBlue)),
+                          DataColumn(label: Text('İsim', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                          DataColumn(label: Text('Cins', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                          DataColumn(label: Text('Renk', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                          DataColumn(label: Text('Boyut', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                          DataColumn(label: Text('Miktar', style: AppText.contextSemiBoldBlue)),
+                          DataColumn(label: Text('İşlemler', style: AppText.contextSemiBoldBlue)),
+                        ],
+                      );
                     }
                   },
-                  columns: [
-                    DataColumn(label: Text('Barkod', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                    DataColumn(label: Text('Görsel', style: AppText.contextSemiBoldBlue)),
-                    DataColumn(label: Text('İsim', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                    DataColumn(label: Text('Cins', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                    DataColumn(label: Text('Renk', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                    DataColumn(label: Text('Boyut', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                    DataColumn(label: Text('Miktar', style: AppText.contextSemiBoldBlue)),
-                    DataColumn(label: Text('İşlemler', style: AppText.contextSemiBoldBlue)),
-                  ],
                 ),
               ],
             ),
@@ -192,44 +214,24 @@ class _BarcodeState extends State<Barcode> {
       ),
     );
   }
-  ///Sorting Functions ///zortlamıyor sııkıntı gadaaaaaaaaasss
-  void onSort(int columnIndex, bool ascending) {
-    if(columnIndex == 0){
-      materialStock.sort((material1, material2) => compareString(ascending, material1.referenceNumber.toString(), material1.referenceNumber.toString()));
-    }else if(columnIndex == 2){
-      materialStock.sort((material1, material2) => compareString(ascending, material1.materialName, material1.materialName));
-    }else if(columnIndex == 3){
-      materialStock.sort((material1, material2) => compareString(ascending, material1.typeName, material1.typeName));
-    }else if(columnIndex == 4){
-      materialStock.sort((material1, material2) => compareString(ascending, material1.colorName, material1.colorName));
-    }else if(columnIndex == 5){
-      materialStock.sort((material1, material2) => compareString(ascending, material1.sizeName, material1.sizeName));
-    }
-    setState(() {
-      sortColumnIndex = columnIndex;
-      isAscending = ascending;
-    });
+
+  Future<Map<String, dynamic>> getAllMaterial() async {
+    return await MaterialService.getAllMaterials();
   }
+
+  int compareString(bool ascending, String value1, String value2) {
+    return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
+  }
+
 }
 
-int compareString(bool ascending, String value1, String value2) {return ascending ? value1.compareTo(value2) : value2.compareTo(value1);}
+class BarcodeSource extends AdvancedDataTableSource<AppMaterial> {
+  BarcodeSource(this.context, this.materials);
 
-///Sorting işlemleri bitiş
-///DataTable Source Kısmı
-class RowData {
-  final int index;
-  final String value;
-
-  RowData(this.index, this.value);
-}
-
-class ExampleSource extends AdvancedDataTableSource<RowData> {
-  final data = List<RowData>.generate(30, (index) => RowData(index+1, 'Value for no. ${index+1}'));
-  final List<AppMaterial> materialStock;
-  final TextEditingController _amountController = TextEditingController();
-  ExampleSource(this.context, this.materialStock);
-
+  final List<AppMaterial> materials;
   final BuildContext context;
+
+  final TextEditingController _amountController = TextEditingController();
 
   void showPreviewPdfModal(AppMaterial materialStock) {
     showDialog(
@@ -239,63 +241,86 @@ class ExampleSource extends AdvancedDataTableSource<RowData> {
       },
     );
   }
+
   @override
   DataRow? getRow(int index) {
     Function setMaterialSelectedRows = Provider.of<States>(context).setMaterialSelectedRows;
     List<int> materialSelectedRows = Provider.of<States>(context).materialSelectedRows;
 
-    final currentRowData = materialStock[index];
+    final material = materials[index];
 
-    _amountController.text = currentRowData.amount.toString();
+    _amountController.text = material.amount.toString();
+
+    String imageUrl = "${"${BaseService.baseUrl}/images/materials/${material.materialId}"}/${material.imageUrl}";
+
     return DataRow(
-      selected: materialSelectedRows.contains(currentRowData.materialId) ? true : false,
-      onSelectChanged: (value) {
-        setMaterialSelectedRows(currentRowData.materialId);
-      },
+      selected: materialSelectedRows.contains(material.materialId) ? true : false,
+      onSelectChanged: (value) {setMaterialSelectedRows(material.materialId);},
       cells: [
         DataCell(
           SizedBox(
+            width: 48,
+            height: 48,
+            child: QrImage(data: material.referenceNumber.toString()),
+          ),
+        ),
+        DataCell(
+          Container(
             width: 36,
             height: 36,
-            child: QrImage(
-              data: currentRowData.referenceNumber.toString(),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              image: material.imageUrl.isEmpty ? const DecorationImage(
+                image: AssetImage("assets/images/placeholder-image.jpg"),
+                fit: BoxFit.cover,
+              ) : DecorationImage(
+                image: NetworkImage(imageUrl),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),
         DataCell(
-          Text(currentRowData.imageUrl, style: AppText.context),
-        ),///Görsel eklenmesi için değişcek
-        DataCell(
-          Text(currentRowData.materialName , style: AppText.context),
+          Text(
+            Helpers.titleCase(material.materialName),
+            style: AppText.context,
+          ),
         ),
         DataCell(
-          Text(currentRowData.typeName, style: AppText.context),
+          Text(
+            Helpers.titleCase(material.typeName),
+            style: AppText.context,
+          ),
         ),
         DataCell(
-          Text(currentRowData.colorName, style: AppText.context),
+          Text(
+            Helpers.titleCase(material.colorName),
+            style: AppText.context,
+          ),
         ),
         DataCell(
-          Text(currentRowData.sizeName, style: AppText.context),
+          Text(
+            material.sizeName,
+            style: AppText.context,
+          ),
         ),
-         DataCell(
-            NumberTextField(amount: currentRowData.amount),
-        ),
+        DataCell(NumberTextField(amount: material.amount)),
         DataCell(
-            Row(
-              children: [
-                OutlinedButton(
-                    onPressed: (){showPreviewPdfModal(currentRowData);},
-                    child: Row(
-                      children:
-                      const[
-                        Icon(FluentIcons.print_20_regular, color: AppColors.lightPrimary),
-                        SizedBox(width: 8),
-                        Text('Yazdır', style: TextStyle(color: AppColors.lightPrimary),
-                        )],
-                    )),
-                IconButton(onPressed: (){print('icon butona basıldı');}, icon: const Icon(FluentIcons.more_vertical_20_regular, color: AppColors.lightPrimary), splashRadius: 20,)
-              ],
-            )
+          Row(
+            children: [
+              OutlinedButton.icon(
+                onPressed: (){showPreviewPdfModal(material);},
+                icon: const Icon(FluentIcons.print_24_regular),
+                label: const Text('Yazdır'),
+              ),
+              const SizedBox(width: 8),
+              IconButton(
+                onPressed: (){print('icon butona basıldı');},
+                icon: const Icon(FluentIcons.more_vertical_20_regular, color: AppColors.lightPrimary),
+                splashRadius: 20,
+              ),
+            ],
+          )
         ), /// İşlem butonlarına popUpButtonları konucak
       ],
       color: MaterialStateProperty.resolveWith<Color?>(
@@ -311,10 +336,10 @@ class ExampleSource extends AdvancedDataTableSource<RowData> {
   int get selectedRowCount => 0;
 
   @override
-  Future<RemoteDataSourceDetails<RowData>> getNextPage(NextPageRequest pageRequest) async {
+  Future<RemoteDataSourceDetails<AppMaterial>> getNextPage(NextPageRequest pageRequest) async {
     return RemoteDataSourceDetails(
-      materialStock.length,
-      data
+      materials.length,
+      materials
           .skip(pageRequest.offset)
           .take(pageRequest.pageSize)
           .toList(),

@@ -6,7 +6,6 @@ class Employee {
   String phoneNumber;
   String departmentName;
   String imageUrl;
-  bool isAdmin;
   String createdAt;
   String updatedAt;
 
@@ -18,7 +17,6 @@ class Employee {
         required this.phoneNumber,
         required this.departmentName,
         required this.imageUrl,
-        required this.isAdmin,
         required this.createdAt,
         required this.updatedAt});
 
@@ -30,7 +28,6 @@ class Employee {
     phoneNumber: json["phoneNumber"] as String,
     departmentName: json["departmentName"] as String,
     imageUrl: json["imageUrl"] as String,
-    isAdmin: json["isAdmin"] as bool,
     createdAt: json["createdAt"] as String,
     updatedAt: json["updatedAt"] as String,
   );
@@ -43,7 +40,6 @@ class Employee {
     "phoneNumber": phoneNumber,
     "departmentName": departmentName,
     "image": imageUrl,
-    "isAdmin": isAdmin,
     "createdAt": createdAt,
     "updatedAt": updatedAt,
   };

@@ -21,6 +21,8 @@ import '../../design/app_colors.dart';
 
 import '../design/app_text.dart';
 import '../states/states.dart';
+import '../storage/storage.dart';
+import '../utils/helpers.dart';
 import '../views/contents/barcode.dart';
 import 'package:erp_windows/views/contents/dashboard.dart';
 
@@ -34,6 +36,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final TextEditingController _searchController = TextEditingController();
+  final SecureStorage secureStorage = SecureStorage();
+
   List<Widget> contents = const [
     Dashboard(), // 0
     StockMaterial(), // 1
@@ -49,6 +54,22 @@ class _HomeState extends State<Home> {
     Barcode(), //11
     DocumentReports(), //12
     DocumentBills(), //13
+  ];
+  List<String> contentSuggestions = const [
+    "Panel", // 0
+    "Stok > Hammadde", // 1
+    "Stok > Bitmiş Ürün", // 2
+    // OrderIncoming(), // 3
+    // OrderPreparing(), // 4
+    // OrderOutgoing(), // 5
+    "Personel", // 6
+    // DepartmentManufacturing(), // 7
+    // DepartmentInventory(), // 8
+    // DepartmentTransfer(), // 9
+    // DepartmentHumanResources(), //10
+    "Etiket", //11
+    // DocumentReports(), //12
+    // DocumentBills(), //13
   ];
   bool _isSelected = false;
 
@@ -89,9 +110,9 @@ class _HomeState extends State<Home> {
                           height: 44,
                           child: AppForm.appAutoCompleteTextFormFieldForSearch(
                             hint: 'Ara...',
-                            controller: TextEditingController(),
+                            controller: _searchController,
                             key: GlobalKey(),
-                            suggestions: [],
+                            suggestions: contentSuggestions,
                           ),
                         ),
                         Row(
@@ -121,7 +142,7 @@ class _HomeState extends State<Home> {
                                 itemBuilder: (context) => [
 
                                   PopupMenuItem(
-                                    onTap: () {},
+                                    onTap: logOut,
                                     value: 4,
                                     child: Row(
                                       children: [
@@ -159,7 +180,15 @@ class _HomeState extends State<Home> {
                                       width: 28,
                                     ),
                                     const SizedBox(width: 16),
-                                    Text('Burak', style: AppText.contextSemiBold),
+                                    FutureBuilder(
+                                      future: getFirstName(),
+                                      builder: (context, snapshot) {
+                                        return Text(
+                                          Helpers.titleCase(snapshot.data.toString()),
+                                          style: AppText.contextSemiBold,
+                                        );
+                                      },
+                                    ),
                                     const SizedBox(width: 16),
                                     _isSelected == true ? const Icon(FluentIcons.chevron_down_12_regular, size: 20) : const Icon(FluentIcons.chevron_up_12_regular, size: 20),
                                   ],
@@ -185,6 +214,17 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
+  void logOut() async {
+    await secureStorage.deleteAllSecureData().then((value) => {
+      Navigator.pushReplacementNamed(context, 'login_view'),
+    });
+  }
+
+  Future<String> getFirstName() async {
+    return await secureStorage.readSecureData('firstName');
+  }
+
 }
 
 /*class RightSide extends StatefulWidget {
