@@ -132,62 +132,6 @@ class _AppSidebarState extends State<AppSidebar> {
                 ),
               ),
             ],
-            /*children: [
-              Container(
-                margin: const EdgeInsets.only(left: 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: indexContent == 1 ? AppColors.lightPrimary.withOpacity(0.04): AppColors.lightSecondary,
-                ),
-                child: ListTile(
-                  onTap: () {
-                    setIndexContent(1);
-                    print(indexContent);
-                  },
-                  /*selectedTileColor: indexSidebar == 1 ? Colors.amber : Colors.red,*/
-                  textColor: indexContent == 1 ? AppColors.lightPrimary : AppColors.lightBlack,
-                  leading: const Icon(
-                    Icons.dashboard_outlined,
-                    color: Colors.transparent,
-                  ),
-                  title: const Text(
-                    "Hammadde",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.4,
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(left: 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: indexContent == 2 ? AppColors.lightPrimary.withOpacity(0.04): AppColors.lightSecondary,
-                ),
-                child: ListTile(
-                  onTap: () {
-                    setIndexContent(2);
-                    print(indexContent);
-                  },
-                  /*selectedTileColor: indexSidebar == 2 ? Colors.amber : Colors.red,*/
-                  textColor: indexContent == 2 ? AppColors.lightPrimary : AppColors.lightBlack,
-                  leading: const Icon(
-                    Icons.dashboard_outlined,
-                    color: Colors.transparent,
-                  ),
-                  title: const Text(
-                    "Bitmiş Ürün",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.4,
-                    ),
-                  ),
-                ),
-              ),
-            ],*/
           ),
           const SizedBox(height: 20),
           // Sipariş
