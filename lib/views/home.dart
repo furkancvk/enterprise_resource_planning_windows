@@ -100,7 +100,8 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 24),
                     color: AppColors.lightSecondary,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -118,29 +119,29 @@ class _HomeState extends State<Home> {
                         Row(
                           // mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            IconButton(
+                            /*IconButton(
                               onPressed: (){},
                               icon: const Icon(FluentIcons.alert_24_regular),
-                            ),
+                            ),*/
                             const SizedBox(width: 24),
                             Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                 color: AppColors.lightGrey,
-                                border: Border.all(color: AppColors.lightPrimary),
+                                border:
+                                    Border.all(color: AppColors.lightPrimary),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: PopupMenuButton<int>(
-                                onCanceled: (){
-                                  _isSelected = false ;
+                                onCanceled: () {
+                                  _isSelected = false;
                                 },
-                                onSelected: (value){
+                                onSelected: (value) {
                                   _isSelected = true;
                                 },
                                 tooltip: "Profil Menüsü",
                                 padding: const EdgeInsets.all(8),
                                 itemBuilder: (context) => [
-
                                   PopupMenuItem(
                                     onTap: logOut,
                                     value: 4,
@@ -159,7 +160,8 @@ class _HomeState extends State<Home> {
                                 ],
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(4),
-                                  side: const BorderSide(color: AppColors.lightPrimary),
+                                  side: const BorderSide(
+                                      color: AppColors.lightPrimary),
                                 ),
                                 splashRadius: 20,
                                 offset: const Offset(9, 37),
@@ -172,7 +174,8 @@ class _HomeState extends State<Home> {
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(4),
                                         image: const DecorationImage(
-                                          image: AssetImage("assets/images/avatar.png"),
+                                          image: AssetImage(
+                                              "assets/images/avatar.png"),
                                           fit: BoxFit.fill,
                                         ),
                                       ),
@@ -184,20 +187,27 @@ class _HomeState extends State<Home> {
                                       future: getFirstName(),
                                       builder: (context, snapshot) {
                                         return Text(
-                                          Helpers.titleCase(snapshot.data.toString()),
+                                          Helpers.titleCase(
+                                              snapshot.data.toString()),
                                           style: AppText.contextSemiBold,
                                         );
                                       },
                                     ),
                                     const SizedBox(width: 16),
-                                    _isSelected == true ? const Icon(FluentIcons.chevron_down_12_regular, size: 20) : const Icon(FluentIcons.chevron_up_12_regular, size: 20),
+                                    _isSelected == true
+                                        ? const Icon(
+                                            FluentIcons.chevron_down_12_regular,
+                                            size: 20)
+                                        : const Icon(
+                                            FluentIcons.chevron_up_12_regular,
+                                            size: 20),
                                   ],
                                 ),
                               ),
                             ),
                             const SizedBox(width: 24),
                             IconButton(
-                              onPressed: (){},
+                              onPressed: () {},
                               icon: const Icon(FluentIcons.settings_24_regular),
                             ),
                           ],
@@ -217,14 +227,13 @@ class _HomeState extends State<Home> {
 
   void logOut() async {
     await secureStorage.deleteAllSecureData().then((value) => {
-      Navigator.pushReplacementNamed(context, 'login_view'),
-    });
+          Navigator.pushReplacementNamed(context, 'login_view'),
+        });
   }
 
   Future<String> getFirstName() async {
     return await secureStorage.readSecureData('firstName');
   }
-
 }
 
 /*class RightSide extends StatefulWidget {

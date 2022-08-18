@@ -1,11 +1,11 @@
 import 'package:erp_windows/models/app_material.dart';
 import 'package:erp_windows/services/process_service.dart';
 import 'package:erp_windows/utils/helpers.dart';
+
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter/material.dart';
-
 
 import '../../design/app_colors.dart';
 import '../../design/app_text.dart';
@@ -33,6 +33,9 @@ class _DashboardState extends State<Dashboard> {
 
   List<AppProcess> processes = [];
 
+  DateTime selectedDay = DateTime.now();
+  DateTime focusedDay = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     Function setIndexTabBar = Provider.of<States>(context).setIndexTabBar;
@@ -52,8 +55,9 @@ class _DashboardState extends State<Dashboard> {
               children: [
                 FutureBuilder(
                   future: getAllEmployee(),
-                  builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                    if(snapshot.data != null) {
+                  builder:
+                      (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                    if (snapshot.data != null) {
                       return AppCards.panelDataCard(
                         icon: FluentIcons.people_team_24_regular,
                         label: "Toplam Personel",
@@ -73,8 +77,9 @@ class _DashboardState extends State<Dashboard> {
                 const SizedBox(width: 30),
                 FutureBuilder(
                   future: getAllMaterials(),
-                  builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                    if(snapshot.data != null) {
+                  builder:
+                      (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                    if (snapshot.data != null) {
                       return AppCards.panelDataCard(
                         icon: FluentIcons.apps_24_regular,
                         label: "Toplam Hammadde",
@@ -101,9 +106,13 @@ class _DashboardState extends State<Dashboard> {
                 const SizedBox(width: 30),
                 FutureBuilder(
                   future: getAllMaterials(),
-                  builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                    if(snapshot.data != null) {
-                      List<AppMaterial> materials = List.generate(snapshot.data!["data"].length, (index) => AppMaterial.fromJson(snapshot.data!["data"][index]));
+                  builder:
+                      (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                    if (snapshot.data != null) {
+                      List<AppMaterial> materials = List.generate(
+                          snapshot.data!["data"].length,
+                          (index) => AppMaterial.fromJson(
+                              snapshot.data!["data"][index]));
                       materials.retainWhere((element) => element.amount <= 100);
 
                       return AppCards.panelDataCard(
@@ -137,10 +146,51 @@ class _DashboardState extends State<Dashboard> {
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: TableCalendar(
-                  focusedDay: DateTime.now(),
+                  onDaySelected: (DateTime selectDay, DateTime focusDay) {
+                    setState(() {
+                      selectedDay = selectDay;
+                      focusedDay = focusDay;
+                    });
+                    print(focusedDay);
+                  },
+                  selectedDayPredicate: (DateTime date) {
+                    return isSameDay(selectedDay, date);
+                  },
+                  focusedDay: selectedDay,
                   firstDay: DateTime.utc(2010, 10, 16),
                   lastDay: DateTime.utc(2030, 3, 14),
                   rowHeight: 40,
+                  calendarStyle: CalendarStyle(
+                    outsideDaysVisible: false,
+                    rangeStartDecoration: BoxDecoration(
+                        color: AppColors.lightSecondary,
+                        borderRadius: BorderRadius.circular(4)),
+                    rangeEndDecoration: BoxDecoration(
+                        color: AppColors.lightSecondary,
+                        borderRadius: BorderRadius.circular(4)),
+                    disabledDecoration: BoxDecoration(
+                        color: AppColors.lightSecondary,
+                        borderRadius: BorderRadius.circular(4)),
+                    defaultDecoration: BoxDecoration(
+                        color: AppColors.lightGrey,
+                        borderRadius: BorderRadius.circular(4)),
+                    weekendDecoration: BoxDecoration(
+                        color: AppColors.lightGrey,
+                        borderRadius: BorderRadius.circular(4)),
+                    isTodayHighlighted: true,
+                    selectedDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: AppColors.lightAccent.withOpacity(0.5)),
+                    selectedTextStyle: AppText.labelSemiBold,
+                    todayDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: AppColors.lightPrimary.withOpacity(0.75)),
+                    todayTextStyle: TextStyle(color: AppColors.lightSecondary),
+                  ),
+                  headerStyle: HeaderStyle(
+                      formatButtonVisible: false,
+                      titleCentered: true,
+                      titleTextStyle: AppText.headerSemiBold),
                 ),
               ),
               const SizedBox(width: 24),
@@ -152,9 +202,13 @@ class _DashboardState extends State<Dashboard> {
                       Row(
                         children: [
                           TextButton(
-                            onPressed: (){setIndexTabBar(0);},
+                            onPressed: () {
+                              setIndexTabBar(0);
+                            },
                             style: TextButton.styleFrom(
-                              backgroundColor: indexTabBar == 0 ? AppColors.lightSecondary : AppColors.lightPrimary.withOpacity(0.04),
+                              backgroundColor: indexTabBar == 0
+                                  ? AppColors.lightSecondary
+                                  : AppColors.lightPrimary.withOpacity(0.04),
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(4),
@@ -162,12 +216,17 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                               ),
                             ),
-                            child: Text('Yapılacaklar', style: AppText.titleSemiBold),
+                            child: Text('Yapılacaklar',
+                                style: AppText.titleSemiBold),
                           ),
                           TextButton(
-                            onPressed: (){setIndexTabBar(1);},
+                            onPressed: () {
+                              setIndexTabBar(1);
+                            },
                             style: TextButton.styleFrom(
-                              backgroundColor: indexTabBar == 1 ? AppColors.lightSecondary : AppColors.lightPrimary.withOpacity(0.04),
+                              backgroundColor: indexTabBar == 1
+                                  ? AppColors.lightSecondary
+                                  : AppColors.lightPrimary.withOpacity(0.04),
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(4),
@@ -175,12 +234,17 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                               ),
                             ),
-                            child: Text('İşlemde', style: AppText.titleSemiBold),
+                            child:
+                                Text('İşlemde', style: AppText.titleSemiBold),
                           ),
                           TextButton(
-                            onPressed: (){setIndexTabBar(2);},
+                            onPressed: () {
+                              setIndexTabBar(2);
+                            },
                             style: TextButton.styleFrom(
-                              backgroundColor: indexTabBar == 2 ? AppColors.lightSecondary : AppColors.lightPrimary.withOpacity(0.04),
+                              backgroundColor: indexTabBar == 2
+                                  ? AppColors.lightSecondary
+                                  : AppColors.lightPrimary.withOpacity(0.04),
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(4),
@@ -188,7 +252,8 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                               ),
                             ),
-                            child: Text('Tamamlandı', style: AppText.titleSemiBold),
+                            child: Text('Tamamlandı',
+                                style: AppText.titleSemiBold),
                           )
                         ],
                       ),
@@ -200,7 +265,11 @@ class _DashboardState extends State<Dashboard> {
                           color: AppColors.lightSecondary,
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        child: indexTabBar == 0 ? const ToDo() : (indexTabBar == 1 ? const InProgress() : const Completed()),
+                        child: indexTabBar == 0
+                            ? const ToDo()
+                            : (indexTabBar == 1
+                                ? const InProgress()
+                                : const Completed()),
                       ),
                     ],
                   ),
@@ -245,7 +314,8 @@ class _DashboardState extends State<Dashboard> {
                                         color: AppColors.lightPrimary,
                                       ),
                                       const SizedBox(width: 10),
-                                      Text("Düzenle", style: AppText.contextSemiBold),
+                                      Text("Düzenle",
+                                          style: AppText.contextSemiBold),
                                     ],
                                   ),
                                 ),
@@ -259,14 +329,16 @@ class _DashboardState extends State<Dashboard> {
                                         color: AppColors.lightPrimary,
                                       ),
                                       const SizedBox(width: 10),
-                                      Text("Sil", style: AppText.contextSemiBold),
+                                      Text("Sil",
+                                          style: AppText.contextSemiBold),
                                     ],
                                   ),
                                 ),
                               ],
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4),
-                                side: const BorderSide(color: AppColors.lightPrimary),
+                                side: const BorderSide(
+                                    color: AppColors.lightPrimary),
                               ),
                               splashRadius: 20,
                               offset: const Offset(18, 34),
@@ -274,11 +346,14 @@ class _DashboardState extends State<Dashboard> {
                               elevation: 0,
                               child: Row(
                                 children: [
-                                  const Icon(FluentIcons.options_24_regular,color: AppColors.lightPrimary),
+                                  const Icon(FluentIcons.options_24_regular,
+                                      color: AppColors.lightPrimary),
                                   const SizedBox(width: 16),
-                                  Text("Toplu İşlemler", style: AppText.contextSemiBoldBlue),
+                                  Text("Toplu İşlemler",
+                                      style: AppText.contextSemiBoldBlue),
                                   const SizedBox(width: 16),
-                                  const Icon(FluentIcons.chevron_down_24_filled, size: 20, color: AppColors.lightPrimary),
+                                  const Icon(FluentIcons.chevron_down_24_filled,
+                                      size: 20, color: AppColors.lightPrimary),
                                 ],
                               ),
                             ),
@@ -287,7 +362,8 @@ class _DashboardState extends State<Dashboard> {
                           const SizedBox(width: 16),
                           OutlinedButton.icon(
                             onPressed: () {},
-                            icon: const Icon(FluentIcons.database_search_24_regular),
+                            icon: const Icon(
+                                FluentIcons.database_search_24_regular),
                             label: const Text("Dışa Aktar"),
                           ),
                         ],
@@ -297,7 +373,8 @@ class _DashboardState extends State<Dashboard> {
                           SizedBox(
                             width: 300,
                             height: 40,
-                            child: AppForm.appAutoCompleteTextFormFieldForSearch(
+                            child:
+                                AppForm.appAutoCompleteTextFormFieldForSearch(
                               hint: "Ara...",
                               controller: TextEditingController(),
                               key: GlobalKey(),
@@ -307,12 +384,13 @@ class _DashboardState extends State<Dashboard> {
                           OutlinedButton.icon(
                             onPressed: () {},
                             icon: const Icon(FluentIcons.filter_24_regular),
-                            label: const Text("Filtrele",style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 0.4,
-                              color: AppColors.lightPrimary,
-                            )),
+                            label: const Text("Filtrele",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.4,
+                                  color: AppColors.lightPrimary,
+                                )),
                           ),
                         ],
                       ),
@@ -322,32 +400,58 @@ class _DashboardState extends State<Dashboard> {
                 const SizedBox(height: 16),
                 FutureBuilder(
                   future: getAllProcess(),
-                  builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                    if(snapshot.data == null) {
+                  builder:
+                      (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                    if (snapshot.data == null) {
                       return AppAlerts.error("Herhangi bir kayıt bulunamadı.");
                     } else {
-                      processes = List.generate(snapshot.data!["data"].length, (index) => AppProcess.fromJson(snapshot.data!["data"][index]));
+                      processes = List.generate(
+                          snapshot.data!["data"].length,
+                          (index) => AppProcess.fromJson(
+                              snapshot.data!["data"][index]));
                       void onSort(int columnIndex, bool ascending) {
-                        if (columnIndex == 0){
-                          processes.sort((process1, process2) => compareString(ascending, process1.user.firstName, process2.user.firstName));
-                        }else if(columnIndex == 1){
-                          processes.sort((process1, process2) => compareString(ascending, process1.user.lastName, process2.user.lastName));
-                        }else if(columnIndex == 2){
-                          processes.sort((process1, process2) => compareString(ascending, process1.user.departmentName, process2.user.departmentName));
-                        }else if(columnIndex == 3){
-                          processes.sort((process1, process2) => compareString(ascending, process1.material.materialName, process2.material.materialName));
-                        }else if(columnIndex == 5){
-                          processes.sort((process1, process2) => compareString(ascending, process1.processTypeName, process2.processTypeName));
-                        }else if(columnIndex == 6){
-                          processes.sort((process1, process2) => compareString(ascending, process1.createdAt, process2.createdAt));
-                        }else if(columnIndex == 7){
-                          processes.sort((process1, process2) => compareString(ascending, process1.updatedAt, process2.user.updatedAt));
+                        if (columnIndex == 0) {
+                          processes.sort((process1, process2) => compareString(
+                              ascending,
+                              process1.user.firstName,
+                              process2.user.firstName));
+                        } else if (columnIndex == 1) {
+                          processes.sort((process1, process2) => compareString(
+                              ascending,
+                              process1.user.lastName,
+                              process2.user.lastName));
+                        } else if (columnIndex == 2) {
+                          processes.sort((process1, process2) => compareString(
+                              ascending,
+                              process1.user.departmentName,
+                              process2.user.departmentName));
+                        } else if (columnIndex == 3) {
+                          processes.sort((process1, process2) => compareString(
+                              ascending,
+                              process1.material.materialName,
+                              process2.material.materialName));
+                        } else if (columnIndex == 5) {
+                          processes.sort((process1, process2) => compareString(
+                              ascending,
+                              process1.processTypeName,
+                              process2.processTypeName));
+                        } else if (columnIndex == 6) {
+                          processes.sort((process1, process2) => compareString(
+                              ascending,
+                              process1.createdAt,
+                              process2.createdAt));
+                        } else if (columnIndex == 7) {
+                          processes.sort((process1, process2) => compareString(
+                              ascending,
+                              process1.updatedAt,
+                              process2.user.updatedAt));
                         }
                         setState(() {
                           sortColumnIndex = columnIndex;
                           isAscending = ascending;
                         });
                       }
+
                       final source = DashboardSource(context, processes);
                       return AdvancedPaginatedDataTable(
                         sortAscending: isAscending,
@@ -366,14 +470,37 @@ class _DashboardState extends State<Dashboard> {
                           }
                         },
                         columns: [
-                          DataColumn(label: Text('İsim', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                          DataColumn(label: Text('Soyisim', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                          DataColumn(label: Text('Birim', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                          DataColumn(label: Text('Materyal', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                          DataColumn(label: Text('Miktar', style: AppText.contextSemiBoldBlue)),
-                          DataColumn(label: Text('İşlem Türü', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                          DataColumn(label: Text('Tarih', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                          DataColumn(label: Text('Saat', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                          DataColumn(
+                              label: Text('İsim',
+                                  style: AppText.contextSemiBoldBlue),
+                              onSort: onSort),
+                          DataColumn(
+                              label: Text('Soyisim',
+                                  style: AppText.contextSemiBoldBlue),
+                              onSort: onSort),
+                          DataColumn(
+                              label: Text('Birim',
+                                  style: AppText.contextSemiBoldBlue),
+                              onSort: onSort),
+                          DataColumn(
+                              label: Text('Materyal',
+                                  style: AppText.contextSemiBoldBlue),
+                              onSort: onSort),
+                          DataColumn(
+                              label: Text('Miktar',
+                                  style: AppText.contextSemiBoldBlue)),
+                          DataColumn(
+                              label: Text('İşlem Türü',
+                                  style: AppText.contextSemiBoldBlue),
+                              onSort: onSort),
+                          DataColumn(
+                              label: Text('Tarih',
+                                  style: AppText.contextSemiBoldBlue),
+                              onSort: onSort),
+                          DataColumn(
+                              label: Text('Saat',
+                                  style: AppText.contextSemiBoldBlue),
+                              onSort: onSort),
                         ],
                       );
                     }
@@ -402,9 +529,7 @@ class _DashboardState extends State<Dashboard> {
   int compareString(bool ascending, String value1, String value2) {
     return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
   }
-
 }
-
 
 class ToDo extends StatelessWidget {
   const ToDo({Key? key}) : super(key: key);
@@ -432,7 +557,8 @@ class ToDo extends StatelessWidget {
         AppCards.taskCard(
           color: AppColors.lightError,
           title: "Yapılacaklar",
-          task: "Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir.",
+          task:
+              "Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir.",
           date: "03/08/2022",
           fullName: "Burak Yalnız",
         ),
@@ -440,7 +566,8 @@ class ToDo extends StatelessWidget {
         AppCards.taskCard(
           color: AppColors.lightWarning,
           title: "Başlık",
-          task: "Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir.",
+          task:
+              "Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir.",
           date: "03/08/2022",
           fullName: "Burak Yalnız",
         ),
@@ -475,7 +602,8 @@ class InProgress extends StatelessWidget {
         AppCards.taskCard(
           color: AppColors.lightSuccess,
           title: "İşlemde",
-          task: "Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir.",
+          task:
+              "Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir.",
           date: "03/08/2022",
           fullName: "Burak Yalnız",
         ),
@@ -510,7 +638,8 @@ class Completed extends StatelessWidget {
         AppCards.taskCard(
           color: AppColors.lightWarning,
           title: "Tamamlandı",
-          task: "Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir.",
+          task:
+              "Lorem Ipsum, dizgi ve baskı endüstrisinde kullanılan mıgır metinlerdir.",
           date: "03/08/2022",
           fullName: "Burak Yalnız",
         ),
@@ -518,9 +647,6 @@ class Completed extends StatelessWidget {
     );
   }
 }
-
-
-
 
 class DashboardSource extends AdvancedDataTableSource<AppProcess> {
   DashboardSource(this.context, this.processes);
@@ -530,18 +656,21 @@ class DashboardSource extends AdvancedDataTableSource<AppProcess> {
 
   @override
   DataRow? getRow(int index) {
-    Function setProcessSelectedRows = Provider.of<States>(context).setProcessSelectedRows;
-    List<int> processSelectedRows = Provider.of<States>(context).processSelectedRows;
+    Function setProcessSelectedRows =
+        Provider.of<States>(context).setProcessSelectedRows;
+    List<int> processSelectedRows =
+        Provider.of<States>(context).processSelectedRows;
 
     final process = processes[index];
 
     String createdDate = DateTime.parse(process.createdAt).toLocal().toString();
     String date = createdDate.substring(0, createdDate.indexOf(" "));
-    String time = createdDate.substring(createdDate.indexOf(" "), createdDate.length - 7);
+    String time =
+        createdDate.substring(createdDate.indexOf(" "), createdDate.length - 7);
 
     return DataRow(
       selected: processSelectedRows.contains(process.processId) ? true : false,
-      onSelectChanged: (value)  => setProcessSelectedRows(process.processId),
+      onSelectChanged: (value) => setProcessSelectedRows(process.processId),
       cells: [
         DataCell(
           Text(
@@ -593,11 +722,15 @@ class DashboardSource extends AdvancedDataTableSource<AppProcess> {
         ),
       ],
       color: MaterialStateProperty.resolveWith<Color?>(
-              (Set<MaterialState> states) {
-            if (states.contains(MaterialState.selected)) {return AppColors.lightPrimary.withOpacity(0.5);}
-            if (index.isEven) {return AppColors.lightPrimary.withOpacity(0.08);}
-            return null;
-          }),
+          (Set<MaterialState> states) {
+        if (states.contains(MaterialState.selected)) {
+          return AppColors.lightPrimary.withOpacity(0.5);
+        }
+        if (index.isEven) {
+          return AppColors.lightPrimary.withOpacity(0.08);
+        }
+        return null;
+      }),
     );
   }
 
@@ -605,7 +738,8 @@ class DashboardSource extends AdvancedDataTableSource<AppProcess> {
   int get selectedRowCount => 0;
 
   @override
-  Future<RemoteDataSourceDetails<AppProcess>> getNextPage(NextPageRequest pageRequest) async {
+  Future<RemoteDataSourceDetails<AppProcess>> getNextPage(
+      NextPageRequest pageRequest) async {
     return RemoteDataSourceDetails(
       processes.length,
       processes
@@ -614,5 +748,4 @@ class DashboardSource extends AdvancedDataTableSource<AppProcess> {
           .toList(), //again in a real world example you would only get the right amount of rows
     );
   }
-
 }
