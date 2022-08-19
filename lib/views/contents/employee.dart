@@ -16,6 +16,7 @@ import '../../states/states.dart';
 import '../../utils/helpers.dart';
 import '../../widgets/app_alerts.dart';
 import '../../widgets/app_form.dart';
+import '../modals/export_data.dart';
 
 class EmployeeManagement extends StatefulWidget {
   const EmployeeManagement({Key? key}) : super(key: key);
@@ -133,7 +134,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                           ),
                           const SizedBox(width: 16),
                           OutlinedButton.icon(
-                            onPressed: () {},
+                            onPressed: () {showExportDataModal(employees);},
                             icon: const Icon(FluentIcons.database_search_24_regular),
                             label: const Text("Dışa Aktar"),
                           ),
@@ -237,6 +238,34 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
 
   int compareString(bool ascending, String value1, String value2) {
     return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
+  }
+
+  void showExportDataModal(List<Employee> dataList) {
+    const tableHeaders = ['İsim', 'Soyisim', 'Birim', 'Email', 'Telefon'];
+
+    List<dynamic> buildRow(int index) {
+      List<dynamic> row = [
+        Helpers.titleCase(dataList[index].firstName),
+        Helpers.titleCase(dataList[index].lastName),
+        Helpers.titleCase(dataList[index].departmentName),
+        dataList[index].email,
+        dataList[index].phoneNumber,
+      ];
+
+      return row;
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return ExportData(
+          title: "Personel Tablosu",
+          dataList: dataList,
+          tableHeaders: tableHeaders,
+          buildRow: buildRow,
+        );
+      },
+    );
   }
 }
 

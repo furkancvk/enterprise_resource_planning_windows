@@ -19,6 +19,7 @@ import '../../states/states.dart';
 import '../../widgets/app_alerts.dart';
 import '../../widgets/app_cards.dart';
 import '../../widgets/app_form.dart';
+import '../modals/export_data.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -251,22 +252,17 @@ class _DashboardState extends State<Dashboard> {
                                               );
                                             });
                                       },
-                                      icon: Icon(
-                                        FluentIcons.add_circle_24_regular,
-                                        color: AppColors.lightPrimary,
-                                      )),
+                                      icon: Icon(FluentIcons.add_circle_24_regular, color: AppColors.lightPrimary),
+                                  ),
                                   ElevatedButton.icon(
                                     onPressed: () {
                                       showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return NotePad();
-                                          });
+                                        context: context,
+                                        builder: (BuildContext context) {return NotePad();}
+                                      );
                                     },
                                     label: Text("Notları Aç"),
-                                    icon: Icon(
-                                      FluentIcons.note_24_regular,
-                                    ),
+                                    icon: Icon(FluentIcons.note_24_regular),
                                   ),
                                 ],
                               )
@@ -398,8 +394,7 @@ class _DashboardState extends State<Dashboard> {
                                         color: AppColors.lightPrimary,
                                       ),
                                       const SizedBox(width: 10),
-                                      Text("Düzenle",
-                                          style: AppText.contextSemiBold),
+                                      Text("Düzenle", style: AppText.contextSemiBold),
                                     ],
                                   ),
                                 ),
@@ -413,16 +408,14 @@ class _DashboardState extends State<Dashboard> {
                                         color: AppColors.lightPrimary,
                                       ),
                                       const SizedBox(width: 10),
-                                      Text("Sil",
-                                          style: AppText.contextSemiBold),
+                                      Text("Sil", style: AppText.contextSemiBold),
                                     ],
                                   ),
                                 ),
                               ],
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4),
-                                side: const BorderSide(
-                                    color: AppColors.lightPrimary),
+                                side: const BorderSide(color: AppColors.lightPrimary),
                               ),
                               splashRadius: 20,
                               offset: const Offset(18, 34),
@@ -430,14 +423,11 @@ class _DashboardState extends State<Dashboard> {
                               elevation: 0,
                               child: Row(
                                 children: [
-                                  const Icon(FluentIcons.options_24_regular,
-                                      color: AppColors.lightPrimary),
+                                  const Icon(FluentIcons.options_24_regular, color: AppColors.lightPrimary),
                                   const SizedBox(width: 16),
-                                  Text("Toplu İşlemler",
-                                      style: AppText.contextSemiBoldBlue),
+                                  Text("Toplu İşlemler", style: AppText.contextSemiBoldBlue),
                                   const SizedBox(width: 16),
-                                  const Icon(FluentIcons.chevron_down_24_filled,
-                                      size: 20, color: AppColors.lightPrimary),
+                                  const Icon(FluentIcons.chevron_down_24_filled, size: 20, color: AppColors.lightPrimary),
                                 ],
                               ),
                             ),
@@ -445,9 +435,8 @@ class _DashboardState extends State<Dashboard> {
                           // DropdownButtonFormField()
                           const SizedBox(width: 16),
                           OutlinedButton.icon(
-                            onPressed: () {},
-                            icon: const Icon(
-                                FluentIcons.database_search_24_regular),
+                            onPressed: () {showExportDataModal(processes);},
+                            icon: const Icon(FluentIcons.database_search_24_regular),
                             label: const Text("Dışa Aktar"),
                           ),
                         ],
@@ -457,8 +446,7 @@ class _DashboardState extends State<Dashboard> {
                           SizedBox(
                             width: 300,
                             height: 40,
-                            child:
-                                AppForm.appAutoCompleteTextFormFieldForSearch(
+                            child: AppForm.appAutoCompleteTextFormFieldForSearch(
                               hint: "Ara...",
                               controller: TextEditingController(),
                               key: GlobalKey(),
@@ -468,13 +456,15 @@ class _DashboardState extends State<Dashboard> {
                           OutlinedButton.icon(
                             onPressed: () {},
                             icon: const Icon(FluentIcons.filter_24_regular),
-                            label: const Text("Filtrele",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 0.4,
-                                  color: AppColors.lightPrimary,
-                                )),
+                            label: const Text(
+                              "Filtrele",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.4,
+                                color: AppColors.lightPrimary,
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -490,53 +480,21 @@ class _DashboardState extends State<Dashboard> {
                     } else if (snapshot.data == null) {
                       return AppAlerts.error("Herhangi bir kayıt bulunamadı.");
                     } else {
-                      processes = List.generate(
-                          snapshot.data!["data"].length,
-                          (index) => AppProcess.fromJson(
-                              snapshot.data!["data"][index]));
+                      processes = List.generate(snapshot.data!["data"].length, (index) => AppProcess.fromJson(snapshot.data!["data"][index]));
                       void onSort(int columnIndex, bool ascending) {
-                        if (columnIndex == 0) {
-                          processes.sort((process1, process2) => compareString(
-                              ascending,
-                              process1.user.firstName,
-                              process2.user.firstName));
-                        } else if (columnIndex == 1) {
-                          processes.sort((process1, process2) => compareString(
-                              ascending,
-                              process1.user.lastName,
-                              process2.user.lastName));
-                        } else if (columnIndex == 2) {
-                          processes.sort((process1, process2) => compareString(
-                              ascending,
-                              process1.user.departmentName,
-                              process2.user.departmentName));
-                        } else if (columnIndex == 3) {
-                          processes.sort((process1, process2) => compareString(
-                              ascending,
-                              process1.material.materialName,
-                              process2.material.materialName));
-                        } else if (columnIndex == 5) {
-                          processes.sort((process1, process2) => compareString(
-                              ascending,
-                              process1.processTypeName,
-                              process2.processTypeName));
-                        } else if (columnIndex == 6) {
-                          processes.sort((process1, process2) => compareString(
-                              ascending,
-                              process1.createdAt,
-                              process2.createdAt));
-                        } else if (columnIndex == 7) {
-                          processes.sort((process1, process2) => compareString(
-                              ascending,
-                              process1.updatedAt,
-                              process2.user.updatedAt));
+                        if (columnIndex == 0) {processes.sort((process1, process2) => compareString(ascending, process1.user.firstName, process2.user.firstName));
+                        } else if (columnIndex == 1) {processes.sort((process1, process2) => compareString(ascending, process1.user.lastName, process2.user.lastName));
+                        } else if (columnIndex == 2) {processes.sort((process1, process2) => compareString(ascending, process1.user.departmentName, process2.user.departmentName));
+                        } else if (columnIndex == 3) {processes.sort((process1, process2) => compareString(ascending, process1.material.materialName, process2.material.materialName));
+                        } else if (columnIndex == 5) {processes.sort((process1, process2) => compareString(ascending, process1.processTypeName, process2.processTypeName));
+                        } else if (columnIndex == 6) {processes.sort((process1, process2) => compareString(ascending, process1.createdAt, process2.createdAt));
+                        } else if (columnIndex == 7) {processes.sort((process1, process2) => compareString(ascending, process1.updatedAt, process2.user.updatedAt));
                         }
                         setState(() {
                           sortColumnIndex = columnIndex;
                           isAscending = ascending;
                         });
                       }
-
                       final source = DashboardSource(context, processes);
                       return AdvancedPaginatedDataTable(
                         sortAscending: isAscending,
@@ -555,37 +513,14 @@ class _DashboardState extends State<Dashboard> {
                           }
                         },
                         columns: [
-                          DataColumn(
-                              label: Text('İsim',
-                                  style: AppText.contextSemiBoldBlue),
-                              onSort: onSort),
-                          DataColumn(
-                              label: Text('Soyisim',
-                                  style: AppText.contextSemiBoldBlue),
-                              onSort: onSort),
-                          DataColumn(
-                              label: Text('Birim',
-                                  style: AppText.contextSemiBoldBlue),
-                              onSort: onSort),
-                          DataColumn(
-                              label: Text('Materyal',
-                                  style: AppText.contextSemiBoldBlue),
-                              onSort: onSort),
-                          DataColumn(
-                              label: Text('Miktar',
-                                  style: AppText.contextSemiBoldBlue)),
-                          DataColumn(
-                              label: Text('İşlem Türü',
-                                  style: AppText.contextSemiBoldBlue),
-                              onSort: onSort),
-                          DataColumn(
-                              label: Text('Tarih',
-                                  style: AppText.contextSemiBoldBlue),
-                              onSort: onSort),
-                          DataColumn(
-                              label: Text('Saat',
-                                  style: AppText.contextSemiBoldBlue),
-                              onSort: onSort),
+                          DataColumn(label: Text('İsim', style: AppText.contextSemiBoldBlue), onSort: onSort),
+                          DataColumn(label: Text('Soyisim', style: AppText.contextSemiBoldBlue), onSort: onSort),
+                          DataColumn(label: Text('Birim', style: AppText.contextSemiBoldBlue), onSort: onSort),
+                          DataColumn(label: Text('Materyal', style: AppText.contextSemiBoldBlue), onSort: onSort),
+                          DataColumn(label: Text('Miktar', style: AppText.contextSemiBoldBlue)),
+                          DataColumn(label: Text('İşlem Türü', style: AppText.contextSemiBoldBlue), onSort: onSort),
+                          DataColumn(label: Text('Tarih', style: AppText.contextSemiBoldBlue), onSort: onSort),
+                          DataColumn(label: Text('Saat', style: AppText.contextSemiBoldBlue), onSort: onSort),
                         ],
                       );
                     }
@@ -614,6 +549,42 @@ class _DashboardState extends State<Dashboard> {
   int compareString(bool ascending, String value1, String value2) {
     return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
   }
+
+  void showExportDataModal(List<AppProcess> dataList) {
+    const tableHeaders = ['İsim', 'Soyisim', 'Birim', 'Materyal', 'Miktar', 'İşlem Türü', 'Tarih', 'Saat'];
+
+    List<dynamic> buildRow(int index) {
+      String createdDate = DateTime.parse(dataList[index].createdAt).toLocal().toString();
+      String date = createdDate.substring(0, createdDate.indexOf(" "));
+      String time = createdDate.substring(createdDate.indexOf(" "), createdDate.length - 7);
+
+      List<dynamic> row = [
+        Helpers.titleCase(dataList[index].user.firstName),
+        Helpers.titleCase(dataList[index].user.lastName),
+        Helpers.titleCase(dataList[index].user.departmentName),
+        Helpers.titleCase(dataList[index].material.materialName),
+        "${dataList[index].amount} ${Helpers.titleCase(dataList[index].material.unitName)}",
+        Helpers.titleCase(dataList[index].processTypeName),
+        date,
+        time,
+      ];
+
+      return row;
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return ExportData(
+          title: "İşlem Geçmişi Tablosu",
+          dataList: dataList,
+          tableHeaders: tableHeaders,
+          buildRow: buildRow,
+        );
+      },
+    );
+  }
+
 }
 
 class ToDo extends StatelessWidget {
@@ -741,17 +712,14 @@ class DashboardSource extends AdvancedDataTableSource<AppProcess> {
 
   @override
   DataRow? getRow(int index) {
-    Function setProcessSelectedRows =
-        Provider.of<States>(context).setProcessSelectedRows;
-    List<int> processSelectedRows =
-        Provider.of<States>(context).processSelectedRows;
+    Function setProcessSelectedRows = Provider.of<States>(context).setProcessSelectedRows;
+    List<int> processSelectedRows = Provider.of<States>(context).processSelectedRows;
 
     final process = processes[index];
 
     String createdDate = DateTime.parse(process.createdAt).toLocal().toString();
     String date = createdDate.substring(0, createdDate.indexOf(" "));
-    String time =
-        createdDate.substring(createdDate.indexOf(" "), createdDate.length - 7);
+    String time = createdDate.substring(createdDate.indexOf(" "), createdDate.length - 7);
 
     return DataRow(
       selected: processSelectedRows.contains(process.processId) ? true : false,
@@ -823,14 +791,13 @@ class DashboardSource extends AdvancedDataTableSource<AppProcess> {
   int get selectedRowCount => 0;
 
   @override
-  Future<RemoteDataSourceDetails<AppProcess>> getNextPage(
-      NextPageRequest pageRequest) async {
+  Future<RemoteDataSourceDetails<AppProcess>> getNextPage(NextPageRequest pageRequest) async {
     return RemoteDataSourceDetails(
       processes.length,
       processes
           .skip(pageRequest.offset)
           .take(pageRequest.pageSize)
-          .toList(), //again in a real world example you would only get the right amount of rows
+          .toList(),
     );
   }
 }

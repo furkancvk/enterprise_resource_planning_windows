@@ -14,6 +14,7 @@ import '../../../services/material_service.dart';
 import '../../../states/states.dart';
 import '../../../widgets/app_alerts.dart';
 import '../../../widgets/app_form.dart';
+import '../../modals/export_data.dart';
 
 class StockMaterial extends StatefulWidget {
   const StockMaterial({Key? key}) : super(key: key);
@@ -134,7 +135,7 @@ class _StockMaterialState extends State<StockMaterial> {
                           // DropdownButtonFormField()
                           const SizedBox(width: 16),
                           OutlinedButton.icon(
-                            onPressed: () {},
+                            onPressed: () {showExportDataModal(materials);},
                             icon: const Icon(FluentIcons.database_search_24_regular),
                             label: const Text("Dışa Aktar"),
                           ),
@@ -237,6 +238,35 @@ class _StockMaterialState extends State<StockMaterial> {
 
   int compareString(bool ascending, String value1, String value2) {
     return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
+  }
+
+  void showExportDataModal(List<AppMaterial> dataList) {
+    const tableHeaders = ['İsim', 'Cins', 'Renk', 'Boyut', 'Miktar', 'Stok Durumu'];
+
+    List<dynamic> buildRow(int index) {
+      List<dynamic> row = [
+        Helpers.titleCase(dataList[index].materialName),
+        Helpers.titleCase(dataList[index].typeName),
+        Helpers.titleCase(dataList[index].colorName),
+        Helpers.titleCase(dataList[index].sizeName),
+        "${dataList[index].amount} ${Helpers.titleCase(dataList[index].unitName)}",
+        dataList[index].amount > 100 ? (dataList[index].amount <= 300 ? 'Kritik' : 'Yeterli') : 'Yetersiz',
+      ];
+
+      return row;
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return ExportData(
+          title: "Hammadde Stok Tablosu",
+          dataList: dataList,
+          tableHeaders: tableHeaders,
+          buildRow: buildRow,
+        );
+      },
+    );
   }
 
 }

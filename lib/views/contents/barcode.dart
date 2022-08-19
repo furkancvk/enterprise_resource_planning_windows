@@ -54,75 +54,64 @@ class _BarcodeState extends State<Barcode> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(6.9),
-                            decoration: BoxDecoration(
-                              color: AppColors.lightSecondary,
-                              border: Border.all(color: AppColors.lightPrimary),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: PopupMenuButton<int>(
-                              tooltip: "Toplu İşlemler",
-                              padding: const EdgeInsets.all(8),
-                              itemBuilder: (context) => [
-                                PopupMenuItem(
-                                  onTap: () {},
-                                  value: 2,
-                                  child: Row(
-                                    children: [
-                                      const Icon(
-                                        FluentIcons.edit_24_regular,
-                                        color: AppColors.lightPrimary,
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Text("Düzenle", style: AppText.contextSemiBold),
-                                    ],
-                                  ),
-                                ),
-                                PopupMenuItem(
-                                  onTap: () {},
-                                  value: 1,
-                                  child: Row(
-                                    children: [
-                                      const Icon(
-                                        FluentIcons.delete_24_regular,
-                                        color: AppColors.lightPrimary,
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Text("Sil", style: AppText.contextSemiBold),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4),
-                                side: const BorderSide(color: AppColors.lightPrimary),
-                              ),
-                              splashRadius: 20,
-                              offset: const Offset(18, 34),
-                              color: AppColors.lightSecondary,
-                              elevation: 0,
+                      Container(
+                        padding: const EdgeInsets.all(6.9),
+                        decoration: BoxDecoration(
+                          color: AppColors.lightSecondary,
+                          border: Border.all(color: AppColors.lightPrimary),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: PopupMenuButton<int>(
+                          tooltip: "Toplu İşlemler",
+                          padding: const EdgeInsets.all(8),
+                          itemBuilder: (context) => [
+                            PopupMenuItem(
+                              onTap: () {},
+                              value: 2,
                               child: Row(
                                 children: [
-                                  const Icon(FluentIcons.options_24_regular,color: AppColors.lightPrimary),
-                                  const SizedBox(width: 16),
-                                  Text("Toplu İşlemler", style: AppText.contextSemiBoldBlue),
-                                  const SizedBox(width: 16),
-                                  const Icon(FluentIcons.chevron_down_24_filled, size: 20, color: AppColors.lightPrimary),
+                                  const Icon(
+                                    FluentIcons.edit_24_regular,
+                                    color: AppColors.lightPrimary,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text("Düzenle", style: AppText.contextSemiBold),
                                 ],
                               ),
                             ),
+                            PopupMenuItem(
+                              onTap: () {},
+                              value: 1,
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    FluentIcons.delete_24_regular,
+                                    color: AppColors.lightPrimary,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text("Sil", style: AppText.contextSemiBold),
+                                ],
+                              ),
+                            ),
+                          ],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
+                            side: const BorderSide(color: AppColors.lightPrimary),
                           ),
-                          // DropdownButtonFormField()
-                          const SizedBox(width: 16),
-                          OutlinedButton.icon(
-                            onPressed: () {},
-                            icon: const Icon(FluentIcons.database_search_24_regular),
-                            label: const Text("Dışa Aktar"),
+                          splashRadius: 20,
+                          offset: const Offset(18, 34),
+                          color: AppColors.lightSecondary,
+                          elevation: 0,
+                          child: Row(
+                            children: [
+                              const Icon(FluentIcons.options_24_regular,color: AppColors.lightPrimary),
+                              const SizedBox(width: 16),
+                              Text("Toplu İşlemler", style: AppText.contextSemiBoldBlue),
+                              const SizedBox(width: 16),
+                              const Icon(FluentIcons.chevron_down_24_filled, size: 20, color: AppColors.lightPrimary),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                       Row(
                         children: [
