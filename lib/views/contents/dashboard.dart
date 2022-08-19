@@ -234,9 +234,25 @@ class _DashboardState extends State<Dashboard> {
                                                 Provider.of<States>(context)
                                                     .setInput;
                                             return AlertDialog(
-                                              title: Text(
-                                                "Yapılacak Not Ekle",
-                                                style: AppText.contextSemiBold,
+                                              title: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    "Yapılacak Not Ekle",
+                                                    style:
+                                                        AppText.contextSemiBold,
+                                                  ),
+                                                  IconButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      icon: Icon(
+                                                        Icons.close_outlined,
+                                                        size: 20,
+                                                      ),
+                                                  splashRadius: 16,)
+                                                ],
                                               ),
                                               content: Container(
                                                 height: 150,
@@ -251,66 +267,83 @@ class _DashboardState extends State<Dashboard> {
                                                 ),
                                               ),
                                               actions: [
-                                                TextButton(
-                                                    onPressed: () {
-                                                      if (input != "") {
-                                                        setState(() {
-                                                          tasks.add(input);
-                                                          setTasks(tasks);
-                                                        });
-                                                        Navigator.of(context)
-                                                            .pop();
+                                                Row(
+                                                  mainAxisAlignment:MainAxisAlignment.end ,
+                                                  children: [
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          if (input != "") {
+                                                            setState(() {
+                                                              tasks.add(input);
+                                                              setTasks(tasks);
+                                                            });
+                                                            Navigator.of(context)
+                                                                .pop();
 
-                                                        input = "";
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                          SnackBar(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(0),
-                                                            content:
-                                                                AppAlerts.success(
-                                                                    "Not Başarıyla Eklendi"),
-                                                            duration:
-                                                                const Duration(
-                                                                    milliseconds:
-                                                                        1500),
-                                                            backgroundColor:
-                                                                AppColors
-                                                                    .lightSecondary,
-                                                          ),
-                                                        );
-                                                        ;
-                                                      } else {
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                          SnackBar(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(0),
-                                                            content:
-                                                                AppAlerts.error(
-                                                                    "Boş Not Eklenemez"),
-                                                            duration:
-                                                                const Duration(
-                                                                    milliseconds:
-                                                                        1500),
-                                                            backgroundColor:
-                                                                AppColors
-                                                                    .lightSecondary,
-                                                          ),
-                                                        );
-                                                      }
-                                                    },
-                                                    child: Text(
-                                                      "Ekle",
-                                                      style:
-                                                          AppText.titleSemiBold,
-                                                    ))
+                                                            input = "";
+                                                            ScaffoldMessenger.of(
+                                                                    context)
+                                                                .showSnackBar(
+                                                              SnackBar(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(0),
+                                                                content: AppAlerts
+                                                                    .success(
+                                                                        "Not başarıyla eklendi"),
+                                                                duration:
+                                                                    const Duration(
+                                                                        milliseconds:
+                                                                            1500),
+                                                                backgroundColor:
+                                                                    AppColors
+                                                                        .lightSecondary,
+                                                              ),
+                                                            );
+                                                            ;
+                                                          } else {
+                                                            Navigator.of(context)
+                                                                .pop();
+                                                            ScaffoldMessenger.of(
+                                                                    context)
+                                                                .showSnackBar(
+                                                              SnackBar(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(0),
+                                                                content:
+                                                                    AppAlerts.error(
+                                                                        "Not alanı boş bırakılamaz"),
+                                                                duration:
+                                                                    const Duration(
+                                                                        milliseconds:
+                                                                            1500),
+                                                                backgroundColor:
+                                                                    AppColors
+                                                                        .lightSecondary,
+                                                              ),
+                                                            );
+                                                          }
+                                                        },
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(
+                                                              FluentIcons
+                                                                  .add_24_regular,
+                                                              size: 20,color: AppColors.lightBlack,
+                                                            ),
+                                                            SizedBox(
+                                                              width: 12,
+                                                            ),
+                                                            Text(
+                                                              "Ekle",
+                                                              style: AppText
+                                                                  .titleSemiBold,
+                                                            ),
+                                                          ],
+                                                        )),
+                                                  ],
+                                                ),
                                               ],
                                             );
                                           });
@@ -677,8 +710,6 @@ class _DashboardState extends State<Dashboard> {
   Future<Map<String, dynamic>> getAllProcess() async {
     return await ProcessService.getAllProcess();
   }
-
-  
 
   int compareString(bool ascending, String value1, String value2) {
     return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
