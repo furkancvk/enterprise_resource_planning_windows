@@ -41,6 +41,7 @@ class _NotePadState extends State<NotePad> {
                   key: UniqueKey(),
                   child: AlertDialog(
                     content: Container(
+                      decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/logo-blue.png',),opacity: 0.1,scale: 0.5)),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -49,6 +50,7 @@ class _NotePadState extends State<NotePad> {
                             children: [
                               Row(
                                 children: [
+
                                   Icon(FluentIcons.calendar_edit_24_regular,size: 24,),
                                   SizedBox(width: 4,),
                                   Text(date),
@@ -74,7 +76,7 @@ class _NotePadState extends State<NotePad> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Divider(
-                                thickness: 3,
+                                thickness: 1,
                                 color: AppColors.lightPrimary,
                               ),
                               Text(
@@ -91,12 +93,17 @@ class _NotePadState extends State<NotePad> {
           )
         : AlertDialog(
             content: Container(
-            height: 50,
-            width: 50,
+            height: 300,
+            width: 300,
             child: Center(
-              child: Text(
-                "Gösterilecek Not Yok",
-                style: AppText.contextSemiBold,
+              child: Column(
+                children: [
+                  Image.asset('assets/images/no-data.png'),
+                  Text(
+                    "Gösterilecek Not Yok",
+                    style: AppText.contextSemiBold,
+                  ),
+                ],
               ),
             ),
           ));

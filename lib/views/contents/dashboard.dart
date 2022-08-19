@@ -16,6 +16,7 @@ import '../../packages/edited_advanced_datatable_source.dart';
 import '../../services/employee_service.dart';
 import '../../services/material_service.dart';
 import '../../states/states.dart';
+import '../../storage/storage.dart';
 import '../../widgets/app_alerts.dart';
 import '../../widgets/app_cards.dart';
 import '../../widgets/app_form.dart';
@@ -29,11 +30,12 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  static SecureStorage secureStorage = SecureStorage();
   int? sortColumnIndex;
   bool isAscending = false;
   var rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
-  List tasks=[];
-  String input="";
+  List tasks = [];
+  String input = "";
   List<AppProcess> processes = [];
 
   DateTime selectedDay = DateTime.now();
@@ -221,51 +223,109 @@ class _DashboardState extends State<Dashboard> {
                               Row(
                                 children: [
                                   IconButton(
-                                      onPressed: () {
-                                        showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              Function setTasks =Provider.of<States>(context).setTasks;
-                                              Function setInput =Provider.of<States>(context).setInput;
-                                              return AlertDialog(
-                                                title: Text(
-                                                  "Yapılacak Not Ekle",
-                                                  style: AppText.contextSemiBold,
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            Function setTasks =
+                                                Provider.of<States>(context)
+                                                    .setTasks;
+                                            Function setInput =
+                                                Provider.of<States>(context)
+                                                    .setInput;
+                                            return AlertDialog(
+                                              title: Text(
+                                                "Yapılacak Not Ekle",
+                                                style: AppText.contextSemiBold,
+                                              ),
+                                              content: Container(
+                                                height: 150,
+                                                width: 300,
+                                                child: TextField(
+                                                  maxLength: 300,
+                                                  maxLines: 7,
+                                                  onChanged: (String value) {
+                                                    input = value;
+                                                    setInput(input);
+                                                  },
                                                 ),
-                                                content: Container(
-                                                  height: 150,
-                                                  width: 300,
-                                                  child: TextField(
-                                                    maxLength: 300,
-                                                    maxLines: 7,
-                                                    onChanged: (String value) {
-                                                      input = value;
-                                                      setInput(input);
-                                                    },
-                                                  ),
-                                                ),
-                                                actions: [
-                                                  TextButton(
-                                                      onPressed: () {
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      if (input != "") {
                                                         setState(() {
                                                           tasks.add(input);
                                                           setTasks(tasks);
                                                         });
-                                                        Navigator.of(context).pop();
-                                                      },
-                                                      child: Text("Ekle",style: AppText.titleSemiBold,))
-                                                ],
-                                              );
-                                            });
-                                      },
-                                      icon: Icon(FluentIcons.add_circle_24_regular, color: AppColors.lightPrimary),
+                                                        Navigator.of(context)
+                                                            .pop();
+
+                                                        input = "";
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                          SnackBar(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(0),
+                                                            content:
+                                                                AppAlerts.success(
+                                                                    "Not Başarıyla Eklendi"),
+                                                            duration:
+                                                                const Duration(
+                                                                    milliseconds:
+                                                                        1500),
+                                                            backgroundColor:
+                                                                AppColors
+                                                                    .lightSecondary,
+                                                          ),
+                                                        );
+                                                        ;
+                                                      } else {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                          SnackBar(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(0),
+                                                            content:
+                                                                AppAlerts.error(
+                                                                    "Boş Not Eklenemez"),
+                                                            duration:
+                                                                const Duration(
+                                                                    milliseconds:
+                                                                        1500),
+                                                            backgroundColor:
+                                                                AppColors
+                                                                    .lightSecondary,
+                                                          ),
+                                                        );
+                                                      }
+                                                    },
+                                                    child: Text(
+                                                      "Ekle",
+                                                      style:
+                                                          AppText.titleSemiBold,
+                                                    ))
+                                              ],
+                                            );
+                                          });
+                                    },
+                                    icon: Icon(
+                                        FluentIcons.add_circle_24_regular,
+                                        color: AppColors.lightPrimary),
                                   ),
                                   ElevatedButton.icon(
                                     onPressed: () {
                                       showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {return NotePad();}
-                                      );
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return NotePad();
+                                          });
                                     },
                                     label: Text("Notları Aç"),
                                     icon: Icon(FluentIcons.note_24_regular),
@@ -400,7 +460,8 @@ class _DashboardState extends State<Dashboard> {
                                         color: AppColors.lightPrimary,
                                       ),
                                       const SizedBox(width: 10),
-                                      Text("Düzenle", style: AppText.contextSemiBold),
+                                      Text("Düzenle",
+                                          style: AppText.contextSemiBold),
                                     ],
                                   ),
                                 ),
@@ -414,14 +475,16 @@ class _DashboardState extends State<Dashboard> {
                                         color: AppColors.lightPrimary,
                                       ),
                                       const SizedBox(width: 10),
-                                      Text("Sil", style: AppText.contextSemiBold),
+                                      Text("Sil",
+                                          style: AppText.contextSemiBold),
                                     ],
                                   ),
                                 ),
                               ],
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4),
-                                side: const BorderSide(color: AppColors.lightPrimary),
+                                side: const BorderSide(
+                                    color: AppColors.lightPrimary),
                               ),
                               splashRadius: 20,
                               offset: const Offset(18, 34),
@@ -429,11 +492,14 @@ class _DashboardState extends State<Dashboard> {
                               elevation: 0,
                               child: Row(
                                 children: [
-                                  const Icon(FluentIcons.options_24_regular, color: AppColors.lightPrimary),
+                                  const Icon(FluentIcons.options_24_regular,
+                                      color: AppColors.lightPrimary),
                                   const SizedBox(width: 16),
-                                  Text("Toplu İşlemler", style: AppText.contextSemiBoldBlue),
+                                  Text("Toplu İşlemler",
+                                      style: AppText.contextSemiBoldBlue),
                                   const SizedBox(width: 16),
-                                  const Icon(FluentIcons.chevron_down_24_filled, size: 20, color: AppColors.lightPrimary),
+                                  const Icon(FluentIcons.chevron_down_24_filled,
+                                      size: 20, color: AppColors.lightPrimary),
                                 ],
                               ),
                             ),
@@ -441,8 +507,11 @@ class _DashboardState extends State<Dashboard> {
                           // DropdownButtonFormField()
                           const SizedBox(width: 16),
                           OutlinedButton.icon(
-                            onPressed: () {showExportDataModal(processes);},
-                            icon: const Icon(FluentIcons.database_search_24_regular),
+                            onPressed: () {
+                              showExportDataModal(processes);
+                            },
+                            icon: const Icon(
+                                FluentIcons.database_search_24_regular),
                             label: const Text("Dışa Aktar"),
                           ),
                         ],
@@ -452,7 +521,8 @@ class _DashboardState extends State<Dashboard> {
                           SizedBox(
                             width: 300,
                             height: 40,
-                            child: AppForm.appAutoCompleteTextFormFieldForSearch(
+                            child:
+                                AppForm.appAutoCompleteTextFormFieldForSearch(
                               hint: "Ara...",
                               controller: TextEditingController(),
                               key: GlobalKey(),
@@ -480,27 +550,60 @@ class _DashboardState extends State<Dashboard> {
                 const SizedBox(height: 16),
                 FutureBuilder(
                   future: getAllProcess(),
-                  builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                  builder:
+                      (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator();
                     } else if (snapshot.data == null) {
                       return AppAlerts.error("Herhangi bir kayıt bulunamadı.");
                     } else {
-                      processes = List.generate(snapshot.data!["data"].length, (index) => AppProcess.fromJson(snapshot.data!["data"][index]));
+                      processes = List.generate(
+                          snapshot.data!["data"].length,
+                          (index) => AppProcess.fromJson(
+                              snapshot.data!["data"][index]));
                       void onSort(int columnIndex, bool ascending) {
-                        if (columnIndex == 0) {processes.sort((process1, process2) => compareString(ascending, process1.user.firstName, process2.user.firstName));
-                        } else if (columnIndex == 1) {processes.sort((process1, process2) => compareString(ascending, process1.user.lastName, process2.user.lastName));
-                        } else if (columnIndex == 2) {processes.sort((process1, process2) => compareString(ascending, process1.user.departmentName, process2.user.departmentName));
-                        } else if (columnIndex == 3) {processes.sort((process1, process2) => compareString(ascending, process1.material.materialName, process2.material.materialName));
-                        } else if (columnIndex == 5) {processes.sort((process1, process2) => compareString(ascending, process1.processTypeName, process2.processTypeName));
-                        } else if (columnIndex == 6) {processes.sort((process1, process2) => compareString(ascending, process1.createdAt, process2.createdAt));
-                        } else if (columnIndex == 7) {processes.sort((process1, process2) => compareString(ascending, process1.updatedAt, process2.user.updatedAt));
+                        if (columnIndex == 0) {
+                          processes.sort((process1, process2) => compareString(
+                              ascending,
+                              process1.user.firstName,
+                              process2.user.firstName));
+                        } else if (columnIndex == 1) {
+                          processes.sort((process1, process2) => compareString(
+                              ascending,
+                              process1.user.lastName,
+                              process2.user.lastName));
+                        } else if (columnIndex == 2) {
+                          processes.sort((process1, process2) => compareString(
+                              ascending,
+                              process1.user.departmentName,
+                              process2.user.departmentName));
+                        } else if (columnIndex == 3) {
+                          processes.sort((process1, process2) => compareString(
+                              ascending,
+                              process1.material.materialName,
+                              process2.material.materialName));
+                        } else if (columnIndex == 5) {
+                          processes.sort((process1, process2) => compareString(
+                              ascending,
+                              process1.processTypeName,
+                              process2.processTypeName));
+                        } else if (columnIndex == 6) {
+                          processes.sort((process1, process2) => compareString(
+                              ascending,
+                              process1.createdAt,
+                              process2.createdAt));
+                        } else if (columnIndex == 7) {
+                          processes.sort((process1, process2) => compareString(
+                              ascending,
+                              process1.updatedAt,
+                              process2.user.updatedAt));
                         }
                         setState(() {
                           sortColumnIndex = columnIndex;
                           isAscending = ascending;
                         });
                       }
+
                       final source = DashboardSource(context, processes);
                       return AdvancedPaginatedDataTable(
                         sortAscending: isAscending,
@@ -519,14 +622,37 @@ class _DashboardState extends State<Dashboard> {
                           }
                         },
                         columns: [
-                          DataColumn(label: Text('İsim', style: AppText.contextSemiBoldBlue), onSort: onSort),
-                          DataColumn(label: Text('Soyisim', style: AppText.contextSemiBoldBlue), onSort: onSort),
-                          DataColumn(label: Text('Birim', style: AppText.contextSemiBoldBlue), onSort: onSort),
-                          DataColumn(label: Text('Materyal', style: AppText.contextSemiBoldBlue), onSort: onSort),
-                          DataColumn(label: Text('Miktar', style: AppText.contextSemiBoldBlue)),
-                          DataColumn(label: Text('İşlem Türü', style: AppText.contextSemiBoldBlue), onSort: onSort),
-                          DataColumn(label: Text('Tarih', style: AppText.contextSemiBoldBlue), onSort: onSort),
-                          DataColumn(label: Text('Saat', style: AppText.contextSemiBoldBlue), onSort: onSort),
+                          DataColumn(
+                              label: Text('İsim',
+                                  style: AppText.contextSemiBoldBlue),
+                              onSort: onSort),
+                          DataColumn(
+                              label: Text('Soyisim',
+                                  style: AppText.contextSemiBoldBlue),
+                              onSort: onSort),
+                          DataColumn(
+                              label: Text('Birim',
+                                  style: AppText.contextSemiBoldBlue),
+                              onSort: onSort),
+                          DataColumn(
+                              label: Text('Materyal',
+                                  style: AppText.contextSemiBoldBlue),
+                              onSort: onSort),
+                          DataColumn(
+                              label: Text('Miktar',
+                                  style: AppText.contextSemiBoldBlue)),
+                          DataColumn(
+                              label: Text('İşlem Türü',
+                                  style: AppText.contextSemiBoldBlue),
+                              onSort: onSort),
+                          DataColumn(
+                              label: Text('Tarih',
+                                  style: AppText.contextSemiBoldBlue),
+                              onSort: onSort),
+                          DataColumn(
+                              label: Text('Saat',
+                                  style: AppText.contextSemiBoldBlue),
+                              onSort: onSort),
                         ],
                       );
                     }
@@ -552,17 +678,30 @@ class _DashboardState extends State<Dashboard> {
     return await ProcessService.getAllProcess();
   }
 
+  
+
   int compareString(bool ascending, String value1, String value2) {
     return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
   }
 
   void showExportDataModal(List<AppProcess> dataList) {
-    const tableHeaders = ['İsim', 'Soyisim', 'Birim', 'Materyal', 'Miktar', 'İşlem Türü', 'Tarih', 'Saat'];
+    const tableHeaders = [
+      'İsim',
+      'Soyisim',
+      'Birim',
+      'Materyal',
+      'Miktar',
+      'İşlem Türü',
+      'Tarih',
+      'Saat'
+    ];
 
     List<dynamic> buildRow(int index) {
-      String createdDate = DateTime.parse(dataList[index].createdAt).toLocal().toString();
+      String createdDate =
+          DateTime.parse(dataList[index].createdAt).toLocal().toString();
       String date = createdDate.substring(0, createdDate.indexOf(" "));
-      String time = createdDate.substring(createdDate.indexOf(" "), createdDate.length - 7);
+      String time = createdDate.substring(
+          createdDate.indexOf(" "), createdDate.length - 7);
 
       List<dynamic> row = [
         Helpers.titleCase(dataList[index].user.firstName),
@@ -590,7 +729,6 @@ class _DashboardState extends State<Dashboard> {
       },
     );
   }
-
 }
 
 class ToDo extends StatelessWidget {
@@ -718,14 +856,17 @@ class DashboardSource extends AdvancedDataTableSource<AppProcess> {
 
   @override
   DataRow? getRow(int index) {
-    Function setProcessSelectedRows = Provider.of<States>(context).setProcessSelectedRows;
-    List<int> processSelectedRows = Provider.of<States>(context).processSelectedRows;
+    Function setProcessSelectedRows =
+        Provider.of<States>(context).setProcessSelectedRows;
+    List<int> processSelectedRows =
+        Provider.of<States>(context).processSelectedRows;
 
     final process = processes[index];
 
     String createdDate = DateTime.parse(process.createdAt).toLocal().toString();
     String date = createdDate.substring(0, createdDate.indexOf(" "));
-    String time = createdDate.substring(createdDate.indexOf(" "), createdDate.length - 7);
+    String time =
+        createdDate.substring(createdDate.indexOf(" "), createdDate.length - 7);
 
     return DataRow(
       selected: processSelectedRows.contains(process.processId) ? true : false,
@@ -797,13 +938,11 @@ class DashboardSource extends AdvancedDataTableSource<AppProcess> {
   int get selectedRowCount => 0;
 
   @override
-  Future<RemoteDataSourceDetails<AppProcess>> getNextPage(NextPageRequest pageRequest) async {
+  Future<RemoteDataSourceDetails<AppProcess>> getNextPage(
+      NextPageRequest pageRequest) async {
     return RemoteDataSourceDetails(
       processes.length,
-      processes
-          .skip(pageRequest.offset)
-          .take(pageRequest.pageSize)
-          .toList(),
+      processes.skip(pageRequest.offset).take(pageRequest.pageSize).toList(),
     );
   }
 }
