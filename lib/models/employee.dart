@@ -39,7 +39,7 @@ class Employee {
     "email": email,
     "phoneNumber": phoneNumber,
     "departmentName": departmentName,
-    "image": imageUrl,
+    "imageUrl": imageUrl,
     "createdAt": createdAt,
     "updatedAt": updatedAt,
   };

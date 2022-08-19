@@ -179,6 +179,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                     } else if(snapshot.data == null) {
                       return AppAlerts.error("Herhangi bir kayıt bulunamadı.");
                     } else {
+                      print(snapshot.data!["data"]);
                       employees = List.generate(snapshot.data!["data"].length, (index) => Employee.fromJson(snapshot.data!["data"][index]));
                       void onSort(int columnIndex, bool ascending) {
                         if (columnIndex == 1) {
