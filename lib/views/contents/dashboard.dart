@@ -232,11 +232,17 @@ class _DashboardState extends State<Dashboard> {
                                                   "Yapılacak Not Ekle",
                                                   style: AppText.contextSemiBold,
                                                 ),
-                                                content: TextField(
-                                                  onChanged: (String value) {
-                                                    input = value;
-                                                    setInput(input);
-                                                  },
+                                                content: Container(
+                                                  height: 150,
+                                                  width: 300,
+                                                  child: TextField(
+                                                    maxLength: 300,
+                                                    maxLines: 7,
+                                                    onChanged: (String value) {
+                                                      input = value;
+                                                      setInput(input);
+                                                    },
+                                                  ),
                                                 ),
                                                 actions: [
                                                   TextButton(
@@ -247,7 +253,7 @@ class _DashboardState extends State<Dashboard> {
                                                         });
                                                         Navigator.of(context).pop();
                                                       },
-                                                      child: Text("Ekle"))
+                                                      child: Text("Ekle",style: AppText.titleSemiBold,))
                                                 ],
                                               );
                                             });
