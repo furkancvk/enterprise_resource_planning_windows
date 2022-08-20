@@ -1,7 +1,6 @@
 import 'package:erp_windows/models/employee.dart';
 import 'package:erp_windows/services/employee_service.dart';
 import 'package:erp_windows/views/modals/add_employee.dart';
-import 'package:erp_windows/widgets/app_cards.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,9 +30,75 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
   var rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
 
   List<Employee> employees = [];
+  bool isNotFound = false;
+
+  void getAllEmployee() {
+    EmployeeService.getAllEmployee().then((value) => {
+      if(value["success"]) {
+        for(var data in value["data"]) {
+          employees.add(Employee.fromJson(data)),
+        },
+        if(value["data"] == []) isNotFound = true,
+        setState(() {}),
+      }
+    });
+  }
+
+  void onSort(int columnIndex, bool ascending) {
+    if (columnIndex == 1) {
+      employees.sort((employee1, employee2) => compareString(ascending, employee1.firstName, employee2.firstName));
+    } else if (columnIndex == 2) {
+      employees.sort((employee1, employee2) => compareString(ascending, employee1.lastName, employee2.lastName));
+    } else if (columnIndex == 3) {
+      employees.sort((employee1, employee2) => compareString(ascending, employee1.departmentName, employee2.departmentName));
+    }
+    setState(() {
+      sortColumnIndex = columnIndex;
+      isAscending = ascending;
+    });
+  }
+
+  int compareString(bool ascending, String value1, String value2) {
+    return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
+  }
+
+  void showExportDataModal(List<Employee> dataList) {
+    const tableHeaders = ['İsim', 'Soyisim', 'Birim', 'Email', 'Telefon'];
+
+    List<dynamic> buildRow(int index) {
+      List<dynamic> row = [
+        Helpers.titleCase(dataList[index].firstName),
+        Helpers.titleCase(dataList[index].lastName),
+        Helpers.titleCase(dataList[index].departmentName),
+        dataList[index].email,
+        dataList[index].phoneNumber,
+      ];
+
+      return row;
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return ExportData(
+          title: "Personel Tablosu",
+          dataList: dataList,
+          tableHeaders: tableHeaders,
+          buildRow: buildRow,
+        );
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getAllEmployee();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final source = EmployeeSource(context, employees);
     return Scaffold(
       appBar: AppBar(
         leading: const Icon(FluentIcons.people_team_24_regular),
@@ -171,101 +236,39 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                FutureBuilder(
-                  future: getAllEmployee(),
-                  builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if(snapshot.data == null) {
-                      return AppAlerts.error("Herhangi bir kayıt bulunamadı.");
-                    } else {
-                      print(snapshot.data!["data"]);
-                      employees = List.generate(snapshot.data!["data"].length, (index) => Employee.fromJson(snapshot.data!["data"][index]));
-                      void onSort(int columnIndex, bool ascending) {
-                        if (columnIndex == 1) {
-                          employees.sort((employee1, employee2) => compareString(ascending, employee1.firstName, employee2.firstName));
-                        } else if (columnIndex == 2) {
-                          employees.sort((employee1, employee2) => compareString(ascending, employee1.lastName, employee2.lastName));
-                        } else if (columnIndex == 3) {
-                          employees.sort((employee1, employee2) => compareString(ascending, employee1.departmentName, employee2.departmentName));
-                        }
-                        setState(() {
-                          sortColumnIndex = columnIndex;
-                          isAscending = ascending;
-                        });
-                      }
-
-                      final source = EmployeeSource(context, employees);
-                      return AdvancedPaginatedDataTable(
-                        sortAscending: isAscending,
-                        sortColumnIndex: sortColumnIndex,
-                        /*customTableFooter: ,*/
-                        addEmptyRows: false,
-                        source: source,
-                        showFirstLastButtons: true,
-                        rowsPerPage: rowsPerPage,
-                        availableRowsPerPage: const [10, 16, 20, 56],
-                        onRowsPerPageChanged: (newRowsPerPage) {
-                          if (newRowsPerPage != null) {
-                            setState(() {
-                              rowsPerPage = newRowsPerPage;
-                            });
-                          }
-                        },
-                        columns: [
-                          DataColumn(label: Text('Görsel', style: AppText.contextSemiBoldBlue)),
-                          DataColumn(label: Text('İsim', style: AppText.contextSemiBoldBlue), onSort: onSort),
-                          DataColumn(label: Text('Soyisim', style: AppText.contextSemiBoldBlue), onSort: onSort),
-                          DataColumn(label: Text('Birim', style: AppText.contextSemiBoldBlue), onSort: onSort),
-                          DataColumn(label: Text('Email', style: AppText.contextSemiBoldBlue)),
-                          DataColumn(label: Text('Telefon', style: AppText.contextSemiBoldBlue)),
-                          DataColumn(label: Text('İşlemler', style: AppText.contextSemiBoldBlue)),
-                        ],
-                      );
+                if(employees.isEmpty) const Text("Yükleniyor"),
+                if(isNotFound) AppAlerts.info("Herhangi bir kayıt bulunamadı."),
+                if(employees.isNotEmpty) AdvancedPaginatedDataTable(
+                  sortAscending: isAscending,
+                  sortColumnIndex: sortColumnIndex,
+                  /*customTableFooter: ,*/
+                  addEmptyRows: false,
+                  source: source,
+                  showFirstLastButtons: true,
+                  rowsPerPage: rowsPerPage,
+                  availableRowsPerPage: const [10, 16, 20, 56],
+                  onRowsPerPageChanged: (newRowsPerPage) {
+                    if (newRowsPerPage != null) {
+                      setState(() {
+                        rowsPerPage = newRowsPerPage;
+                      });
                     }
                   },
+                  columns: [
+                    DataColumn(label: Text('Görsel', style: AppText.contextSemiBoldBlue)),
+                    DataColumn(label: Text('İsim', style: AppText.contextSemiBoldBlue), onSort: onSort),
+                    DataColumn(label: Text('Soyisim', style: AppText.contextSemiBoldBlue), onSort: onSort),
+                    DataColumn(label: Text('Birim', style: AppText.contextSemiBoldBlue), onSort: onSort),
+                    DataColumn(label: Text('Email', style: AppText.contextSemiBoldBlue)),
+                    DataColumn(label: Text('Telefon', style: AppText.contextSemiBoldBlue)),
+                    DataColumn(label: Text('İşlemler', style: AppText.contextSemiBoldBlue)),
+                  ],
                 ),
               ],
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Future<Map<String, dynamic>> getAllEmployee() async {
-    return await EmployeeService.getAllEmployee();
-  }
-
-  int compareString(bool ascending, String value1, String value2) {
-    return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
-  }
-
-  void showExportDataModal(List<Employee> dataList) {
-    const tableHeaders = ['İsim', 'Soyisim', 'Birim', 'Email', 'Telefon'];
-
-    List<dynamic> buildRow(int index) {
-      List<dynamic> row = [
-        Helpers.titleCase(dataList[index].firstName),
-        Helpers.titleCase(dataList[index].lastName),
-        Helpers.titleCase(dataList[index].departmentName),
-        dataList[index].email,
-        dataList[index].phoneNumber,
-      ];
-
-      return row;
-    }
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return ExportData(
-          title: "Personel Tablosu",
-          dataList: dataList,
-          tableHeaders: tableHeaders,
-          buildRow: buildRow,
-        );
-      },
     );
   }
 }

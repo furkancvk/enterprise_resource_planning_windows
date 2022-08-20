@@ -30,9 +30,74 @@ class _StockMaterialState extends State<StockMaterial> {
   var rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
 
   List<AppMaterial> materials = [];
+  bool isNotFound = false;
+
+  void getAllMaterial() {
+    MaterialService.getAllMaterials().then((value) => {
+      if(value["success"]) {
+        for(var data in value["data"]) {
+          materials.add(AppMaterial.fromJson(data)),
+        },
+        if(value["data"] == []) isNotFound = true,
+        setState(() {}),
+      }
+    });
+  }
+
+  void onSort(int columnIndex, bool ascending) {
+    if(columnIndex == 1){materials.sort((material1, material2) => compareString(ascending, material1.materialName, material2.materialName));
+    }else if(columnIndex == 2){materials.sort((material1, material2) => compareString(ascending, material1.typeName, material2.typeName));
+    }else if(columnIndex == 3){materials.sort((material1, material2) => compareString(ascending, material1.colorName, material2.colorName));
+    }else if(columnIndex == 6){///Stok durumuna göre değişmeli burasımaterials.sort((material1, material2) => compareString(ascending, material1.amount.toString(), material2.amount.toString()));
+    }
+    setState(() {
+      sortColumnIndex = columnIndex;
+      isAscending = ascending;
+    });
+  }
+
+  int compareString(bool ascending, String value1, String value2) {
+    return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
+  }
+
+  void showExportDataModal(List<AppMaterial> dataList) {
+    const tableHeaders = ['İsim', 'Cins', 'Renk', 'Boyut', 'Miktar', 'Stok Durumu'];
+
+    List<dynamic> buildRow(int index) {
+      List<dynamic> row = [
+        Helpers.titleCase(dataList[index].materialName),
+        Helpers.titleCase(dataList[index].typeName),
+        Helpers.titleCase(dataList[index].colorName),
+        Helpers.titleCase(dataList[index].sizeName),
+        "${dataList[index].amount} ${Helpers.titleCase(dataList[index].unitName)}",
+        dataList[index].amount > 100 ? (dataList[index].amount <= 300 ? 'Kritik' : 'Yeterli') : 'Yetersiz',
+      ];
+
+      return row;
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return ExportData(
+          title: "Hammadde Stok Tablosu",
+          dataList: dataList,
+          tableHeaders: tableHeaders,
+          buildRow: buildRow,
+        );
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getAllMaterial();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final source = StockMaterialSource(context, materials);
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -170,60 +235,34 @@ class _StockMaterialState extends State<StockMaterial> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                FutureBuilder(
-                  future: getAllMaterial(),
-                  builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if(snapshot.data == null) {
-                      return AppAlerts.error("Herhangi bir kayıt bulunamadı.");
-                    } else {
-                      materials = List.generate(snapshot.data!["data"].length, (index) => AppMaterial.fromJson(snapshot.data!["data"][index]));
-                      void onSort(int columnIndex, bool ascending) {
-                        if(columnIndex == 1){
-                          materials.sort((material1, material2) => compareString(ascending, material1.materialName, material2.materialName));
-                        }else if(columnIndex == 2){
-                          materials.sort((material1, material2) => compareString(ascending, material1.typeName, material2.typeName));
-                        }else if(columnIndex == 3){
-                          materials.sort((material1, material2) => compareString(ascending, material1.colorName, material2.colorName));
-                        }else if(columnIndex == 6){///Stok durumuna göre değişmeli burası
-                          materials.sort((material1, material2) => compareString(ascending, material1.amount.toString(), material2.amount.toString()));
-                        }
-                        setState(() {
-                          sortColumnIndex = columnIndex;
-                          isAscending = ascending;
-                        });
-                      }
-                      final source = StockMaterialSource(context, materials);
-                      return AdvancedPaginatedDataTable(
-                        sortAscending: isAscending,
-                        sortColumnIndex: sortColumnIndex,
-                        /*customTableFooter: ,*/
-                        addEmptyRows: false,
-                        source: source,
-                        showFirstLastButtons: true,
-                        rowsPerPage: rowsPerPage,
-                        availableRowsPerPage: const [10, 16, 20, 56],
-                        onRowsPerPageChanged: (newRowsPerPage) {
-                          if (newRowsPerPage != null) {
-                            setState(() {
-                              rowsPerPage = newRowsPerPage;
-                            });
-                          }
-                        },
-                        columns: [
-                          /*DataColumn(label: Text('Görsel', style: AppText.contextSemiBoldBlue)),*/
-                          DataColumn(label: Text('İsim', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                          DataColumn(label: Text('Cins', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                          DataColumn(label: Text('Renk', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                          DataColumn(label: Text('Boyut', style: AppText.contextSemiBoldBlue)),
-                          DataColumn(label: Text('Miktar', style: AppText.contextSemiBoldBlue)),
-                          DataColumn(label: Text('Stok Durumu', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                          DataColumn(label: Text('İşlemler', style: AppText.contextSemiBoldBlue)),
-                        ],
-                      );
+                if(materials.isEmpty) const Text("Yükleniyor"),
+                if(isNotFound) AppAlerts.info("Herhangi bir kayıt bulunamadı."),
+                if(materials.isNotEmpty) AdvancedPaginatedDataTable(
+                  sortAscending: isAscending,
+                  sortColumnIndex: sortColumnIndex,
+                  /*customTableFooter: ,*/
+                  addEmptyRows: false,
+                  source: source,
+                  showFirstLastButtons: true,
+                  rowsPerPage: rowsPerPage,
+                  availableRowsPerPage: const [10, 16, 20, 56],
+                  onRowsPerPageChanged: (newRowsPerPage) {
+                    if (newRowsPerPage != null) {
+                      setState(() {
+                        rowsPerPage = newRowsPerPage;
+                      });
                     }
                   },
+                  columns: [
+                    DataColumn(label: Text('Görsel', style: AppText.contextSemiBoldBlue)),
+                    DataColumn(label: Text('İsim', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                    DataColumn(label: Text('Cins', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                    DataColumn(label: Text('Renk', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                    DataColumn(label: Text('Boyut', style: AppText.contextSemiBoldBlue)),
+                    DataColumn(label: Text('Miktar', style: AppText.contextSemiBoldBlue)),
+                    DataColumn(label: Text('Stok Durumu', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                    DataColumn(label: Text('İşlemler', style: AppText.contextSemiBoldBlue)),
+                  ],
                 ),
               ],
             ),
@@ -232,44 +271,6 @@ class _StockMaterialState extends State<StockMaterial> {
       ),
     );
   }
-
-  Future<Map<String, dynamic>> getAllMaterial() async {
-    return await MaterialService.getAllMaterials();
-  }
-
-  int compareString(bool ascending, String value1, String value2) {
-    return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
-  }
-
-  void showExportDataModal(List<AppMaterial> dataList) {
-    const tableHeaders = ['İsim', 'Cins', 'Renk', 'Boyut', 'Miktar', 'Stok Durumu'];
-
-    List<dynamic> buildRow(int index) {
-      List<dynamic> row = [
-        Helpers.titleCase(dataList[index].materialName),
-        Helpers.titleCase(dataList[index].typeName),
-        Helpers.titleCase(dataList[index].colorName),
-        Helpers.titleCase(dataList[index].sizeName),
-        "${dataList[index].amount} ${Helpers.titleCase(dataList[index].unitName)}",
-        dataList[index].amount > 100 ? (dataList[index].amount <= 300 ? 'Kritik' : 'Yeterli') : 'Yetersiz',
-      ];
-
-      return row;
-    }
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return ExportData(
-          title: "Hammadde Stok Tablosu",
-          dataList: dataList,
-          tableHeaders: tableHeaders,
-          buildRow: buildRow,
-        );
-      },
-    );
-  }
-
 }
 
 class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
@@ -293,22 +294,26 @@ class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
         setMaterialSelectedRows(material.materialId);
       },
       cells: [
-        /*DataCell(
+        DataCell(
           Container(
             width: 36,
             height: 36,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
-              image: material.imageUrl.isEmpty ? const DecorationImage(
+              image: const DecorationImage(
+                image: AssetImage("assets/images/placeholder-image.jpg"),
+                fit: BoxFit.cover,
+              ),
+              /*image: material.imageUrl.isEmpty ? const DecorationImage(
                 image: AssetImage("assets/images/placeholder-image.jpg"),
                 fit: BoxFit.cover,
               ) : DecorationImage(
                 image: NetworkImage(imageUrl),
                 fit: BoxFit.cover,
-              ),
+              ),*/
             ),
           ),
-        ),*/
+        ),
         DataCell(
           Text(
             Helpers.titleCase(material.materialName),

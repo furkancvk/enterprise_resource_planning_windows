@@ -37,14 +37,136 @@ class _DashboardState extends State<Dashboard> {
   List tasks = [];
   String input = "";
   List<AppProcess> processes = [];
+  bool isNotFound = false;
+
+  void getAllProcess() {
+    ProcessService.getAllProcess().then((value) => {
+      if(value["success"]) {
+        for(var data in value["data"]) {
+          processes.add(AppProcess.fromJson(data)),
+        },
+        if(value["data"] == []) isNotFound = true,
+        setState(() {}),
+      }
+    });
+  }
+
+  Future<Map<String, dynamic>> getAllEmployee() async {
+    return await EmployeeService.getAllEmployee();
+  }
+
+  Future<Map<String, dynamic>> getAllMaterials() async {
+    return await MaterialService.getAllMaterials();
+  }
+
+  void onSort(int columnIndex, bool ascending) {
+    if (columnIndex == 0) {
+      processes.sort((process1, process2) => compareString(
+          ascending,
+          process1.user.firstName,
+          process2.user.firstName));
+    } else if (columnIndex == 1) {
+      processes.sort((process1, process2) => compareString(
+          ascending,
+          process1.user.lastName,
+          process2.user.lastName));
+    } else if (columnIndex == 2) {
+      processes.sort((process1, process2) => compareString(
+          ascending,
+          process1.user.departmentName,
+          process2.user.departmentName));
+    } else if (columnIndex == 3) {
+      processes.sort((process1, process2) => compareString(
+          ascending,
+          process1.material.materialName,
+          process2.material.materialName));
+    } else if (columnIndex == 5) {
+      processes.sort((process1, process2) => compareString(
+          ascending,
+          process1.processTypeName,
+          process2.processTypeName));
+    } else if (columnIndex == 6) {
+      processes.sort((process1, process2) => compareString(
+          ascending,
+          process1.createdAt,
+          process2.createdAt));
+    } else if (columnIndex == 7) {
+      processes.sort((process1, process2) => compareString(
+          ascending,
+          process1.updatedAt,
+          process2.user.updatedAt));
+    }
+    setState(() {
+      sortColumnIndex = columnIndex;
+      isAscending = ascending;
+    });
+  }
+
+  int compareString(bool ascending, String value1, String value2) {
+    return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
+  }
+
+  void showExportDataModal(List<AppProcess> dataList) {
+    const tableHeaders = [
+      'İsim',
+      'Soyisim',
+      'Birim',
+      'Materyal',
+      'Miktar',
+      'İşlem Türü',
+      'Tarih',
+      'Saat'
+    ];
+
+    List<dynamic> buildRow(int index) {
+      String createdDate =
+      DateTime.parse(dataList[index].createdAt).toLocal().toString();
+      String date = createdDate.substring(0, createdDate.indexOf(" "));
+      String time = createdDate.substring(
+          createdDate.indexOf(" "), createdDate.length - 7);
+
+      List<dynamic> row = [
+        Helpers.titleCase(dataList[index].user.firstName),
+        Helpers.titleCase(dataList[index].user.lastName),
+        Helpers.titleCase(dataList[index].user.departmentName),
+        Helpers.titleCase(dataList[index].material.materialName),
+        "${dataList[index].amount} ${Helpers.titleCase(dataList[index].material.unitName)}",
+        Helpers.titleCase(dataList[index].processTypeName),
+        date,
+        time,
+      ];
+
+      return row;
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return ExportData(
+          title: "İşlem Geçmişi Tablosu",
+          dataList: dataList,
+          tableHeaders: tableHeaders,
+          buildRow: buildRow,
+        );
+      },
+    );
+  }
 
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
 
   @override
+  void initState() {
+    super.initState();
+    getAllProcess();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Function setIndexTabBar = Provider.of<States>(context).setIndexTabBar;
     int indexTabBar = Provider.of<States>(context).indexTabBar;
+
+    final source = DashboardSource(context, processes);
 
     return Scaffold(
       appBar: AppBar(
@@ -581,183 +703,63 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                FutureBuilder(
-                  future: getAllProcess(),
-                  builder:
-                      (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.data == null) {
-                      return AppAlerts.error("Herhangi bir kayıt bulunamadı.");
-                    } else {
-                      processes = List.generate(
-                          snapshot.data!["data"].length,
-                          (index) => AppProcess.fromJson(
-                              snapshot.data!["data"][index]));
-                      void onSort(int columnIndex, bool ascending) {
-                        if (columnIndex == 0) {
-                          processes.sort((process1, process2) => compareString(
-                              ascending,
-                              process1.user.firstName,
-                              process2.user.firstName));
-                        } else if (columnIndex == 1) {
-                          processes.sort((process1, process2) => compareString(
-                              ascending,
-                              process1.user.lastName,
-                              process2.user.lastName));
-                        } else if (columnIndex == 2) {
-                          processes.sort((process1, process2) => compareString(
-                              ascending,
-                              process1.user.departmentName,
-                              process2.user.departmentName));
-                        } else if (columnIndex == 3) {
-                          processes.sort((process1, process2) => compareString(
-                              ascending,
-                              process1.material.materialName,
-                              process2.material.materialName));
-                        } else if (columnIndex == 5) {
-                          processes.sort((process1, process2) => compareString(
-                              ascending,
-                              process1.processTypeName,
-                              process2.processTypeName));
-                        } else if (columnIndex == 6) {
-                          processes.sort((process1, process2) => compareString(
-                              ascending,
-                              process1.createdAt,
-                              process2.createdAt));
-                        } else if (columnIndex == 7) {
-                          processes.sort((process1, process2) => compareString(
-                              ascending,
-                              process1.updatedAt,
-                              process2.user.updatedAt));
-                        }
-                        setState(() {
-                          sortColumnIndex = columnIndex;
-                          isAscending = ascending;
-                        });
-                      }
-
-                      final source = DashboardSource(context, processes);
-                      return AdvancedPaginatedDataTable(
-                        sortAscending: isAscending,
-                        sortColumnIndex: sortColumnIndex,
-                        /*customTableFooter: ,*/
-                        addEmptyRows: false,
-                        source: source,
-                        showFirstLastButtons: true,
-                        rowsPerPage: rowsPerPage,
-                        availableRowsPerPage: const [10, 16, 20, 56],
-                        onRowsPerPageChanged: (newRowsPerPage) {
-                          if (newRowsPerPage != null) {
-                            setState(() {
-                              rowsPerPage = newRowsPerPage;
-                            });
-                          }
-                        },
-                        columns: [
-                          DataColumn(
-                              label: Text('İsim',
-                                  style: AppText.contextSemiBoldBlue),
-                              onSort: onSort),
-                          DataColumn(
-                              label: Text('Soyisim',
-                                  style: AppText.contextSemiBoldBlue),
-                              onSort: onSort),
-                          DataColumn(
-                              label: Text('Birim',
-                                  style: AppText.contextSemiBoldBlue),
-                              onSort: onSort),
-                          DataColumn(
-                              label: Text('Materyal',
-                                  style: AppText.contextSemiBoldBlue),
-                              onSort: onSort),
-                          DataColumn(
-                              label: Text('Miktar',
-                                  style: AppText.contextSemiBoldBlue)),
-                          DataColumn(
-                              label: Text('İşlem Türü',
-                                  style: AppText.contextSemiBoldBlue),
-                              onSort: onSort),
-                          DataColumn(
-                              label: Text('Tarih',
-                                  style: AppText.contextSemiBoldBlue),
-                              onSort: onSort),
-                          DataColumn(
-                              label: Text('Saat',
-                                  style: AppText.contextSemiBoldBlue),
-                              onSort: onSort),
-                        ],
-                      );
+                if(processes.isEmpty) const Text("Yükleniyor"),
+                if(isNotFound) AppAlerts.info("Herhangi bir kayıt bulunamadı."),
+                if(processes.isNotEmpty) AdvancedPaginatedDataTable(
+                  sortAscending: isAscending,
+                  sortColumnIndex: sortColumnIndex,
+                  /*customTableFooter: ,*/
+                  addEmptyRows: false,
+                  source: source,
+                  showFirstLastButtons: true,
+                  rowsPerPage: rowsPerPage,
+                  availableRowsPerPage: const [10, 16, 20, 56],
+                  onRowsPerPageChanged: (newRowsPerPage) {
+                    if (newRowsPerPage != null) {
+                      setState(() {
+                        rowsPerPage = newRowsPerPage;
+                      });
                     }
                   },
+                  columns: [
+                    DataColumn(
+                        label: Text('İsim',
+                            style: AppText.contextSemiBoldBlue),
+                        onSort: onSort),
+                    DataColumn(
+                        label: Text('Soyisim',
+                            style: AppText.contextSemiBoldBlue),
+                        onSort: onSort),
+                    DataColumn(
+                        label: Text('Birim',
+                            style: AppText.contextSemiBoldBlue),
+                        onSort: onSort),
+                    DataColumn(
+                        label: Text('Materyal',
+                            style: AppText.contextSemiBoldBlue),
+                        onSort: onSort),
+                    DataColumn(
+                        label: Text('Miktar',
+                            style: AppText.contextSemiBoldBlue)),
+                    DataColumn(
+                        label: Text('İşlem Türü',
+                            style: AppText.contextSemiBoldBlue),
+                        onSort: onSort),
+                    DataColumn(
+                        label: Text('Tarih',
+                            style: AppText.contextSemiBoldBlue),
+                        onSort: onSort),
+                    DataColumn(
+                        label: Text('Saat',
+                            style: AppText.contextSemiBoldBlue),
+                        onSort: onSort),
+                  ],
                 ),
               ],
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Future<Map<String, dynamic>> getAllEmployee() async {
-    return await EmployeeService.getAllEmployee();
-  }
-
-  Future<Map<String, dynamic>> getAllMaterials() async {
-    return await MaterialService.getAllMaterials();
-  }
-
-  Future<Map<String, dynamic>> getAllProcess() async {
-    return await ProcessService.getAllProcess();
-  }
-
-  int compareString(bool ascending, String value1, String value2) {
-    return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
-  }
-
-  void showExportDataModal(List<AppProcess> dataList) {
-    const tableHeaders = [
-      'İsim',
-      'Soyisim',
-      'Birim',
-      'Materyal',
-      'Miktar',
-      'İşlem Türü',
-      'Tarih',
-      'Saat'
-    ];
-
-    List<dynamic> buildRow(int index) {
-      String createdDate =
-          DateTime.parse(dataList[index].createdAt).toLocal().toString();
-      String date = createdDate.substring(0, createdDate.indexOf(" "));
-      String time = createdDate.substring(
-          createdDate.indexOf(" "), createdDate.length - 7);
-
-      List<dynamic> row = [
-        Helpers.titleCase(dataList[index].user.firstName),
-        Helpers.titleCase(dataList[index].user.lastName),
-        Helpers.titleCase(dataList[index].user.departmentName),
-        Helpers.titleCase(dataList[index].material.materialName),
-        "${dataList[index].amount} ${Helpers.titleCase(dataList[index].material.unitName)}",
-        Helpers.titleCase(dataList[index].processTypeName),
-        date,
-        time,
-      ];
-
-      return row;
-    }
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return ExportData(
-          title: "İşlem Geçmişi Tablosu",
-          dataList: dataList,
-          tableHeaders: tableHeaders,
-          buildRow: buildRow,
-        );
-      },
     );
   }
 }
