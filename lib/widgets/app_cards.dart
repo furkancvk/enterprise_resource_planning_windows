@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../design/app_colors.dart';
 import '../design/app_text.dart';
@@ -315,7 +312,7 @@ class AppCards {
     );
   }
 }
-
+/*
 class ImagePickerWidget extends StatefulWidget {
   const ImagePickerWidget({Key? key}) : super(key: key);
 
@@ -422,4 +419,4 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
       ),
     );
   }
-}
+}*/

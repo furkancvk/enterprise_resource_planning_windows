@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,6 +37,20 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
   final TextEditingController _explanationController = TextEditingController();
   int currentStock = 0;
 
+  File? imageFile;
+
+  pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'png', 'jpeg'],
+    );
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      imageFile = file;
+      setState(() {});
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +63,8 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
     _explanationController.text = widget.material.description;
 
     String imageUrl = '${BaseService.baseUrl}/images/materials/${widget.material.materialId}/${widget.material.imageUrl}' ;
+    print('imageurl : ${widget.material.imageUrl}');
+    print('imageurl : ${imageUrl}');
 
     return AlertDialog(
       title: Text("Hammadde Verisi Güncelle", style: AppText.titleSemiBold),
@@ -95,19 +114,65 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
               child: Column(
                 children: [
                   const SizedBox(height: 8),
-                  // const ImagePickerWidget(),
-                  Container(
-                    width: 171,
-                    height: 156,
-                    decoration: BoxDecoration(
-                      color: AppColors.lightPrimary.withOpacity(0.04),
-                      border: Border.all(
-                        color: AppColors.lightPrimary,
-                        style: BorderStyle.solid,
+                  // const ImagePickerWidget(), Image.network(imageUrl, fit: BoxFit.cover), width: 171,height: 156,
+                  imageUrl == 'https://api-first-java-backend-project.herokuapp.com/images/materials/4/placeholder-image.jpg' ? /// imageUrl null yada boş strin ilde değiştirilecek
+                  (imageFile != null ?
+                  Stack(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.lightPrimary.withOpacity(0.04),
+                          border: Border.all(
+                            color: AppColors.lightPrimary,
+                            style: BorderStyle.solid,
+                          ),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Image.file(imageFile!, width: 200, height: 150, fit: BoxFit.cover),
                       ),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Image.network(imageUrl, fit: BoxFit.cover),
+                      Positioned(
+                        top: -8,
+                        right: -8,
+                        child: IconButton(
+                          onPressed: (){
+                            setState(() {
+                              imageFile = null;
+                            });
+                          },
+                          icon: const Icon(FluentIcons.dismiss_circle_20_filled, color: AppColors.lightPrimary),
+                        ),
+                      )
+                    ],
+                  ) :
+                  AppCards.addImgCard(onTap: () => pickFile())) :
+                  Stack(
+                    children: [
+                      Container(
+                        width: 174,
+                        height: 156,
+                        decoration: BoxDecoration(
+                          color: AppColors.lightPrimary.withOpacity(0.04),
+                          border: Border.all(
+                            color: AppColors.lightPrimary,
+                            style: BorderStyle.solid,
+                          ),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Image.network(imageUrl, width: 200, height: 150, fit: BoxFit.cover),
+                      ),
+                      Positioned(
+                        top: -8,
+                        right: -8,
+                        child: IconButton(
+                          onPressed: (){
+                            setState(() {
+                              imageUrl == 'https://api-first-java-backend-project.herokuapp.com/images/materials/4/placeholder-image.jpg'; ///NULL YADA '' (BOŞ STRİNG) ile değiştirilecek
+                            });
+                          },
+                          icon: const Icon(FluentIcons.dismiss_circle_20_filled, color: AppColors.lightPrimary),
+                        ),
+                      )
+                    ],
                   ),
                   const SizedBox(height: 24),
                   AppForm.appTextFormField(

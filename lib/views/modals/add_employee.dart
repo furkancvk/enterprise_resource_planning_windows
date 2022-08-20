@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:erp_windows/models/employee.dart';
 import 'package:erp_windows/services/employee_service.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,6 +26,20 @@ class _AddEmployeeState extends State<AddEmployee> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _departmentController = TextEditingController();
+
+  File? imageFile;
+
+  pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'png', 'jpeg'],
+    );
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      imageFile = file;
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +95,35 @@ class _AddEmployeeState extends State<AddEmployee> {
                       child: Column(
                         children: [
                           const SizedBox(height: 12),
-                          const ImagePickerWidget(),
+                          imageFile != null ? Stack(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.lightPrimary.withOpacity(0.04),
+                                  border: Border.all(
+                                    color: AppColors.lightPrimary,
+                                    style: BorderStyle.solid,
+                                  ),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Image.file(imageFile!, width: 200, height: 150, fit: BoxFit.cover),
+                              ),
+                              Positioned(
+                                top: -8,
+                                  right: -8,
+                                  child: IconButton(
+                                onPressed: (){
+                                  setState(() {
+                                    imageFile = null;
+                                  });
+                                },
+                                icon: const Icon(FluentIcons.dismiss_circle_20_filled, color: AppColors.lightPrimary),
+                              ),
+                              )
+                            ],
+                          ) :
+                          AppCards.addImgCard(
+                              onTap: () => pickFile()),
                           const SizedBox(height: 26),
                           AppForm.appTextFormFieldRegex(
                             isRequired: true,
@@ -118,6 +163,7 @@ class _AddEmployeeState extends State<AddEmployee> {
         ),
       ],
     );
+
   }
   void addEmployee() {
     if(_firstNameController.text.isNotEmpty && _lastNameController.text.isNotEmpty && _phoneNumberController.text.isNotEmpty && _departmentController.text.isNotEmpty) {
@@ -165,4 +211,5 @@ class _AddEmployeeState extends State<AddEmployee> {
       );
     }
   }
+
 }
