@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -10,12 +11,15 @@ import '../../design/app_colors.dart';
 import '../../models/app_material.dart';
 
 class PreviewPdf extends StatelessWidget {
-  const PreviewPdf({Key? key, required this.material}) : super(key: key);
+  const PreviewPdf({Key? key, required this.material, required this.amount}) : super(key: key);
   final AppMaterial material;
+  final int amount;
 
   Future<Uint8List> _generatePdf(PdfPageFormat format, AppMaterial material) async {
+    final font = await rootBundle.load("assets/fonts/SourceSansPro-SemiBold.ttf");
+    final ttf = pw.Font.ttf(font);
     final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
-    final resultData = List.generate(material.amount, (index) {
+    final resultData = List.generate(amount, (index) {
       return pw.BarcodeWidget(
         color: PdfColor.fromHex("#000000"),
         barcode: pw.Barcode.qrCode(),
@@ -28,11 +32,17 @@ class PreviewPdf extends StatelessWidget {
         header: (context) {
           return pw.Column(
               children: [
-                pw.Text("${material.materialName} | ${material.typeName} | ${material.colorName}"),
+                pw.Text("${material.materialName} | ${material.typeName} | ${material.colorName}", style: pw.TextStyle(
+                  color: PdfColors.black,
+                  fontWeight: pw.FontWeight.bold,
+                  font: ttf,
+                ),),
                 pw.SizedBox(height: 30),
               ]
           );
+
         },
+
         margin: const pw.EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         pageFormat: format,
         build: (context) {
