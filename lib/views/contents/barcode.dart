@@ -317,11 +317,7 @@ class BarcodeSource extends AdvancedDataTableSource<AppMaterial> {
                 label: const Text('Yazdır'),
               ),
               const SizedBox(width: 8),
-              IconButton(
-                onPressed: (){print('icon butona basıldı');},
-                icon: const Icon(FluentIcons.more_vertical_20_regular, color: AppColors.lightPrimary),
-                splashRadius: 20,
-              ),
+              
             ],
           )
         ), /// İşlem butonlarına popUpButtonları konucak
