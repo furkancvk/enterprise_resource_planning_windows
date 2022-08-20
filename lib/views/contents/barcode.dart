@@ -224,24 +224,23 @@ class BarcodeSource extends AdvancedDataTableSource<AppMaterial> {
 
   final TextEditingController _amountController = TextEditingController();
 
-  void showPreviewPdfModal(AppMaterial materialStock) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return PreviewPdf(material: materialStock);
-      },
-    );
-  }
-
   @override
   DataRow? getRow(int index) {
     Function setMaterialSelectedRows = Provider.of<States>(context).setMaterialSelectedRows;
     List<int> materialSelectedRows = Provider.of<States>(context).materialSelectedRows;
 
     final material = materials[index];
-
     _amountController.text = material.amount.toString();
-
+    String temp = '0';
+    void showPreviewPdfModal(AppMaterial materialStock) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          print('amount: ${int.parse(temp)}');
+          return PreviewPdf(material: materialStock, amount: int.parse(temp) == 0 ? material.amount : int.parse(temp) );
+        },
+      );
+    }
     String imageUrl = "${"${BaseService.baseUrl}/images/materials/${material.materialId}"}/${material.imageUrl}";
 
     return DataRow(
@@ -295,7 +294,20 @@ class BarcodeSource extends AdvancedDataTableSource<AppMaterial> {
             style: AppText.context,
           ),
         ),
-        DataCell(NumberTextField(amount: material.amount)),
+        DataCell(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextFormField(
+              initialValue: material.amount.toString(),
+              keyboardType: TextInputType.number,
+              onChanged: (val) {
+                print('onSubmited $val');
+                temp = val;
+              },
+            ),
+          ),
+            /*NumberTextField(amount: int.parse(_amountController.text)),*/
+        ),
         DataCell(
           Row(
             children: [
