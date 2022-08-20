@@ -67,12 +67,11 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
     print('imageurl : ${imageUrl}');
 
     return AlertDialog(
-      title: Text("Hammadde Verisi Güncelle", style: AppText.titleSemiBold),
+      title: Text("Hammadde Düzenle", style: AppText.titleSemiBold),
       content: SizedBox(
-        height: 380,
+        height: 560,
         width: 360,
         child: ListView(
-      padding: const EdgeInsets.all(24),
       children: [
         Row(
           children: [
@@ -115,8 +114,7 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
                 children: [
                   const SizedBox(height: 8),
                   // const ImagePickerWidget(), Image.network(imageUrl, fit: BoxFit.cover), width: 171,height: 156,
-                  imageUrl == 'https://api-first-java-backend-project.herokuapp.com/images/materials/4/placeholder-image.jpg' ? /// imageUrl null yada boş strin ilde değiştirilecek
-                  (imageFile != null ?
+                  imageFile != null ?
                   Stack(
                     children: [
                       Container(
@@ -144,36 +142,7 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
                       )
                     ],
                   ) :
-                  AppCards.addImgCard(onTap: () => pickFile())) :
-                  Stack(
-                    children: [
-                      Container(
-                        width: 174,
-                        height: 156,
-                        decoration: BoxDecoration(
-                          color: AppColors.lightPrimary.withOpacity(0.04),
-                          border: Border.all(
-                            color: AppColors.lightPrimary,
-                            style: BorderStyle.solid,
-                          ),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Image.network(imageUrl, width: 200, height: 150, fit: BoxFit.cover),
-                      ),
-                      Positioned(
-                        top: -8,
-                        right: -8,
-                        child: IconButton(
-                          onPressed: (){
-                            setState(() {
-                              imageUrl == 'https://api-first-java-backend-project.herokuapp.com/images/materials/4/placeholder-image.jpg'; ///NULL YADA '' (BOŞ STRİNG) ile değiştirilecek
-                            });
-                          },
-                          icon: const Icon(FluentIcons.dismiss_circle_20_filled, color: AppColors.lightPrimary),
-                        ),
-                      )
-                    ],
-                  ),
+                  AppCards.addImgCard(onTap: () => pickFile()),
                   const SizedBox(height: 24),
                   AppForm.appTextFormField(
                     label: "Miktar Birimi",
