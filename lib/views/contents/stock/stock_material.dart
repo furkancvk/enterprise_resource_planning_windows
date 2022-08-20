@@ -1,4 +1,5 @@
 import 'package:erp_windows/utils/helpers.dart';
+import 'package:erp_windows/views/modals/update_material.dart';
 import 'package:erp_windows/widgets/app_cards.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
@@ -211,7 +212,7 @@ class _StockMaterialState extends State<StockMaterial> {
                           }
                         },
                         columns: [
-                          DataColumn(label: Text('Görsel', style: AppText.contextSemiBoldBlue)),
+                          /*DataColumn(label: Text('Görsel', style: AppText.contextSemiBoldBlue)),*/
                           DataColumn(label: Text('İsim', style: AppText.contextSemiBoldBlue),onSort: onSort),
                           DataColumn(label: Text('Cins', style: AppText.contextSemiBoldBlue),onSort: onSort),
                           DataColumn(label: Text('Renk', style: AppText.contextSemiBoldBlue),onSort: onSort),
@@ -292,7 +293,7 @@ class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
         setMaterialSelectedRows(material.materialId);
       },
       cells: [
-        DataCell(
+        /*DataCell(
           Container(
             width: 36,
             height: 36,
@@ -307,7 +308,7 @@ class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
               ),
             ),
           ),
-        ),
+        ),*/
         DataCell(
           Text(
             Helpers.titleCase(material.materialName),
@@ -346,11 +347,14 @@ class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
               data: material.amount > 100 ? (material.amount <= 300 ? 'Kritik' : 'Yeterli') : 'Yetersiz',
             ),
           )
-        ), ///Yeterli-Kritik-Yetersiz değerleri statik yapılcak
+        ), ///Yeterli-Kritik-Yetersiz değerleri dinamik yapılcak
         DataCell(
          Row(
            children: [
-             IconButton(onPressed: (){print('edited');}, icon: const Icon(FluentIcons.edit_16_regular, color: AppColors.lightPrimary), splashRadius: 20),
+             IconButton(onPressed: (){
+               print('edited');
+               showDialog(context: context, builder: (context) =>  UpdateMaterial(material: material));
+               }, icon: const Icon(FluentIcons.edit_16_regular, color: AppColors.lightPrimary), splashRadius: 20),
              IconButton(onPressed: (){print('deleted');}, icon: const Icon(FluentIcons.delete_16_regular, color: AppColors.lightPrimary), splashRadius: 20),
            ],
          )

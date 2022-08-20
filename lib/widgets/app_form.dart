@@ -241,6 +241,58 @@ class AppForm {
     );
   }
 
+  static Widget appTextFormFieldRegexNumber({
+    required String label,
+    required String hint,
+    required TextEditingController controller,
+    required GlobalKey<AutoCompleteTextFieldState<String>> key,
+    required TextInputType keyboardType,
+    bool isRequired = false,
+    bool isEnabled = true,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(label, style: AppText.labelSemiBold),
+            isRequired
+                ? const Text("*",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.lightError,
+                ))
+                : const Text(""),
+          ],
+        ),
+        const SizedBox(height: 4),
+        TextFormField(
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'([1-9][0-9]*)'))
+          ],
+          keyboardType: keyboardType,
+          key: key,
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: hint,
+          ),
+        ),
+        /*SimpleAutoCompleteTextField(
+          keyboardType: keyboardType,
+          key: key,
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: hint,
+          ),
+          suggestions: suggestions,
+          textSubmitted: (String value) {},
+          clearOnSubmit: false,
+        ),*/
+      ],
+    );
+  }
+
   static Widget appSearchableDropDownField({
     required List<String> items,
     required String label,
