@@ -4,7 +4,7 @@ import 'base_service.dart';
 class MaterialService {
 
   static Future<Map<String, dynamic>> getAllMaterials() async {
-    var body = await BaseService.getRequest('/api/v1/materials/getAllMaterials');
+    var body = await BaseService.getRequest('/api/v1/materials/getAllMaterial');
     return body;
   }
 
@@ -26,6 +26,11 @@ class MaterialService {
         path: '/api/v1/materials/updateMaterial',
         data: material
     );
+    return body;
+  }
+
+  static Future<Map<String, dynamic>> deleteMaterial(int materialId) async {
+    var body = await BaseService.deleteRequest('/api/v1/materials/deleteMaterial?id=$materialId');
     return body;
   }
 
