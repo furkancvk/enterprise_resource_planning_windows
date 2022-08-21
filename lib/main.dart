@@ -45,15 +45,32 @@ class _MyAppState extends State<MyApp> {
     return FutureBuilder(
       future: getToken(),
       builder: (context, snapshot) {
-        return MaterialApp(
-          title: "Solvio Kurumsal Kaynak Planlama Programlama",
-          debugShowCheckedModeBanner: false,
-          theme: AppThemeData.lightTheme(context),
-          // darkTheme: AppThemeData.darkTheme(context),
-          // home: const Login(),
-          initialRoute: snapshot.data == null ? "home_view" : "login_view",
-          routes: routes,
-        );
+        // print(snapshot.data);
+        if(snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if(snapshot.hasData) {
+          // print("has data: " + snapshot.data.toString());
+          return MaterialApp(
+            title: "Solvio Kurumsal Kaynak Planlama Programlama",
+            debugShowCheckedModeBanner: false,
+            theme: AppThemeData.lightTheme(context),
+            // darkTheme: AppThemeData.darkTheme(context),
+            // home: const Login(),
+            initialRoute: snapshot.data == null ? "login_view" : "home_view",
+            routes: routes,
+          );
+        } else {
+          // print("no data: " + snapshot.data.toString());
+          return MaterialApp(
+            title: "Solvio Kurumsal Kaynak Planlama Programlama",
+            debugShowCheckedModeBanner: false,
+            theme: AppThemeData.lightTheme(context),
+            // darkTheme: AppThemeData.darkTheme(context),
+            // home: const Login(),
+            initialRoute: "login_view",
+            routes: routes,
+          );
+        }
       },
     );
   }
