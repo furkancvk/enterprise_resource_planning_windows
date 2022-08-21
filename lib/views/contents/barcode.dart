@@ -25,6 +25,8 @@ class Barcode extends StatefulWidget {
 }
 
 class _BarcodeState extends State<Barcode> {
+  final TextEditingController searchQueryController = TextEditingController();
+
   int? sortColumnIndex;
   bool isAscending = false;
   var rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
@@ -32,13 +34,19 @@ class _BarcodeState extends State<Barcode> {
   List<AppMaterial> materials = [];
   bool isNotFound = false;
 
+  bool isLoading = true;
+
+  String filterName = '';
+
   void getAllMaterial() {
     MaterialService.getAllMaterials().then((value) => {
       if(value["success"]) {
+        print(value["data"]),
         for(var data in value["data"]) {
           materials.add(AppMaterial.fromJson(data)),
         },
-        if(value["data"] == []) isNotFound = true,
+        if(value["data"].isEmpty) isNotFound = true,
+        isLoading = false,
         setState(() {}),
       }
     });
@@ -158,11 +166,13 @@ class _BarcodeState extends State<Barcode> {
                           SizedBox(
                             width: 300,
                             height: 40,
-                            child: AppForm.appAutoCompleteTextFormFieldForSearch(
-                              hint: "Ara...",
-                              controller: TextEditingController(),
-                              key: GlobalKey(),
-                              suggestions: [],
+                            child:TextFormField(
+                              controller: searchQueryController,
+                              onChanged: (query) => source.filterClientSide(searchQueryController.text, filterName),
+                              decoration: const InputDecoration(
+                                suffixIcon: Icon(FluentIcons.search_24_filled, color: AppColors.lightPrimary),
+                                hintText: "Ara...",
+                              ),
                             ),
                           ),
                           OutlinedButton.icon(
@@ -181,7 +191,7 @@ class _BarcodeState extends State<Barcode> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                if(materials.isEmpty) const Text("Yükleniyor"),
+                if(isLoading) const Text("Yükleniyor"),
                 if(isNotFound) AppAlerts.info("Herhangi bir kayıt bulunamadı."),
                 if(materials.isNotEmpty) AdvancedPaginatedDataTable(
                   sortAscending: isAscending,
@@ -225,6 +235,9 @@ class BarcodeSource extends AdvancedDataTableSource<AppMaterial> {
   final List<AppMaterial> materials;
   final BuildContext context;
 
+  String searchQuery = '';
+  String filterName = '';
+
   final TextEditingController _amountController = TextEditingController();
 
   @override
@@ -232,7 +245,26 @@ class BarcodeSource extends AdvancedDataTableSource<AppMaterial> {
     Function setMaterialSelectedRows = Provider.of<States>(context).setMaterialSelectedRows;
     List<int> materialSelectedRows = Provider.of<States>(context).materialSelectedRows;
 
-    final material = materials[index];
+    final material = materials.where((element) {
+      switch(filterName) {
+        case 'typeName': {
+          return element.typeName.contains(searchQuery);
+        }
+        case 'colorName': {
+          return element.colorName.contains(searchQuery);
+        }
+        case 'sizeName': {
+          return element.sizeName.contains(searchQuery);
+        }
+        case 'amount': {
+          return element.amount.toString().contains(searchQuery);
+        }
+        default: {
+          return element.materialName.contains(searchQuery);
+        }
+      }
+    }).toList()[index];
+
     _amountController.text = material.amount.toString();
     String temp = '0';
     void showPreviewPdfModal(AppMaterial materialStock) {
@@ -338,17 +370,44 @@ class BarcodeSource extends AdvancedDataTableSource<AppMaterial> {
     );
   }
 
+  void filterClientSide(String filterQuery, String filter) {
+    searchQuery = filterQuery.toLowerCase().trim();
+    filterName = filter;
+    setNextView();
+  }
+
   @override
   int get selectedRowCount => 0;
 
   @override
   Future<RemoteDataSourceDetails<AppMaterial>> getNextPage(NextPageRequest pageRequest) async {
+    List<AppMaterial> filteredMaterials = materials.where((element) {
+      switch(filterName) {
+        case 'typeName': {
+          return element.typeName.contains(searchQuery);
+        }
+        case 'colorName': {
+          return element.colorName.contains(searchQuery);
+        }
+        case 'sizeName': {
+          return element.sizeName.contains(searchQuery);
+        }
+        case 'amount': {
+          return element.amount.toString().contains(searchQuery);
+        }
+        default: {
+          return element.materialName.contains(searchQuery);
+        }
+      }
+    }).toList();
+
     return RemoteDataSourceDetails(
-      materials.length,
-      materials
+      filteredMaterials.length,
+      filteredMaterials
           .skip(pageRequest.offset)
           .take(pageRequest.pageSize)
           .toList(),
+      filteredRows: searchQuery.isNotEmpty ? filteredMaterials.length : null,
     );
   }
 }

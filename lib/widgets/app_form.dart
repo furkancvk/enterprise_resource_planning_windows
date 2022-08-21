@@ -346,8 +346,7 @@ class PasswordFieldWithVisibility extends StatefulWidget {
       _PasswordFieldWithVisibilityState();
 }
 
-class _PasswordFieldWithVisibilityState
-    extends State<PasswordFieldWithVisibility> {
+class _PasswordFieldWithVisibilityState extends State<PasswordFieldWithVisibility> {
   bool isObscure = true;
 
   void changePasswordVisibility() {

@@ -25,12 +25,18 @@ class StockMaterial extends StatefulWidget {
 }
 
 class _StockMaterialState extends State<StockMaterial> {
+  final TextEditingController searchQueryController = TextEditingController();
+
   int? sortColumnIndex;
   bool isAscending = false;
   var rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
 
+  String filterName = '';
+
   List<AppMaterial> materials = [];
   bool isNotFound = false;
+
+  bool isLoading = true;
 
   void getAllMaterial() {
     MaterialService.getAllMaterials().then((value) => {
@@ -38,7 +44,8 @@ class _StockMaterialState extends State<StockMaterial> {
         for(var data in value["data"]) {
           materials.add(AppMaterial.fromJson(data)),
         },
-        if(value["data"] == []) isNotFound = true,
+        if(value["data"].isEmpty) isNotFound = true,
+        isLoading = false,
         setState(() {}),
       }
     });
@@ -98,6 +105,7 @@ class _StockMaterialState extends State<StockMaterial> {
   @override
   Widget build(BuildContext context) {
     final source = StockMaterialSource(context, materials);
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -212,11 +220,13 @@ class _StockMaterialState extends State<StockMaterial> {
                           SizedBox(
                             width: 300,
                             height: 40,
-                            child: AppForm.appAutoCompleteTextFormFieldForSearch(
-                              hint: "Ara...",
-                              controller: TextEditingController(),
-                              key: GlobalKey(),
-                              suggestions: [],
+                            child: TextFormField(
+                              controller: searchQueryController,
+                              onChanged: (query) => source.filterClientSide(searchQueryController.text, filterName),
+                              decoration: const InputDecoration(
+                                suffixIcon: Icon(FluentIcons.search_24_filled, color: AppColors.lightPrimary),
+                                hintText: "Ara...",
+                              ),
                             ),
                           ),
                           OutlinedButton.icon(
@@ -235,7 +245,7 @@ class _StockMaterialState extends State<StockMaterial> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                if(materials.isEmpty) const Text("Yükleniyor"),
+                if(isLoading) const Text("Yükleniyor"),
                 if(isNotFound) AppAlerts.info("Herhangi bir kayıt bulunamadı."),
                 if(materials.isNotEmpty) AdvancedPaginatedDataTable(
                   sortAscending: isAscending,
@@ -279,12 +289,33 @@ class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
   final List<AppMaterial> materials;
   final BuildContext context;
 
+  String searchQuery = '';
+  String filterName = '';
+
   @override
   DataRow? getRow(int index) {
     Function setMaterialSelectedRows = Provider.of<States>(context).setMaterialSelectedRows;
     List<int> materialSelectedRows = Provider.of<States>(context).materialSelectedRows;
 
-    final material = materials[index];
+    final material = materials.where((element) {
+      switch(filterName) {
+        case 'typeName': {
+          return element.typeName.contains(searchQuery);
+        }
+        case 'colorName': {
+          return element.colorName.contains(searchQuery);
+        }
+        case 'sizeName': {
+          return element.sizeName.contains(searchQuery);
+        }
+        case 'amount': {
+          return element.amount.toString().contains(searchQuery);
+        }
+        default: {
+          return element.materialName.contains(searchQuery);
+        }
+      }
+    }).toList()[index];
 
     String imageUrl = "${"${BaseService.baseUrl}/images/materials/${material.materialId}"}/${material.imageUrl}";
 
@@ -345,24 +376,24 @@ class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
           ),
         ),
         DataCell(
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: AppCards.stockSituationCard(
-              color: material.amount > 100 ? (material.amount <= 300 ? AppColors.lightWarning : AppColors.lightSuccess) : AppColors.lightError,
-              data: material.amount > 100 ? (material.amount <= 300 ? 'Kritik' : 'Yeterli') : 'Yetersiz',
-            ),
-          )
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: AppCards.stockSituationCard(
+                color: material.amount > 100 ? (material.amount <= 300 ? AppColors.lightWarning : AppColors.lightSuccess) : AppColors.lightError,
+                data: material.amount > 100 ? (material.amount <= 300 ? 'Kritik' : 'Yeterli') : 'Yetersiz',
+              ),
+            )
         ), ///Yeterli-Kritik-Yetersiz değerleri dinamik yapılcak
         DataCell(
-         Row(
-           children: [
-             IconButton(onPressed: (){
-               print('edited');
-               showDialog(context: context, builder: (context) =>  UpdateMaterial(material: material));
-               }, icon: const Icon(FluentIcons.edit_16_regular, color: AppColors.lightPrimary), splashRadius: 20),
-             IconButton(onPressed: (){print('deleted');}, icon: const Icon(FluentIcons.delete_16_regular, color: AppColors.lightPrimary), splashRadius: 20),
-           ],
-         )
+            Row(
+              children: [
+                IconButton(onPressed: (){
+                  print('edited');
+                  showDialog(context: context, builder: (context) =>  UpdateMaterial(material: material));
+                }, icon: const Icon(FluentIcons.edit_16_regular, color: AppColors.lightPrimary), splashRadius: 20),
+                IconButton(onPressed: (){print('deleted');}, icon: const Icon(FluentIcons.delete_16_regular, color: AppColors.lightPrimary), splashRadius: 20),
+              ],
+            )
         ), /// İşlem butonlarına popUpButtonları konucak
       ],
       color: MaterialStateProperty.resolveWith<Color?>(
@@ -374,17 +405,44 @@ class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
     );
   }
 
+  void filterClientSide(String filterQuery, String filter) {
+    searchQuery = filterQuery.toLowerCase().trim();
+    filterName = filter;
+    setNextView();
+  }
+
   @override
   int get selectedRowCount => 0;
 
   @override
   Future<RemoteDataSourceDetails<AppMaterial>> getNextPage(NextPageRequest pageRequest) async {
+    List<AppMaterial> filteredMaterials = materials.where((element) {
+      switch(filterName) {
+        case 'typeName': {
+          return element.typeName.contains(searchQuery);
+        }
+        case 'colorName': {
+          return element.colorName.contains(searchQuery);
+        }
+        case 'sizeName': {
+          return element.sizeName.contains(searchQuery);
+        }
+        case 'amount': {
+          return element.amount.toString().contains(searchQuery);
+        }
+        default: {
+          return element.materialName.contains(searchQuery);
+        }
+      }
+    }).toList();
+
     return RemoteDataSourceDetails(
-      materials.length,
-      materials
+      filteredMaterials.length,
+      filteredMaterials
           .skip(pageRequest.offset)
           .take(pageRequest.pageSize)
-          .toList(), //again in a real world example you would only get the right amount of rows
+          .toList(),
+      filteredRows: searchQuery.isNotEmpty ? filteredMaterials.length : null,
     );
   }
 }

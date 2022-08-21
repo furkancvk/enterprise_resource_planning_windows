@@ -31,6 +31,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
 
   List<Employee> employees = [];
   bool isNotFound = false;
+  bool isLoading = true;
 
   void getAllEmployee() {
     EmployeeService.getAllEmployee().then((value) => {
@@ -38,7 +39,8 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
         for(var data in value["data"]) {
           employees.add(Employee.fromJson(data)),
         },
-        if(value["data"] == []) isNotFound = true,
+        if(value["data"].isEmpty) isNotFound = true,
+        isLoading = false,
         setState(() {}),
       }
     });
@@ -236,7 +238,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                if(employees.isEmpty) const Text("Yükleniyor"),
+                if(isLoading) const Text("Yükleniyor"),
                 if(isNotFound) AppAlerts.info("Herhangi bir kayıt bulunamadı."),
                 if(employees.isNotEmpty) AdvancedPaginatedDataTable(
                   sortAscending: isAscending,

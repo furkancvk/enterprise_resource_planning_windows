@@ -37,6 +37,7 @@ String time =
     createdDate.substring(createdDate.indexOf(" "), createdDate.length - 7);
 
 class _DashboardState extends State<Dashboard> {
+  final TextEditingController searchQueryController = TextEditingController();
   static SecureStorage secureStorage = SecureStorage();
   int? sortColumnIndex;
   bool isAscending = false;
@@ -45,19 +46,21 @@ class _DashboardState extends State<Dashboard> {
   String input = "";
   List<AppProcess> processes = [];
   bool isNotFound = false;
+  bool isLoading = true;
+
+  String filterName = 'firstName';
 
   void getAllProcess() {
     ProcessService.getAllProcess().then((value) => {
-          if (value["success"])
-            {
-              for (var data in value["data"])
-                {
-                  processes.add(AppProcess.fromJson(data)),
-                },
-              if (value["data"] == []) isNotFound = true,
-              setState(() {}),
-            }
-        });
+      if (value["success"]) {
+        for (var data in value["data"]) {
+          processes.add(AppProcess.fromJson(data)),
+        },
+        if (value["data"].isEmpty) isNotFound = true,
+        isLoading = false,
+        setState(() {}),
+      }
+    });
   }
 
   Future<Map<String, dynamic>> getAllEmployee() async {
@@ -710,12 +713,13 @@ class _DashboardState extends State<Dashboard> {
                           SizedBox(
                             width: 300,
                             height: 40,
-                            child:
-                                AppForm.appAutoCompleteTextFormFieldForSearch(
-                              hint: "Ara...",
-                              controller: TextEditingController(),
-                              key: GlobalKey(),
-                              suggestions: [],
+                            child:TextFormField(
+                              controller: searchQueryController,
+                              onChanged: (query) => source.filterClientSide(searchQueryController.text, filterName),
+                              decoration: const InputDecoration(
+                                suffixIcon: Icon(FluentIcons.search_24_filled, color: AppColors.lightPrimary),
+                                hintText: "Ara...",
+                              ),
                             ),
                           ),
                           OutlinedButton.icon(
@@ -737,11 +741,9 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                if (processes.isEmpty) const Text("Yükleniyor"),
-                if (isNotFound)
-                  AppAlerts.info("Herhangi bir kayıt bulunamadı."),
-                if (processes.isNotEmpty)
-                  AdvancedPaginatedDataTable(
+                if (isLoading) const Text("Yükleniyor"),
+                if (isNotFound) AppAlerts.info("Herhangi bir kayıt bulunamadı."),
+                if (processes.isNotEmpty) AdvancedPaginatedDataTable(
                     sortAscending: isAscending,
                     sortColumnIndex: sortColumnIndex,
                     /*customTableFooter: ,*/
@@ -923,6 +925,9 @@ class DashboardSource extends AdvancedDataTableSource<AppProcess> {
   final List<AppProcess> processes;
   final BuildContext context;
 
+  String searchQuery = '';
+  String filterName = '';
+
   @override
   DataRow? getRow(int index) {
     Function setProcessSelectedRows =
@@ -930,7 +935,28 @@ class DashboardSource extends AdvancedDataTableSource<AppProcess> {
     List<int> processSelectedRows =
         Provider.of<States>(context).processSelectedRows;
 
-    final process = processes[index];
+    final process = processes.where((element) {
+      switch(filterName) {
+        case 'firstName': {
+          return element.user.firstName.contains(searchQuery);
+        }
+        case 'lastName': {
+          return element.user.lastName.contains(searchQuery);
+        }
+        case 'departmentName': {
+          return element.user.departmentName.contains(searchQuery);
+        }
+        case 'materyalName': {
+          return element.material.materialName.contains(searchQuery);
+        }
+        case 'amount': {
+          return element.amount.toString().contains(searchQuery);
+        }
+        default: {
+          return element.processTypeName.contains(searchQuery);
+        }
+      }
+    }).toList()[index];
 
     String createdDate = DateTime.parse(process.createdAt).toLocal().toString();
     String date = createdDate.substring(0, createdDate.indexOf(" "));
@@ -1003,15 +1029,47 @@ class DashboardSource extends AdvancedDataTableSource<AppProcess> {
     );
   }
 
+  void filterClientSide(String filterQuery, String filter) {
+    searchQuery = filterQuery.toLowerCase().trim();
+    filterName = filter;
+    setNextView();
+  }
+
   @override
   int get selectedRowCount => 0;
 
   @override
-  Future<RemoteDataSourceDetails<AppProcess>> getNextPage(
-      NextPageRequest pageRequest) async {
+  Future<RemoteDataSourceDetails<AppProcess>> getNextPage(NextPageRequest pageRequest) async {
+    List<AppProcess> filteredProcesses = processes.where((element) {
+      switch(filterName) {
+        case 'firstName': {
+          return element.user.firstName.contains(searchQuery);
+        }
+        case 'lastName': {
+          return element.user.lastName.contains(searchQuery);
+        }
+        case 'departmentName': {
+          return element.user.departmentName.contains(searchQuery);
+        }
+        case 'materyalName': {
+          return element.material.materialName.contains(searchQuery);
+        }
+        case 'amount': {
+          return element.amount.toString().contains(searchQuery);
+        }
+        default: {
+          return element.processTypeName.contains(searchQuery);
+        }
+      }
+    }).toList();
+
     return RemoteDataSourceDetails(
-      processes.length,
-      processes.skip(pageRequest.offset).take(pageRequest.pageSize).toList(),
+      filteredProcesses.length,
+      filteredProcesses
+          .skip(pageRequest.offset)
+          .take(pageRequest.pageSize)
+          .toList(),
+      filteredRows: searchQuery.isNotEmpty ? filteredProcesses.length : null,
     );
   }
 }
