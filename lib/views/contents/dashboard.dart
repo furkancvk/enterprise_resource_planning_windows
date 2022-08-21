@@ -52,15 +52,17 @@ class _DashboardState extends State<Dashboard> {
 
   void getAllProcess() {
     ProcessService.getAllProcess().then((value) => {
-      if (value["success"]) {
-        for (var data in value["data"]) {
-          processes.add(AppProcess.fromJson(data)),
-        },
-        if (value["data"].isEmpty) isNotFound = true,
-        isLoading = false,
-        setState(() {}),
-      }
-    });
+          if (value["success"])
+            {
+              for (var data in value["data"])
+                {
+                  processes.add(AppProcess.fromJson(data)),
+                },
+              if (value["data"].isEmpty) isNotFound = true,
+              isLoading = false,
+              setState(() {}),
+            }
+        });
   }
 
   Future<Map<String, dynamic>> getAllEmployee() async {
@@ -161,6 +163,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    tasks = Provider.of<States>(context).tasks;
     Function setIndexTabBar = Provider.of<States>(context).setIndexTabBar;
     int indexTabBar = Provider.of<States>(context).indexTabBar;
 
@@ -345,145 +348,145 @@ class _DashboardState extends State<Dashboard> {
                                     textAlign: TextAlign.center,
                                   ),
                                   Row(
-
                                     children: [
-                                      OutlinedButton.icon( onPressed: () {
-                                        showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              Function setTasks =
-                                                  Provider.of<States>(context)
-                                                      .setTasks;
-                                              Function setInput =
-                                                  Provider.of<States>(context)
-                                                      .setInput;
-                                              return AlertDialog(
-                                                title: Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      "Yapılacak Not Ekle",
-                                                      style: AppText
-                                                          .contextSemiBold,
-                                                    ),
-                                                    IconButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      icon: const Icon(
-                                                        Icons.close_outlined,
-                                                        size: 20,
-                                                      ),
-                                                      splashRadius: 16,
-                                                    )
-                                                  ],
-                                                ),
-                                                content: SizedBox(
-                                                  height: 150,
-                                                  width: 300,
-                                                  child: TextField(
-                                                    maxLength: 300,
-                                                    maxLines: 7,
-                                                    onChanged:
-                                                        (String value) {
-                                                      input = value;
-                                                      setInput(input);
-                                                    },
-                                                  ),
-                                                ),
-                                                actions: [
-                                                  Row(
+                                      OutlinedButton.icon(
+                                        onPressed: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                Function setTasks =
+                                                    Provider.of<States>(context)
+                                                        .setTasks;
+                                                Function setInput =
+                                                    Provider.of<States>(context)
+                                                        .setInput;
+                                                return AlertDialog(
+                                                  title: Row(
                                                     mainAxisAlignment:
-                                                    MainAxisAlignment.end,
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     children: [
-                                                      TextButton(
-                                                          onPressed: () {
-
-                                                            if (input != "") {
-                                                              setState(() {
-                                                                tasks.add(
-                                                                    input.trim());
-                                                                setTasks(
-                                                                    tasks);
-                                                              });
-                                                              Navigator.of(
-                                                                  context)
-                                                                  .pop();
-
-                                                              input = "";
-                                                              ScaffoldMessenger.of(
-                                                                  context)
-                                                                  .showSnackBar(
-                                                                SnackBar(
-                                                                  padding:
-                                                                  const EdgeInsets
-                                                                      .all(0),
-                                                                  content: AppAlerts
-                                                                      .success(
-                                                                      "Not başarıyla eklendi"),
-                                                                  duration: const Duration(
-                                                                      milliseconds:
-                                                                      1500),
-                                                                  backgroundColor:
-                                                                  AppColors
-                                                                      .lightSecondary,
-                                                                ),
-                                                              );
-
-                                                            } else {
-                                                              Navigator.of(
-                                                                  context)
-                                                                  .pop();
-                                                              ScaffoldMessenger.of(
-                                                                  context)
-                                                                  .showSnackBar(
-                                                                SnackBar(
-                                                                  padding:
-                                                                  const EdgeInsets
-                                                                      .all(0),
-                                                                  content: AppAlerts
-                                                                      .error(
-                                                                      "Not alanı boş bırakılamaz"),
-                                                                  duration: const Duration(
-                                                                      milliseconds:
-                                                                      1500),
-                                                                  backgroundColor:
-                                                                  AppColors
-                                                                      .lightSecondary,
-                                                                ),
-                                                              );
-                                                            }
-                                                          },
-                                                          child: Row(
-                                                            children: [
-                                                              const Icon(
-                                                                FluentIcons
-                                                                    .add_24_regular,
-                                                                size: 20,
-                                                                color: AppColors
-                                                                    .lightBlack,
-                                                              ),
-                                                              const SizedBox(
-                                                                width: 12,
-                                                              ),
-                                                              Text(
-                                                                "Ekle",
-                                                                style: AppText
-                                                                    .titleSemiBold,
-                                                              ),
-                                                            ],
-                                                          )),
+                                                      Text(
+                                                        "Yapılacak Not Ekle",
+                                                        style: AppText
+                                                            .contextSemiBold,
+                                                      ),
+                                                      IconButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        icon: const Icon(
+                                                          Icons.close_outlined,
+                                                          size: 20,
+                                                        ),
+                                                        splashRadius: 16,
+                                                      )
                                                     ],
                                                   ),
-                                                ],
-                                              );
-                                            });
-                                      }, label:Text("Not Ekle"),
-                                      icon: Icon(FluentIcons.add_24_regular),),
-                                      SizedBox(width: 24,),
+                                                  content: SizedBox(
+                                                    height: 150,
+                                                    width: 300,
+                                                    child: TextField(
+                                                      maxLength: 300,
+                                                      maxLines: 7,
+                                                      onChanged:
+                                                          (String value) {
+                                                        input = value;
+                                                        setInput(input);
+                                                      },
+                                                    ),
+                                                  ),
+                                                  actions: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      children: [
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              if (input != "") {
+                                                                setState(() {
+                                                                  tasks.add(input.trim());
+                                                                  setTasks(tasks);
+                                                                });
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+
+                                                                input = "";
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                  SnackBar(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .all(0),
+                                                                    content: AppAlerts
+                                                                        .success(
+                                                                            "Not başarıyla eklendi"),
+                                                                    duration: const Duration(
+                                                                        milliseconds:
+                                                                            1500),
+                                                                    backgroundColor:
+                                                                        AppColors
+                                                                            .lightSecondary,
+                                                                  ),
+                                                                );
+                                                              } else {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                  SnackBar(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .all(0),
+                                                                    content: AppAlerts
+                                                                        .error(
+                                                                            "Not alanı boş bırakılamaz"),
+                                                                    duration: const Duration(
+                                                                        milliseconds:
+                                                                            1500),
+                                                                    backgroundColor:
+                                                                        AppColors
+                                                                            .lightSecondary,
+                                                                  ),
+                                                                );
+                                                              }
+                                                            },
+                                                            child: Row(
+                                                              children: [
+                                                                const Icon(
+                                                                  FluentIcons
+                                                                      .add_24_regular,
+                                                                  size: 20,
+                                                                  color: AppColors
+                                                                      .lightBlack,
+                                                                ),
+                                                                const SizedBox(
+                                                                  width: 12,
+                                                                ),
+                                                                Text(
+                                                                  "Ekle",
+                                                                  style: AppText
+                                                                      .titleSemiBold,
+                                                                ),
+                                                              ],
+                                                            )),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                );
+                                              });
+                                        },
+                                        label: Text("Not Ekle"),
+                                        icon: Icon(FluentIcons.add_24_regular),
+                                      ),
+                                      SizedBox(
+                                        width: 24,
+                                      ),
                                       OutlinedButton.icon(
                                         onPressed: () {
                                           showDialog(
@@ -713,11 +716,13 @@ class _DashboardState extends State<Dashboard> {
                           SizedBox(
                             width: 300,
                             height: 40,
-                            child:TextFormField(
+                            child: TextFormField(
                               controller: searchQueryController,
-                              onChanged: (query) => source.filterClientSide(searchQueryController.text, filterName),
+                              onChanged: (query) => source.filterClientSide(
+                                  searchQueryController.text, filterName),
                               decoration: const InputDecoration(
-                                suffixIcon: Icon(FluentIcons.search_24_filled, color: AppColors.lightPrimary),
+                                suffixIcon: Icon(FluentIcons.search_24_filled,
+                                    color: AppColors.lightPrimary),
                                 hintText: "Ara...",
                               ),
                             ),
@@ -742,8 +747,10 @@ class _DashboardState extends State<Dashboard> {
                 ),
                 const SizedBox(height: 16),
                 if (isLoading) const Text("Yükleniyor"),
-                if (isNotFound) AppAlerts.info("Herhangi bir kayıt bulunamadı."),
-                if (processes.isNotEmpty) AdvancedPaginatedDataTable(
+                if (isNotFound)
+                  AppAlerts.info("Herhangi bir kayıt bulunamadı."),
+                if (processes.isNotEmpty)
+                  AdvancedPaginatedDataTable(
                     sortAscending: isAscending,
                     sortColumnIndex: sortColumnIndex,
                     /*customTableFooter: ,*/
@@ -936,25 +943,31 @@ class DashboardSource extends AdvancedDataTableSource<AppProcess> {
         Provider.of<States>(context).processSelectedRows;
 
     final process = processes.where((element) {
-      switch(filterName) {
-        case 'firstName': {
-          return element.user.firstName.contains(searchQuery);
-        }
-        case 'lastName': {
-          return element.user.lastName.contains(searchQuery);
-        }
-        case 'departmentName': {
-          return element.user.departmentName.contains(searchQuery);
-        }
-        case 'materyalName': {
-          return element.material.materialName.contains(searchQuery);
-        }
-        case 'amount': {
-          return element.amount.toString().contains(searchQuery);
-        }
-        default: {
-          return element.processTypeName.contains(searchQuery);
-        }
+      switch (filterName) {
+        case 'firstName':
+          {
+            return element.user.firstName.contains(searchQuery);
+          }
+        case 'lastName':
+          {
+            return element.user.lastName.contains(searchQuery);
+          }
+        case 'departmentName':
+          {
+            return element.user.departmentName.contains(searchQuery);
+          }
+        case 'materyalName':
+          {
+            return element.material.materialName.contains(searchQuery);
+          }
+        case 'amount':
+          {
+            return element.amount.toString().contains(searchQuery);
+          }
+        default:
+          {
+            return element.processTypeName.contains(searchQuery);
+          }
       }
     }).toList()[index];
 
@@ -1039,27 +1052,34 @@ class DashboardSource extends AdvancedDataTableSource<AppProcess> {
   int get selectedRowCount => 0;
 
   @override
-  Future<RemoteDataSourceDetails<AppProcess>> getNextPage(NextPageRequest pageRequest) async {
+  Future<RemoteDataSourceDetails<AppProcess>> getNextPage(
+      NextPageRequest pageRequest) async {
     List<AppProcess> filteredProcesses = processes.where((element) {
-      switch(filterName) {
-        case 'firstName': {
-          return element.user.firstName.contains(searchQuery);
-        }
-        case 'lastName': {
-          return element.user.lastName.contains(searchQuery);
-        }
-        case 'departmentName': {
-          return element.user.departmentName.contains(searchQuery);
-        }
-        case 'materyalName': {
-          return element.material.materialName.contains(searchQuery);
-        }
-        case 'amount': {
-          return element.amount.toString().contains(searchQuery);
-        }
-        default: {
-          return element.processTypeName.contains(searchQuery);
-        }
+      switch (filterName) {
+        case 'firstName':
+          {
+            return element.user.firstName.contains(searchQuery);
+          }
+        case 'lastName':
+          {
+            return element.user.lastName.contains(searchQuery);
+          }
+        case 'departmentName':
+          {
+            return element.user.departmentName.contains(searchQuery);
+          }
+        case 'materyalName':
+          {
+            return element.material.materialName.contains(searchQuery);
+          }
+        case 'amount':
+          {
+            return element.amount.toString().contains(searchQuery);
+          }
+        default:
+          {
+            return element.processTypeName.contains(searchQuery);
+          }
       }
     }).toList();
 
