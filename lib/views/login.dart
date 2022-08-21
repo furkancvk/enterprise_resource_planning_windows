@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:erp_windows/widgets/app_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../design/app_colors.dart';
 import '../design/app_text.dart';
@@ -271,7 +272,8 @@ class _LoginState extends State<Login> {
                             const SizedBox(height: 4),
                             Text("Giriş yapmak için kullanıcı adınızı & şifrenizi giriniz.", style: AppText.context),
                             const SizedBox(height: 32),
-                            AppForm.appTextFormField(
+                            AppForm.appTextFormFieldRegex(
+                              formatter: FilteringTextInputFormatter.allow(RegExp(r'\S')),
                               label: "Kullanıcı Adı",
                               hint: "ör. isimsoyisim",
                               controller: _usernameController,

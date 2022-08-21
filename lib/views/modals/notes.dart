@@ -7,7 +7,7 @@ import '../../design/app_text.dart';
 import '../../states/states.dart';
 
 class NotePad extends StatefulWidget {
-  NotePad({Key? key}) : super(key: key);
+  const NotePad({Key? key}) : super(key: key);
 
   @override
   State<NotePad> createState() => _NotePadState();
@@ -17,14 +17,15 @@ class _NotePadState extends State<NotePad> {
   @override
   Widget build(BuildContext context) {
     List tasks = Provider.of<States>(context).tasks;
-    String input = Provider.of<States>(context).input;
+    //String input = Provider.of<States>(context).input;
 
-    return tasks.length != 0
+    return tasks.isNotEmpty
         ? GridView.builder(
             gridDelegate:
-                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
             itemCount: tasks.length,
             itemBuilder: (BuildContext context, index) {
+              Function setTasks = Provider.of<States>(context).setTasks;
               String createdDate = DateTime.parse(DateTime.now().toString())
                   .toLocal()
                   .toString();
@@ -36,12 +37,13 @@ class _NotePadState extends State<NotePad> {
                   onDismissed: (value) {
                     setState(() {
                       tasks.removeAt(index);
+                      setTasks(tasks);
                     });
                   },
                   key: UniqueKey(),
                   child: AlertDialog(
                     content: Container(
-                      decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/logo-blue.png',),opacity: 0.1,scale: 0.5)),
+                      decoration: const BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/logo-blue.png',),opacity: 0.1,scale: 0.5)),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -50,16 +52,15 @@ class _NotePadState extends State<NotePad> {
                             children: [
                               Row(
                                 children: [
-
-                                  Icon(FluentIcons.calendar_edit_24_regular,size: 24,),
-                                  SizedBox(width: 4,),
+                                  const Icon(FluentIcons.calendar_edit_24_regular,size: 24,),
+                                  const SizedBox(width: 4,),
                                   Text(date),
                                 ],
                               ),
                               Row(
                                 children: [
-                                  Icon(FluentIcons.clock_24_regular,size: 24,),
-                                  SizedBox(width: 4,),
+                                  const Icon(FluentIcons.clock_24_regular,size: 24,),
+                                  const SizedBox(width: 4,),
                                   Text(time),
                                 ],
                               ),
@@ -67,15 +68,19 @@ class _NotePadState extends State<NotePad> {
                                   onPressed: () {
                                     setState(() {
                                       tasks.removeAt(index);
+                                      setTasks(tasks);
                                     });
                                   },
-                                  icon: Icon(FluentIcons.delete_24_regular))
+                                  icon: const Icon(FluentIcons.delete_24_regular),
+                                splashRadius: 20,
+
+                              )
                             ],
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Divider(
+                              const Divider(
                                 thickness: 1,
                                 color: AppColors.lightPrimary,
                               ),
@@ -92,7 +97,7 @@ class _NotePadState extends State<NotePad> {
             },
           )
         : AlertDialog(
-            content: Container(
+            content: SizedBox(
             height: 300,
             width: 300,
             child: Center(
