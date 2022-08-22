@@ -15,4 +15,5 @@ class ProcessService {
     var body = await BaseService.getRequest('/api/v1/processes/getAllProcess');
     return body;
   }
+
 }

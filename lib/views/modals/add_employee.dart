@@ -174,11 +174,12 @@ class _AddEmployeeState extends State<AddEmployee> {
           email: _emailController.text.toLowerCase(),
           phoneNumber: _phoneNumberController.text.toLowerCase(),
           departmentName: _departmentController.text.toLowerCase(),
-          imageUrl: "",
+          imageName: "",
+          imageData: "",
           createdAt: "",
           updatedAt: "",
       );
-      EmployeeService.addEmployee(employeeData).then((value) {
+      EmployeeService.addEmployee(employeeData, null).then((value) {
         if (value["success"]){
           Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(

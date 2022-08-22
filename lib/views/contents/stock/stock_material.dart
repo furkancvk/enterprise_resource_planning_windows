@@ -39,7 +39,7 @@ class _StockMaterialState extends State<StockMaterial> {
   bool isLoading = true;
 
   void getAllMaterial() {
-    MaterialService.getAllMaterials().then((value) => {
+    MaterialService.getAllMaterial().then((value) => {
       if(value["success"]) {
         for(var data in value["data"]) {
           materials.add(AppMaterial.fromJson(data)),
@@ -317,7 +317,9 @@ class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
       }
     }).toList()[index];
 
-    String imageUrl = "${"${BaseService.baseUrl}/images/materials/${material.materialId}"}/${material.imageUrl}";
+    // String imageUrl = "${"${BaseService.baseUrl}/images/materials/${material.materialId}"}/${material.imageUrl}";
+
+    String imageUrl = "${BaseService.baseUrl}/api/v1/images/materials/${material.materialId}";
 
     return DataRow(
       selected: materialSelectedRows.contains(material.materialId) ? true : false,
@@ -331,17 +333,17 @@ class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
             height: 36,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
-              image: const DecorationImage(
+              /*image: const DecorationImage(
                 image: AssetImage("assets/images/placeholder-image.jpg"),
                 fit: BoxFit.cover,
-              ),
-              /*image: material.imageUrl.isEmpty ? const DecorationImage(
+              ),*/
+              image: material.imageName.isEmpty ? const DecorationImage(
                 image: AssetImage("assets/images/placeholder-image.jpg"),
                 fit: BoxFit.cover,
               ) : DecorationImage(
                 image: NetworkImage(imageUrl),
                 fit: BoxFit.cover,
-              ),*/
+              ),
             ),
           ),
         ),

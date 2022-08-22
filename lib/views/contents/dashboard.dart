@@ -60,7 +60,7 @@ class _DashboardState extends State<Dashboard> {
                 },
               if (value["data"].isEmpty) isNotFound = true,
               isLoading = false,
-              setState(() {}),
+              if(mounted) setState(() {}),
             }
         });
   }
@@ -70,7 +70,7 @@ class _DashboardState extends State<Dashboard> {
   }
 
   Future<Map<String, dynamic>> getAllMaterials() async {
-    return await MaterialService.getAllMaterials();
+    return await MaterialService.getAllMaterial();
   }
 
   void onSort(int columnIndex, bool ascending) {
@@ -937,10 +937,12 @@ class DashboardSource extends AdvancedDataTableSource<AppProcess> {
 
   @override
   DataRow? getRow(int index) {
-    Function setProcessSelectedRows =
-        Provider.of<States>(context).setProcessSelectedRows;
-    List<int> processSelectedRows =
-        Provider.of<States>(context).processSelectedRows;
+    Function setProcessSelectedRows = Provider
+        .of<States>(context)
+        .setProcessSelectedRows;
+    List<int> processSelectedRows = Provider
+        .of<States>(context)
+        .processSelectedRows;
 
     final process = processes.where((element) {
       switch (filterName) {
@@ -973,8 +975,7 @@ class DashboardSource extends AdvancedDataTableSource<AppProcess> {
 
     String createdDate = DateTime.parse(process.createdAt).toLocal().toString();
     String date = createdDate.substring(0, createdDate.indexOf(" "));
-    String time =
-        createdDate.substring(createdDate.indexOf(" "), createdDate.length - 7);
+    String time = createdDate.substring(createdDate.indexOf(" "), createdDate.length - 7);
 
     return DataRow(
       selected: processSelectedRows.contains(process.processId) ? true : false,

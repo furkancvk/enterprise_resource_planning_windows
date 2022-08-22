@@ -1,14 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/user.dart';
 import '../storage/storage.dart';
 
 class BaseService {
-  static String baseUrl = 'https://api-first-java-backend-project.herokuapp.com';
-  // static String baseUrl = 'http://192.168.2.112:8080';
+  // static String baseUrl = 'https://api-first-java-backend-project.herokuapp.com';
+  static String baseUrl = 'http://192.168.2.112:8080';
   static SecureStorage secureStorage = SecureStorage();
 
   static Future<Map<String, dynamic>> getRequest(String path) async {
@@ -84,4 +85,30 @@ class BaseService {
     var body = jsonDecode(utf8.decode(response.bodyBytes));
     return body;
   }
+
+  static Future<Map<String, dynamic>> multipartRequest({
+    required String path,
+    required String fieldName,
+    dynamic data,
+    String requestType = 'POST',
+    File? file,
+  }) async {
+    String token = await secureStorage.readSecureData('token') ?? "";
+    var url = Uri.parse(baseUrl + path);
+    var request = http.MultipartRequest(requestType, url);
+    request.headers.addAll({"Authorization": "Bearer $token"});
+    request.fields[fieldName] = json.encode(data.toJson()).toString();
+
+    if(file != null) {
+      request.files.add(await http.MultipartFile.fromPath("file", file.path));
+    }
+
+    var response = await request.send();
+    var responded = await http.Response.fromStream(response);
+
+    var body = jsonDecode(utf8.decode(responded.bodyBytes));
+    print(body);
+    return body;
+  }
+
 }

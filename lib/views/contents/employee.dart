@@ -288,7 +288,7 @@ class EmployeeSource extends AdvancedDataTableSource<Employee> {
 
     final employee = employees[index];
 
-    String imageUrl = "${"${BaseService.baseUrl}/images/materials/${employee.employeeId}"}/${employee.imageUrl}";
+    String imageUrl = "${BaseService.baseUrl}/api/v1/images/employees/${employee.employeeId}";
 
     return DataRow(
       selected: employeeSelectedRows.contains(employee.employeeId) ? true : false,
@@ -300,15 +300,17 @@ class EmployeeSource extends AdvancedDataTableSource<Employee> {
             height: 36,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
-              image: employee.imageUrl.isEmpty
-                  ? const DecorationImage(
-                      image: AssetImage("assets/images/placeholder-image.jpg"),
-                      fit: BoxFit.cover,
-                    )
-                  : DecorationImage(
-                      image: NetworkImage(imageUrl),
-                      fit: BoxFit.cover,
-                    ),
+              /*image: const DecorationImage(
+                image: AssetImage("assets/images/placeholder-image.jpg"),
+                fit: BoxFit.cover,
+              ),*/
+              image: employee.imageName.isEmpty ? const DecorationImage(
+                image: AssetImage("assets/images/placeholder-image.jpg"),
+                fit: BoxFit.cover,
+              ) : DecorationImage(
+                image: NetworkImage(imageUrl),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),

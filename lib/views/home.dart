@@ -279,8 +279,7 @@ class _HomeState extends State<Home> {
                                       future: getFirstName(),
                                       builder: (context, snapshot) {
                                         return Text(
-                                          Helpers.titleCase(
-                                              snapshot.data.toString()),
+                                          Helpers.titleCase(snapshot.data.toString()),
                                           style: AppText.contextSemiBold,
                                         );
                                       },

@@ -62,14 +62,14 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
     _colorController.text = Helpers.titleCase(widget.material.colorName);
     _explanationController.text = widget.material.description;
 
-    String imageUrl = '${BaseService.baseUrl}/images/materials/${widget.material.materialId}/${widget.material.imageUrl}' ;
-    print('imageurl : ${widget.material.imageUrl}');
-    print('imageurl : ${imageUrl}');
+    // String imageUrl = '${BaseService.baseUrl}/images/materials/${widget.material.materialId}/${widget.material.imageUrl}' ;
+    // print('imageurl : ${widget.material.imageUrl}');
+    // print('imageurl : ${imageUrl}');
 
     return AlertDialog(
       title: Text("Hammadde Düzenle", style: AppText.titleSemiBold),
       content: SizedBox(
-        height: 560,
+        // height: 560,
         width: 360,
         child: ListView(
       children: [
@@ -162,7 +162,7 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
         ),
         const SizedBox(height: 24),
         AppForm.appTextFormField(
-          maxLines: 3,
+          maxLines: 2,
           label: "Açıklama",
           hint: "Ekstra bilgileri buraya ekleyebilirsiniz.",
           controller: _explanationController,
@@ -170,9 +170,10 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
         const SizedBox(height: 24),
         Align(
           alignment: Alignment.centerRight,
-          child: ElevatedButton(
+          child: ElevatedButton.icon(
             onPressed: updateMaterial,
-            child: const Text("Güncelle"),
+            icon: const Icon(FluentIcons.save_24_regular),
+            label: const Text("Kaydet"),
           ),
         ),
       ],
@@ -191,7 +192,8 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
       AppMaterial materialData = AppMaterial(
           materialId: widget.material.materialId,
           referenceNumber: widget.material.referenceNumber,
-          imageUrl: widget.material.imageUrl,
+          imageName: widget.material.imageName,
+          imageData: widget.material.imageData,
           materialName: _nameController.text.toLowerCase(),
           typeName: _typeController.text.toLowerCase(),
           unitName: _unitController.text.toLowerCase(),
@@ -203,7 +205,7 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
           updatedAt: widget.material.createdAt
       );
 
-      MaterialService.updateMaterial(materialData).then((value) {
+      MaterialService.updateMaterial(materialData, null).then((value) {
         if (value["success"]){
             Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
