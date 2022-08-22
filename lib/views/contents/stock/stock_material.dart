@@ -337,11 +337,11 @@ class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
                 image: AssetImage("assets/images/placeholder-image.jpg"),
                 fit: BoxFit.cover,
               ),*/
-              image: material.imageName.isEmpty ? const DecorationImage(
+              image: material.imageUrl.isEmpty ? const DecorationImage(
                 image: AssetImage("assets/images/placeholder-image.jpg"),
                 fit: BoxFit.cover,
               ) : DecorationImage(
-                image: NetworkImage(imageUrl),
+                image: NetworkImage(material.imageUrl),
                 fit: BoxFit.cover,
               ),
             ),

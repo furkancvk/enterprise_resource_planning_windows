@@ -192,8 +192,9 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
       AppMaterial materialData = AppMaterial(
           materialId: widget.material.materialId,
           referenceNumber: widget.material.referenceNumber,
-          imageName: widget.material.imageName,
-          imageData: widget.material.imageData,
+          // imageName: "",
+          // imageData: "",
+          imageUrl: widget.material.imageUrl,
           materialName: _nameController.text.toLowerCase(),
           typeName: _typeController.text.toLowerCase(),
           unitName: _unitController.text.toLowerCase(),

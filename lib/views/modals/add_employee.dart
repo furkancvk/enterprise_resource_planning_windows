@@ -3,9 +3,12 @@ import 'dart:io';
 import 'package:erp_windows/models/employee.dart';
 import 'package:erp_windows/services/employee_service.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:path/path.dart' as path;
 
 import '../../design/app_colors.dart';
 import '../../design/app_text.dart';
@@ -21,6 +24,7 @@ class AddEmployee extends StatefulWidget {
 }
 
 class _AddEmployeeState extends State<AddEmployee> {
+  final FirebaseStorage storage = FirebaseStorage.instance;
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -165,7 +169,22 @@ class _AddEmployeeState extends State<AddEmployee> {
     );
 
   }
-  void addEmployee() {
+
+  Future<String> uploadFile() async {
+    if (imageFile == null) return "";
+
+    final fileName = path.basename(imageFile!.path);
+    final destination = 'files/$fileName';
+
+    final ref = FirebaseStorage.instance.ref(destination).child('file/');
+    await ref.putFile(imageFile!);
+    var url = FirebaseStorage.instance.ref(destination).child('file/').getDownloadURL();
+
+    return url;
+
+  }
+
+  void addEmployee() async {
     if(_firstNameController.text.isNotEmpty && _lastNameController.text.isNotEmpty && _phoneNumberController.text.isNotEmpty && _departmentController.text.isNotEmpty) {
       Employee employeeData = Employee(
           employeeId: 0,
@@ -174,8 +193,9 @@ class _AddEmployeeState extends State<AddEmployee> {
           email: _emailController.text.toLowerCase(),
           phoneNumber: _phoneNumberController.text.toLowerCase(),
           departmentName: _departmentController.text.toLowerCase(),
-          imageName: "",
-          imageData: "",
+          // imageName: "",
+          // imageData: "",
+          imageUrl: await uploadFile(),
           createdAt: "",
           updatedAt: "",
       );

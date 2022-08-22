@@ -351,10 +351,10 @@ class _LoginState extends State<Login> {
       }
     } on SocketException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          padding: EdgeInsets.all(20),
-          content: Text("İnternet bağlantınızı kontrol ediniz."),
-          duration: Duration(milliseconds: 1500),
+        SnackBar(
+          padding: const EdgeInsets.all(20),
+          content: Text("İnternet bağlantınızı kontrol ediniz.", style: AppText.contextSemiBold,),
+          duration: const Duration(milliseconds: 1500),
           backgroundColor: AppColors.lightSecondary,
         ),
       );

@@ -304,11 +304,11 @@ class EmployeeSource extends AdvancedDataTableSource<Employee> {
                 image: AssetImage("assets/images/placeholder-image.jpg"),
                 fit: BoxFit.cover,
               ),*/
-              image: employee.imageName.isEmpty ? const DecorationImage(
+              image: employee.imageUrl.isEmpty ? const DecorationImage(
                 image: AssetImage("assets/images/placeholder-image.jpg"),
                 fit: BoxFit.cover,
               ) : DecorationImage(
-                image: NetworkImage(imageUrl),
+                image: NetworkImage(employee.imageUrl),
                 fit: BoxFit.cover,
               ),
             ),
