@@ -1,6 +1,4 @@
 import 'package:erp_windows/states/states.dart';
-import 'package:erp_windows/views/login.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:provider/provider.dart';
@@ -9,9 +7,8 @@ import 'design/app_theme_data.dart';
 import 'routes/routes.dart';
 import 'storage/storage.dart';
 
+
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   runApp(
     ChangeNotifierProvider<States>(
       create: (BuildContext context) => States(),

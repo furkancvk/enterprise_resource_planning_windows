@@ -208,7 +208,7 @@ class AppCards {
 
   static Widget addImgCard({required void Function() onTap}) {
     return InkWell(
-      onTap: onTap,
+      onTap: (){},
       child: Container(
         height: 156,
         decoration: BoxDecoration(

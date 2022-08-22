@@ -3,12 +3,9 @@ import 'dart:io';
 import 'package:erp_windows/models/employee.dart';
 import 'package:erp_windows/services/employee_service.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:path/path.dart' as path;
 
 import '../../design/app_colors.dart';
 import '../../design/app_text.dart';
@@ -24,7 +21,6 @@ class AddEmployee extends StatefulWidget {
 }
 
 class _AddEmployeeState extends State<AddEmployee> {
-  final FirebaseStorage storage = FirebaseStorage.instance;
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -170,7 +166,7 @@ class _AddEmployeeState extends State<AddEmployee> {
 
   }
 
-  Future<String> uploadFile() async {
+/*  Future<String> uploadFile() async {
     if (imageFile == null) return "";
 
     final fileName = path.basename(imageFile!.path);
@@ -182,7 +178,7 @@ class _AddEmployeeState extends State<AddEmployee> {
 
     return url;
 
-  }
+  }*/
 
   void addEmployee() async {
     if(_firstNameController.text.isNotEmpty && _lastNameController.text.isNotEmpty && _phoneNumberController.text.isNotEmpty && _departmentController.text.isNotEmpty) {
@@ -195,7 +191,7 @@ class _AddEmployeeState extends State<AddEmployee> {
           departmentName: _departmentController.text.toLowerCase(),
           // imageName: "",
           // imageData: "",
-          imageUrl: await uploadFile(),
+          imageUrl: "",
           createdAt: "",
           updatedAt: "",
       );
