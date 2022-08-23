@@ -380,20 +380,23 @@ class _LoginState extends State<Login> {
 
 }
 
-/// KAPATMA ALTA ALMA VE TAM EKRAN YAPMA BUTONLARI BUNDAN SONRASI
+
+/// Kapatma, küçültme ve alta alma butonların kodları
 
 final buttonColors = WindowButtonColors(
-    iconNormal: AppColors.lightPrimary,
-    mouseOver: AppColors.lightPrimary,
-    mouseDown: AppColors.lightPrimary,
-    iconMouseOver: AppColors.lightSecondary,
-    iconMouseDown: AppColors.lightPrimary);
+  iconNormal: AppColors.lightPrimary,
+  mouseOver: AppColors.lightPrimary,
+  mouseDown: AppColors.lightPrimary,
+  iconMouseOver: AppColors.lightSecondary,
+  iconMouseDown: AppColors.lightPrimary,
+);
 
 final closeButtonColors = WindowButtonColors(
-    mouseOver: const Color(0xFFD32F2F),
-    mouseDown: const Color(0xFFB71C1C),
-    iconNormal: AppColors.lightPrimary,
-    iconMouseOver: Colors.white);
+  mouseOver: const Color(0xFFD32F2F),
+  mouseDown: const Color(0xFFB71C1C),
+  iconNormal: AppColors.lightPrimary,
+  iconMouseOver: Colors.white,
+);
 
 class WindowButtons extends StatefulWidget {
   const WindowButtons({Key? key}) : super(key: key);

@@ -25,7 +25,7 @@ import '../utils/helpers.dart';
 import '../views/contents/barcode.dart';
 import 'package:erp_windows/views/contents/dashboard.dart';
 
-const borderColor = AppColors.lightSecondary;
+import 'login.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -35,7 +35,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final TextEditingController _searchController = TextEditingController();
   final SecureStorage secureStorage = SecureStorage();
 
   List<Widget> contents = const [
@@ -96,9 +95,9 @@ class _HomeState extends State<Home> {
 
     return Scaffold(
       body: WindowBorder(
-        color: borderColor,
+        color: AppColors.lightSecondary,
         width: 1,
-        child: Row( ///Ekranı sol sağ ikiye bölüyor
+        child: Row( /// Ekranı sol sağ ikiye bölüyor
           children: [
             const AppSidebar(),
             Expanded(
@@ -114,10 +113,9 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                     ),
-                  ), ///Kapatma genişletme aşağı alma butonları
+                  ), /// Kapatma genişletme aşağı alma butonları
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 24),
+                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                     color: AppColors.lightSecondary,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -186,7 +184,7 @@ class _HomeState extends State<Home> {
                                 ),
                               );
                             },
-                          ), ///HomePage SearchBar
+                          ), /// HomePage SearchBar
                         ),
                         Row(
                           children: [
@@ -199,17 +197,12 @@ class _HomeState extends State<Home> {
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                 color: AppColors.lightGrey,
-                                border:
-                                    Border.all(color: AppColors.lightPrimary),
+                                border: Border.all(color: AppColors.lightPrimary),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: PopupMenuButton<int>(
-                                onCanceled: () {
-                                  _isSelected = false;
-                                },
-                                onSelected: (value) {
-                                  _isSelected = true;
-                                },
+                                onCanceled: () => _isSelected = false,
+                                onSelected: (value) => _isSelected = true,
                                 tooltip: "Profil Menüsü",
                                 padding: const EdgeInsets.all(8),
                                 itemBuilder: (context) => [
@@ -231,8 +224,7 @@ class _HomeState extends State<Home> {
                                 ],
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(4),
-                                  side: const BorderSide(
-                                      color: AppColors.lightPrimary),
+                                  side: const BorderSide(color: AppColors.lightPrimary),
                                 ),
                                 splashRadius: 20,
                                 offset: const Offset(9, 37),
@@ -240,13 +232,12 @@ class _HomeState extends State<Home> {
                                 elevation: 0,
                                 child: Row(
                                   children: [
-                                    //Profildeki resmin verildiği kısım
+                                    /// Profildeki resmin verildiği kısım
                                     Container(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(4),
                                         image: const DecorationImage(
-                                          image: AssetImage(
-                                              "assets/images/avatar.png"),
+                                          image: AssetImage("assets/images/avatar.png"),
                                           fit: BoxFit.fill,
                                         ),
                                       ),
@@ -257,10 +248,13 @@ class _HomeState extends State<Home> {
                                     FutureBuilder(
                                       future: getFirstName(),
                                       builder: (context, snapshot) {
-                                        return Text(
-                                          Helpers.titleCase(snapshot.data.toString()),
-                                          style: AppText.contextSemiBold,
-                                        );
+                                        if(snapshot.hasData) {
+                                          return Text(
+                                            Helpers.titleCase(snapshot.data.toString()),
+                                            style: AppText.contextSemiBold,
+                                          );
+                                        }
+                                        return const Text("");
                                       },
                                     ),
                                     const SizedBox(width: 16),
@@ -274,18 +268,18 @@ class _HomeState extends State<Home> {
                                   ],
                                 ),
                               ),
-                            ),/// Profil Kısmı
+                            ), /// Profil Kısmı
                             const SizedBox(width: 24),
                             IconButton(
                               onPressed: () {},
                               icon: const Icon(FluentIcons.settings_24_regular),
-                            ),  ///Ayarlar Butonu
+                            ),  /// Ayarlar Butonu
                           ],
                         ),
                       ],
                     ),
-                  ), ///SearchBar + Profil butonu
-                  Expanded(child: contents[indexContent]), ///Sayfalarımız
+                  ), /// SearchBar + Profil butonu
+                  Expanded(child: contents[indexContent]), /// Sayfalarımız
                 ],
               ),
             ),
@@ -295,62 +289,14 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Future<String> getFirstName() async {
+    return await secureStorage.readSecureData('firstName');
+  }
+
   void logOut() async {
     await secureStorage.deleteAllSecureData().then((value) => {
           Navigator.pushReplacementNamed(context, 'login_view'),
         });
   }
 
-  Future<String> getFirstName() async {
-    return await secureStorage.readSecureData('firstName');
-  }
-}
-
-/// KAPATMA ALTA ALMA VE TAM EKRAN YAPMA BUTONLARI BUNDAN SONRASI
-
-final buttonColors = WindowButtonColors(
-    iconNormal: AppColors.lightPrimary,
-    mouseOver: AppColors.lightPrimary,
-    mouseDown: AppColors.lightPrimary,
-    iconMouseOver: AppColors.lightSecondary,
-    iconMouseDown: AppColors.lightPrimary);
-
-final closeButtonColors = WindowButtonColors(
-    mouseOver: const Color(0xFFD32F2F),
-    mouseDown: const Color(0xFFB71C1C),
-    iconNormal: AppColors.lightPrimary,
-    iconMouseOver: Colors.white);
-
-class WindowButtons extends StatefulWidget {
-  const WindowButtons({Key? key}) : super(key: key);
-
-  @override
-  _WindowButtonsState createState() => _WindowButtonsState();
-}
-
-class _WindowButtonsState extends State<WindowButtons> {
-  void maximizeOrRestore() {
-    setState(() {
-      appWindow.maximizeOrRestore();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        MinimizeWindowButton(colors: buttonColors),
-        appWindow.isMaximized
-            ? RestoreWindowButton(
-                colors: buttonColors,
-                onPressed: maximizeOrRestore,
-              )
-            : MaximizeWindowButton(
-                colors: buttonColors,
-                onPressed: maximizeOrRestore,
-              ),
-        CloseWindowButton(colors: closeButtonColors),
-      ],
-    );
-  }
 }

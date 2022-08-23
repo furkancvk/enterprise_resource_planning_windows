@@ -174,7 +174,7 @@ class _DashboardState extends State<Dashboard> {
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
-          /// Panel Cardları
+          /// Panel data cardları
           FittedBox(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -262,6 +262,7 @@ class _DashboardState extends State<Dashboard> {
             ),
           ),
           const SizedBox(height: 24),
+          /// Takvim ve notlar
           Row(
             children: [
               Container(
@@ -338,11 +339,10 @@ class _DashboardState extends State<Dashboard> {
                           child: Column(
                             children: [
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    " NOTLARIM ",
+                                    "NOTLARIM",
                                     style: AppText.headerSemiBold,
                                     textAlign: TextAlign.center,
                                   ),
@@ -350,35 +350,17 @@ class _DashboardState extends State<Dashboard> {
                                     children: [
                                       OutlinedButton.icon(
                                         onPressed: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                Function setTasks =
-                                                    Provider.of<States>(context)
-                                                        .setTasks;
-                                                Function setInput =
-                                                    Provider.of<States>(context)
-                                                        .setInput;
+                                          showDialog(context: context, builder: (BuildContext context) {
+                                                Function setTasks = Provider.of<States>(context).setTasks;
+                                                Function setInput = Provider.of<States>(context).setInput;
                                                 return AlertDialog(
                                                   title: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
-                                                      Text(
-                                                        "Yapılacak Not Ekle",
-                                                        style: AppText
-                                                            .contextSemiBold,
-                                                      ),
+                                                      Text("Yapılacak Not Ekle", style: AppText.contextSemiBold),
                                                       IconButton(
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                        icon: const Icon(
-                                                          Icons.close_outlined,
-                                                          size: 20,
-                                                        ),
+                                                        onPressed: () {Navigator.of(context).pop();},
+                                                        icon: const Icon(Icons.close_outlined, size: 20),
                                                         splashRadius: 16,
                                                       )
                                                     ],
@@ -389,8 +371,7 @@ class _DashboardState extends State<Dashboard> {
                                                     child: TextField(
                                                       maxLength: 300,
                                                       maxLines: 7,
-                                                      onChanged:
-                                                          (String value) {
+                                                      onChanged: (String value) {
                                                         input = value;
                                                         setInput(input);
                                                       },
@@ -399,7 +380,7 @@ class _DashboardState extends State<Dashboard> {
                                                   actions: [
                                                     Row(
                                                       mainAxisAlignment:
-                                                          MainAxisAlignment.end,
+                                                      MainAxisAlignment.end,
                                                       children: [
                                                         TextButton(
                                                             onPressed: () {
@@ -408,72 +389,39 @@ class _DashboardState extends State<Dashboard> {
                                                                   tasks.add(input.trim());
                                                                   setTasks(tasks);
                                                                 });
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
+                                                                Navigator.of(context).pop();
 
                                                                 input = "";
-                                                                ScaffoldMessenger.of(
-                                                                        context)
-                                                                    .showSnackBar(
+                                                                ScaffoldMessenger.of(context).showSnackBar(
                                                                   SnackBar(
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                            .all(0),
-                                                                    content: AppAlerts
-                                                                        .success(
-                                                                            "Not başarıyla eklendi"),
-                                                                    duration: const Duration(
-                                                                        milliseconds:
-                                                                            1500),
+                                                                    padding: const EdgeInsets.all(0),
+                                                                    content: AppAlerts.success("Not başarıyla eklendi"),
+                                                                    duration: const Duration(milliseconds: 1500),
                                                                     backgroundColor:
-                                                                        AppColors
-                                                                            .lightSecondary,
+                                                                    AppColors.lightSecondary,
                                                                   ),
                                                                 );
                                                               } else {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                                ScaffoldMessenger.of(
-                                                                        context)
-                                                                    .showSnackBar(
+                                                                Navigator.of(context).pop();
+                                                                ScaffoldMessenger.of(context).showSnackBar(
                                                                   SnackBar(
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                            .all(0),
-                                                                    content: AppAlerts
-                                                                        .error(
-                                                                            "Not alanı boş bırakılamaz"),
-                                                                    duration: const Duration(
-                                                                        milliseconds:
-                                                                            1500),
+                                                                    padding: const EdgeInsets.all(0),
+                                                                    content: AppAlerts.error("Not alanı boş bırakılamaz"),
+                                                                    duration: const Duration(milliseconds: 1500),
                                                                     backgroundColor:
-                                                                        AppColors
-                                                                            .lightSecondary,
+                                                                    AppColors.lightSecondary,
                                                                   ),
                                                                 );
                                                               }
                                                             },
                                                             child: Row(
                                                               children: [
-                                                                const Icon(
-                                                                  FluentIcons
-                                                                      .add_24_regular,
-                                                                  size: 20,
-                                                                  color: AppColors
-                                                                      .lightBlack,
-                                                                ),
-                                                                const SizedBox(
-                                                                  width: 12,
-                                                                ),
-                                                                Text(
-                                                                  "Ekle",
-                                                                  style: AppText
-                                                                      .titleSemiBold,
-                                                                ),
+                                                                const Icon(FluentIcons.add_24_regular, size: 20, color: AppColors.lightBlack),
+                                                                const SizedBox(width: 12),
+                                                                Text("Ekle", style: AppText.titleSemiBold),
                                                               ],
-                                                            )),
+                                                            ),
+                                                        ),
                                                       ],
                                                     ),
                                                   ],
@@ -483,48 +431,33 @@ class _DashboardState extends State<Dashboard> {
                                         label: const Text("Not Ekle"),
                                         icon: const Icon(FluentIcons.add_24_regular),
                                       ),
-                                      const SizedBox(
-                                        width: 24,
-                                      ),
+                                      const SizedBox(width: 24),
                                       OutlinedButton.icon(
-                                        onPressed: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return const NotePad();
-                                              });
-                                        },
+                                        onPressed: () {showDialog(context: context, builder: (BuildContext context) {return const NotePad();});},
                                         label: const Text("Notları Aç"),
-                                        icon: const Icon(
-                                            FluentIcons.note_24_regular),
+                                        icon: const Icon(FluentIcons.note_24_regular),
                                       ),
                                     ],
                                   )
                                 ],
                               ),
-                              const SizedBox(
-                                height: 12,
-                              ),
+                              const SizedBox(height: 12),
                               tasks.isEmpty
                                   ? Padding(
-                                      padding: const EdgeInsets.only(top: 60.0),
-                                      child: SizedBox(
-                                        height: 340,
-                                        width: 300,
-                                        child: Center(
-                                          child: Column(
-                                            children: [
-                                              Image.asset(
-                                                  'assets/images/no-data-transparent.png'),
-                                              Text(
-                                                "Gösterilecek Not Yok",
-                                                style: AppText.contextSemiBold,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    )
+                                padding: const EdgeInsets.only(top: 60.0),
+                                child: SizedBox(
+                                  height: 340,
+                                  width: 300,
+                                  child: Center(
+                                    child: Column(
+                                      children: [
+                                        Image.asset('assets/images/no-data-transparent.png'),
+                                        Text("Gösterilecek Not Yok", style: AppText.contextSemiBold),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
                                   : const AppShowNotes(),
                             ],
                           ),
@@ -538,6 +471,7 @@ class _DashboardState extends State<Dashboard> {
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
+
                       /// Görev Yeri
                       /*Row(
                         children: [
@@ -614,10 +548,11 @@ class _DashboardState extends State<Dashboard> {
                     ],
                   ),
                 ),
-              ), ///Notlar kısmı
+              ), /// Notlar
             ],
           ),
           const SizedBox(height: 24),
+          /// İşlem geçmişi tablosu
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -736,7 +671,8 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 }
-///To Do
+
+/// Görev atama containerı
 /*class ToDo extends StatelessWidget {
   const ToDo({Key? key}) : super(key: key);
 
