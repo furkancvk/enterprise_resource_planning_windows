@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../../design/app_colors.dart';
 import '../../design/app_text.dart';
@@ -58,10 +57,6 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
     _colorController.text = Helpers.titleCase(widget.material.colorName);
     _explanationController.text = widget.material.description;
 
-    // String imageUrl = '${BaseService.baseUrl}/images/materials/${widget.material.materialId}/${widget.material.imageUrl}' ;
-    // print('imageurl : ${widget.material.imageUrl}');
-    // print('imageurl : ${imageUrl}');
-
     return AlertDialog(
       title: Text("Hammadde Düzenle", style: AppText.titleSemiBold),
       content: SizedBox(
@@ -109,7 +104,6 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
               child: Column(
                 children: [
                   const SizedBox(height: 8),
-                  // const ImagePickerWidget(), Image.network(imageUrl, fit: BoxFit.cover), width: 171,height: 156,
                   imageFile != null ?
                   Stack(
                     children: [
