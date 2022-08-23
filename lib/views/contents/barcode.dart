@@ -15,7 +15,6 @@ import '../modals/preview_pdf.dart';
 import '../../packages/edited_advanced_PDT.dart';
 import '../../packages/edited_advanced_datatable_source.dart';
 import '../../states/states.dart';
-import '../../widgets/app_form.dart';
 
 class Barcode extends StatefulWidget {
   const Barcode({Key? key}) : super(key: key);
@@ -160,7 +159,7 @@ class _BarcodeState extends State<Barcode> {
                             ],
                           ),
                         ),
-                      ),
+                      ), /// Toplu İşlemler Butonu
                       Row(
                         children: [
                           SizedBox(
@@ -174,7 +173,7 @@ class _BarcodeState extends State<Barcode> {
                                 hintText: "Ara...",
                               ),
                             ),
-                          ),
+                          ), /// SearchBar
                           OutlinedButton.icon(
                             onPressed: () {},
                             icon: const Icon(FluentIcons.filter_24_regular),
@@ -184,7 +183,7 @@ class _BarcodeState extends State<Barcode> {
                               letterSpacing: 0.4,
                               color: AppColors.lightPrimary,
                             )),
-                          ),
+                          ), /// Filtreleme Butonu
                         ],
                       ),
                     ],
