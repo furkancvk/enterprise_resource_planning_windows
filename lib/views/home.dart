@@ -1,4 +1,3 @@
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:erp_windows/views/contents/departments/department_human_resources.dart';
 import 'package:erp_windows/views/contents/departments/department_inventory.dart';
@@ -12,7 +11,6 @@ import 'package:erp_windows/views/contents/order/order_outgoing.dart';
 import 'package:erp_windows/views/contents/order/order_preparing.dart';
 import 'package:erp_windows/views/contents/stock/stock_material.dart';
 import 'package:erp_windows/views/contents/stock/stock_product.dart';
-import 'package:erp_windows/widgets/app_form.dart';
 import 'package:erp_windows/widgets/app_sidebar.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
@@ -57,23 +55,6 @@ class _HomeState extends State<Home> {
     DocumentBills(), //13
   ];
 
-  /*List<String> contentSuggestions = [
-    "Panel", // 0
-    "Stok > Hammadde", // 1
-    "Stok > Bitmiş Ürün", // 2
-    // OrderIncoming(), // 3
-    // OrderPreparing(), // 4
-    // OrderOutgoing(), // 5
-    "Personel", // 6
-    // DepartmentManufacturing(), // 7
-    // DepartmentInventory(), // 8
-    // DepartmentTransfer(), // 9
-    // DepartmentHumanResources(), //10
-    "Etiket", //11
-    // DocumentReports(), //12
-    // DocumentBills(), //13
-  ];*/
-
   List<Map<String, dynamic>> contentSuggestions = [
     {
       "contentName": "Panel",
@@ -87,30 +68,29 @@ class _HomeState extends State<Home> {
       "contentName": "Stok > Bitmiş Ürün",
       "index": 2,
     },
-    // OrderIncoming(), // 3
-    // OrderPreparing(), // 4
-    // OrderOutgoing(), // 5
+     /*OrderIncoming(), // 3
+     OrderPreparing(), // 4
+     OrderOutgoing(), // 5*/
     {
       "contentName": "Personel",
       "index": 6,
     },
-    // DepartmentManufacturing(), // 7
-    // DepartmentInventory(), // 8
-    // DepartmentTransfer(), // 9
-    // DepartmentHumanResources(), //10
+    /* DepartmentManufacturing(), // 7
+     DepartmentInventory(), // 8
+     DepartmentTransfer(), // 9
+     DepartmentHumanResources(), //10*/
     {
       "contentName": "Etiket",
       "index": 11,
     },
-    // DocumentReports(), //12
-    // DocumentBills(), //13
+   /*  DocumentReports(), //12
+     DocumentBills(), //13*/
   ];
 
   bool _isSelected = false;
 
   @override
   Widget build(BuildContext context) {
-    // int indexSidebar = Provider.of<States>(context).indexSidebar;
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
     int indexContent = Provider.of<States>(context).indexContent;
 
@@ -118,7 +98,7 @@ class _HomeState extends State<Home> {
       body: WindowBorder(
         color: borderColor,
         width: 1,
-        child: Row(
+        child: Row( ///Ekranı sol sağ ikiye bölüyor
           children: [
             const AppSidebar(),
             Expanded(
@@ -134,7 +114,7 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                     ),
-                  ),
+                  ), ///Kapatma genişletme aşağı alma butonları
                   Container(
                     padding: const EdgeInsets.symmetric(
                         vertical: 16, horizontal: 24),
@@ -206,15 +186,14 @@ class _HomeState extends State<Home> {
                                 ),
                               );
                             },
-                          ),
+                          ), ///HomePage SearchBar
                         ),
                         Row(
-                          // mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             /*IconButton(
                               onPressed: (){},
                               icon: const Icon(FluentIcons.alert_24_regular),
-                            ),*/
+                            ),*/ /// Bildirimler Butonu
                             const SizedBox(width: 24),
                             Container(
                               padding: const EdgeInsets.all(8),
@@ -295,18 +274,18 @@ class _HomeState extends State<Home> {
                                   ],
                                 ),
                               ),
-                            ),
+                            ),/// Profil Kısmı
                             const SizedBox(width: 24),
                             IconButton(
                               onPressed: () {},
                               icon: const Icon(FluentIcons.settings_24_regular),
-                            ),
+                            ),  ///Ayarlar Butonu
                           ],
                         ),
                       ],
                     ),
-                  ),
-                  Expanded(child: contents[indexContent]),
+                  ), ///SearchBar + Profil butonu
+                  Expanded(child: contents[indexContent]), ///Sayfalarımız
                 ],
               ),
             ),
