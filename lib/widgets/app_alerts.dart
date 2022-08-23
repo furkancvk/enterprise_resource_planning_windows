@@ -155,20 +155,4 @@ class AppAlerts {
       ),
     );
   }
-
- /* static Future<bool?> toast({
-    required String message,
-    Color backgroundColor = AppColors.lightPrimary,
-    Color textColor = AppColors.lightSecondary,
-  }) {
-    return Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
-      timeInSecForIosWeb: 1,
-      backgroundColor: backgroundColor.withOpacity(.7),
-      textColor: textColor,
-      fontSize: 16,
-    );
-  }*/
 }
