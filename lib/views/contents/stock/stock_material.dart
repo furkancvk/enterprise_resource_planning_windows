@@ -30,7 +30,7 @@ class _StockMaterialState extends State<StockMaterial> {
   bool isAscending = false;
   var rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
 
-  String filterName = '';
+  String filterName = "";
 
   List<AppMaterial> materials = [];
 
@@ -43,21 +43,25 @@ class _StockMaterialState extends State<StockMaterial> {
       "id": 0,
       "value": true,
       "title": "İsim",
+      "filterName": "materialName",
     },
     {
       "id": 1,
       "value": false,
       "title": "Cins",
+      "filterName": "typeName",
     },
     {
       "id": 2,
       "value": false,
       "title": "Renk",
+      "filterName": "colorName",
     },
     {
       "id": 3,
       "value": false,
-      "title": "Stok Drumu",
+      "title": "Boyut",
+      "filterName": "sizeName",
     },
   ];
 
@@ -69,7 +73,7 @@ class _StockMaterialState extends State<StockMaterial> {
         },
         if(value["data"].isEmpty) isNotFound = true,
         isLoading = false,
-        setState(() {}),
+        if(mounted) setState(() {}),
       }
     });
   }
@@ -291,9 +295,8 @@ class _StockMaterialState extends State<StockMaterial> {
                                             element["value"] = false;
                                           }
                                           checkListItems[index]["value"] = value;
-                                          selected =
-                                          "${checkListItems[index]["id"]}, ${checkListItems[index]["title"]}, ${checkListItems[index]["value"]}";
-                                          print('filtre: ${selected}');
+                                          selected = "${checkListItems[index]["id"]}, ${checkListItems[index]["title"]}, ${checkListItems[index]["value"]}";
+                                          filterName = value! ? checkListItems[index]["filterName"] : "";
                                         });
                                       },
                                     ),

@@ -51,33 +51,41 @@ class _DashboardState extends State<Dashboard> {
       "id": 0,
       "value": true,
       "title": "İsim",
+      "filterName": "firstName",
     },
     {
       "id": 1,
       "value": false,
       "title": "Soyisim",
+      "filterName": "lastName",
     },
     {
       "id": 2,
       "value": false,
       "title": "Birim",
+      "filterName": "departmentName",
     },
     {
       "id": 3,
       "value": false,
       "title": "Materyal",
+      "filterName": "materialName",
     },
-    {
+    /*{
       "id": 4,
       "value": false,
       "title": "İşlem Türü",
+      "filterName": "amount",
     },
     {
       "id": 5,
       "value": false,
       "title": "Tarih",
-    },
+      "filterName": "processTime",
+    },*/
   ];
+
+  String hintText = " ";
 
   String filterName = 'firstName';
 
@@ -622,7 +630,7 @@ class _DashboardState extends State<Dashboard> {
                               decoration: const InputDecoration(
                                 suffixIcon: Icon(FluentIcons.search_24_filled,
                                     color: AppColors.lightPrimary),
-                                hintText: "Ara...",
+                                hintText: " Ara...",
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: AppColors.lightInfo
@@ -666,6 +674,7 @@ class _DashboardState extends State<Dashboard> {
                                           selected =
                                           "${checkListItems[index]["id"]}, ${checkListItems[index]["title"]}, ${checkListItems[index]["value"]}";
                                           print('filtre: ${selected}');
+                                          filterName = value! ? checkListItems[index]["filterName"] : "";
                                         });
                                       },
                                     ),
@@ -919,7 +928,7 @@ class DashboardSource extends AdvancedDataTableSource<AppProcess> {
           {
             return element.user.departmentName.contains(searchQuery);
           }
-        case 'materyalName':
+        case 'materialName':
           {
             return element.material.materialName.contains(searchQuery);
           }
@@ -1030,7 +1039,7 @@ class DashboardSource extends AdvancedDataTableSource<AppProcess> {
           {
             return element.user.departmentName.contains(searchQuery);
           }
-        case 'materyalName':
+        case 'materialName':
           {
             return element.material.materialName.contains(searchQuery);
           }

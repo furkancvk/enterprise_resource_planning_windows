@@ -42,21 +42,31 @@ class _BarcodeState extends State<Barcode> {
       "id": 0,
       "value": true,
       "title": "İsim",
+      "filterName": "firstName",
     },
     {
       "id": 1,
       "value": false,
       "title": "Cins",
+      "filterName": "typeName",
     },
     {
       "id": 2,
       "value": false,
       "title": "Renk",
+      "filterName": "colorName",
     },
     {
       "id": 3,
       "value": false,
       "title": "Boyut",
+      "filterName": "sizeName",
+    },
+    {
+      "id": 4,
+      "value": false,
+      "title": "Miktar",
+      "filterName": "amount",
     },
   ];
 
@@ -238,6 +248,7 @@ class _BarcodeState extends State<Barcode> {
                                           selected =
                                           "${checkListItems[index]["id"]}, ${checkListItems[index]["title"]}, ${checkListItems[index]["value"]}";
                                           print('filtre: ${selected}');
+                                          filterName = value! ? checkListItems[index]["filterName"] : "";
                                         });
                                       },
                                     ),

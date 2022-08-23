@@ -42,21 +42,31 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
       "id": 0,
       "value": true,
       "title": "İsim",
+      "filterName": "firstName",
     },
     {
       "id": 1,
       "value": false,
       "title": "Soyisim",
+      "filterName": "lastName",
     },
     {
       "id": 2,
       "value": false,
       "title": "Birim",
+      "filterName": "departmentName",
     },
-    {
+    /*{
       "id": 3,
       "value": false,
       "title": "Telefon",
+      "filterName": "phoneNumber",
+    },*/
+    {
+      "id": 3,
+      "value": false,
+      "title": "email",
+      "filterName": "email",
     },
   ];
 
@@ -292,6 +302,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                                         selected =
                                         "${checkListItems[index]["id"]}, ${checkListItems[index]["title"]}, ${checkListItems[index]["value"]}";
                                         print('filtre: ${selected}');
+                                        filterName = value! ? checkListItems[index]["filterName"] : "";
                                       });
                                     },
                                   ),
