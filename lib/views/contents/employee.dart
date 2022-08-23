@@ -1,6 +1,7 @@
 import 'package:erp_windows/models/employee.dart';
 import 'package:erp_windows/services/employee_service.dart';
-import 'package:erp_windows/views/modals/add_employee.dart';
+import 'package:erp_windows/views/modals/employee/add_employee.dart';
+import 'package:erp_windows/views/modals/employee/edit_employee.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -338,12 +339,18 @@ class EmployeeSource extends AdvancedDataTableSource<Employee> {
         DataCell(Row(
           children: [
             IconButton(
-              onPressed: () {print('edited');},
+              onPressed: () {
+                showDialog(context: context, builder: (context) => EditEmployee(employee: employee));
+                print('sended to edited page');
+                },
               icon: const Icon(FluentIcons.edit_16_regular, color: AppColors.lightPrimary),
               splashRadius: 20,
             ),
             IconButton(
-              onPressed: () {print('deleted');},
+              onPressed: () {
+                print('deleted');
+                deleteEmployee(employee.employeeId);
+                },
               icon: const Icon(FluentIcons.delete_16_regular, color: AppColors.lightPrimary),
               splashRadius: 20,
             ),
@@ -362,6 +369,32 @@ class EmployeeSource extends AdvancedDataTableSource<Employee> {
         return null;
       }),
     );
+  }
+
+  void deleteEmployee (int employeeId) {
+    EmployeeService.deleteEmployee(employeeId).then((value) {
+      if (value["success"]) {
+        //Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            padding: const EdgeInsets.all(0),
+            content: AppAlerts.success(value["message"]),
+            duration: const Duration(milliseconds: 1500),
+            backgroundColor: AppColors.lightSecondary,
+          ),
+        );
+      }
+      else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            padding: const EdgeInsets.all(0),
+            content: AppAlerts.error(value["message"]),
+            duration: const Duration(milliseconds: 1500),
+            backgroundColor: AppColors.lightSecondary,
+          ),
+        );
+      }
+    });
   }
 
   @override

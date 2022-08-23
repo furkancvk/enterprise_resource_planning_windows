@@ -2,25 +2,27 @@ import 'dart:io';
 
 import 'package:erp_windows/models/employee.dart';
 import 'package:erp_windows/services/employee_service.dart';
+import 'package:erp_windows/utils/helpers.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../design/app_colors.dart';
-import '../../design/app_text.dart';
-import '../../widgets/app_alerts.dart';
-import '../../widgets/app_cards.dart';
-import '../../widgets/app_form.dart';
+import '../../../design/app_colors.dart';
+import '../../../design/app_text.dart';
+import '../../../widgets/app_alerts.dart';
+import '../../../widgets/app_cards.dart';
+import '../../../widgets/app_form.dart';
 
-class AddEmployee extends StatefulWidget {
-  const AddEmployee({Key? key}) : super(key: key);
+class EditEmployee extends StatefulWidget {
+  const EditEmployee({Key? key, required this.employee}) : super(key: key);
 
+  final Employee employee;
   @override
-  State<AddEmployee> createState() => _AddEmployeeState();
+  State<EditEmployee> createState() => _EditEmployeeState();
 }
 
-class _AddEmployeeState extends State<AddEmployee> {
+class _EditEmployeeState extends State<EditEmployee> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -31,8 +33,8 @@ class _AddEmployeeState extends State<AddEmployee> {
 
   pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['jpg', 'png', 'jpeg'],
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'png', 'jpeg'],
     );
     if (result != null) {
       File file = File(result.files.single.path!);
@@ -43,8 +45,15 @@ class _AddEmployeeState extends State<AddEmployee> {
 
   @override
   Widget build(BuildContext context) {
+    _firstNameController.text = Helpers.titleCase(widget.employee.firstName);
+    _lastNameController.text = Helpers.titleCase(widget.employee.lastName);
+    _emailController.text = Helpers.titleCase(widget.employee.email);
+    _phoneNumberController.text = Helpers.titleCase(widget.employee.phoneNumber);
+    _departmentController.text = Helpers.titleCase(widget.employee.departmentName);
+
+
     return AlertDialog(
-      title: Text("Personel Ekle", style: AppText.titleSemiBold),
+      title: Text("Personel Düzenle", style: AppText.titleSemiBold),
       content: SizedBox(
         height: 380,
         width: 360,
@@ -60,9 +69,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                       child: Column(
                         children: [
                           AppForm.appTextFormFieldRegex(
-                            formatter: FilteringTextInputFormatter.deny(
-                              RegExp(r'([1-9][0-9]*)'),
-                            ),
+                            formatter: FilteringTextInputFormatter.deny(RegExp(r'([1-9][0-9]*)')),
                             isRequired: true,
                             label: "İsim",
                             hint: "ör. Ali",
@@ -111,13 +118,13 @@ class _AddEmployeeState extends State<AddEmployee> {
                                 top: -8,
                                 right: -8,
                                 child: IconButton(
-                                onPressed: (){
-                                  setState(() {
-                                    imageFile = null;
-                                  });
-                                },
-                                icon: const Icon(FluentIcons.dismiss_circle_20_filled, color: AppColors.lightPrimary),
-                              ),
+                                  onPressed: (){
+                                    setState(() {
+                                      imageFile = null;
+                                    });
+                                  },
+                                  icon: const Icon(FluentIcons.dismiss_circle_20_filled, color: AppColors.lightPrimary),
+                                ),
                               )
                             ],
                           ) :
@@ -152,8 +159,8 @@ class _AddEmployeeState extends State<AddEmployee> {
         Padding(
           padding: const EdgeInsets.only(bottom: 16, right: 16),
           child: ElevatedButton.icon(
-            onPressed: addEmployee,
-            label: const Text("Kaydet"),
+            onPressed: editEmployee,
+            label: const Text("Düzenle"),
             icon: const Icon(FluentIcons.save_24_regular),
           ),
         ),
@@ -175,22 +182,23 @@ class _AddEmployeeState extends State<AddEmployee> {
 
   }*/
 
-  void addEmployee() async {
+  void editEmployee() async {
+    print('employeeId: ${widget.employee.employeeId}');
     if(_firstNameController.text.isNotEmpty && _lastNameController.text.isNotEmpty && _phoneNumberController.text.isNotEmpty && _departmentController.text.isNotEmpty) {
       Employee employeeData = Employee(
-          employeeId: 0,
-          firstName: _firstNameController.text.toLowerCase(),
-          lastName: _lastNameController.text.toLowerCase(),
-          email: _emailController.text.toLowerCase(),
-          phoneNumber: _phoneNumberController.text.toLowerCase(),
-          departmentName: _departmentController.text.toLowerCase(),
-          // imageName: "",
-          // imageData: "",
-          imageUrl: "",
-          createdAt: "",
-          updatedAt: "",
+        employeeId: widget.employee.employeeId,
+        firstName: _firstNameController.text.toLowerCase(),
+        lastName: _lastNameController.text.toLowerCase(),
+        email: _emailController.text.toLowerCase(),
+        phoneNumber: _phoneNumberController.text.toLowerCase(),
+        departmentName: _departmentController.text.toLowerCase(),
+        // imageName: "",
+        // imageData: "",
+        imageUrl: widget.employee.imageUrl,
+        createdAt: widget.employee.createdAt,
+        updatedAt: widget.employee.updatedAt,
       );
-      EmployeeService.addEmployee(employeeData, null).then((value) {
+      EmployeeService.updateEmployee(employeeData, null).then((value) {
         if (value["success"]){
           Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(

@@ -1,5 +1,5 @@
 import 'package:erp_windows/utils/helpers.dart';
-import 'package:erp_windows/views/modals/update_material.dart';
+import 'package:erp_windows/views/modals/edit_material.dart';
 import 'package:erp_windows/widgets/app_cards.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
@@ -387,7 +387,11 @@ class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
                   print('edited');
                   showDialog(context: context, builder: (context) =>  UpdateMaterial(material: material));
                 }, icon: const Icon(FluentIcons.edit_16_regular, color: AppColors.lightPrimary), splashRadius: 20),
-                IconButton(onPressed: (){print('deleted');}, icon: const Icon(FluentIcons.delete_16_regular, color: AppColors.lightPrimary), splashRadius: 20),
+                IconButton(
+                    onPressed: () {
+                      deleteMaterial(material.materialId);
+                      print('deleted');
+                      }, icon: const Icon(FluentIcons.delete_16_regular, color: AppColors.lightPrimary), splashRadius: 20),
               ],
             )
         ), /// İşlem butonlarına popUpButtonları konucak
@@ -399,6 +403,33 @@ class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
             return null;
           }),
     );
+  }
+
+  void deleteMaterial (int materialId) {
+    MaterialService.deleteMaterial(materialId).then((value) {
+      if (value["success"]) {
+        //Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            padding: const EdgeInsets.all(0),
+            content: AppAlerts.success(value["message"]),
+            duration: const Duration(milliseconds: 1500),
+            backgroundColor: AppColors.lightSecondary,
+          ),
+        );
+      }
+      else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            padding: const EdgeInsets.all(0),
+            content: AppAlerts.error(value["message"]),
+            duration: const Duration(milliseconds: 1500),
+            backgroundColor: AppColors.lightSecondary,
+          ),
+        );
+      }
+    });
+
   }
 
   void filterClientSide(String filterQuery, String filter) {
