@@ -14,7 +14,6 @@ import '../../../services/base_service.dart';
 import '../../../services/material_service.dart';
 import '../../../states/states.dart';
 import '../../../widgets/app_alerts.dart';
-import '../../../widgets/app_form.dart';
 import '../../modals/export_data.dart';
 
 class StockMaterial extends StatefulWidget {
@@ -205,14 +204,13 @@ class _StockMaterialState extends State<StockMaterial> {
                                 ],
                               ),
                             ),
-                          ),
-                          // DropdownButtonFormField()
+                          ), ///Toplu İşlemler Butonu
                           const SizedBox(width: 16),
                           OutlinedButton.icon(
                             onPressed: () {showExportDataModal(materials);},
                             icon: const Icon(FluentIcons.database_search_24_regular),
                             label: const Text("Dışa Aktar"),
-                          ),
+                          ), ///Dışa Aktar Butonu
                         ],
                       ),
                       Row(
@@ -228,7 +226,7 @@ class _StockMaterialState extends State<StockMaterial> {
                                 hintText: "Ara...",
                               ),
                             ),
-                          ),
+                          ), /// SearchBar
                           OutlinedButton.icon(
                             onPressed: () {},
                             icon: const Icon(FluentIcons.filter_24_regular),
@@ -238,7 +236,7 @@ class _StockMaterialState extends State<StockMaterial> {
                               letterSpacing: 0.4,
                               color: AppColors.lightPrimary,
                             )),
-                          ),
+                          ), /// Filtrele Butonu
                         ],
                       ),
                     ],
@@ -317,8 +315,6 @@ class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
       }
     }).toList()[index];
 
-    // String imageUrl = "${"${BaseService.baseUrl}/images/materials/${material.materialId}"}/${material.imageUrl}";
-
     String imageUrl = "${BaseService.baseUrl}/api/v1/images/materials/${material.materialId}";
 
     return DataRow(
@@ -333,14 +329,12 @@ class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
             height: 36,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
-              /*image: const DecorationImage(
+              image: material.imageUrl.isEmpty ?
+              const DecorationImage(
                 image: AssetImage("assets/images/placeholder-image.jpg"),
                 fit: BoxFit.cover,
-              ),*/
-              image: material.imageUrl.isEmpty ? const DecorationImage(
-                image: AssetImage("assets/images/placeholder-image.jpg"),
-                fit: BoxFit.cover,
-              ) : DecorationImage(
+              ) :
+              DecorationImage(
                 image: NetworkImage(material.imageUrl),
                 fit: BoxFit.cover,
               ),
