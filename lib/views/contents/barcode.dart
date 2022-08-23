@@ -1,6 +1,7 @@
 import 'package:erp_windows/models/app_material.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:qr_flutter/qr_flutter.dart';
@@ -439,11 +440,14 @@ class BarcodeSource extends AdvancedDataTableSource<AppMaterial> {
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: TextFormField(
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'\S'))
+              ],
               initialValue: material.amount.toString(),
               keyboardType: TextInputType.number,
               onChanged: (val) {
                 print('onSubmited $val');
-                temp = val;
+                temp = val.isEmpty ? '0' : val;
               },
             ),
           ),
