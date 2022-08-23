@@ -1,7 +1,6 @@
 import 'package:erp_windows/models/employee.dart';
 import 'package:erp_windows/services/employee_service.dart';
-import 'package:erp_windows/views/modals/employee/add_employee.dart';
-import 'package:erp_windows/views/modals/employee/edit_employee.dart';
+import 'package:erp_windows/views/modals/add_employee.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +13,7 @@ import '../../services/base_service.dart';
 import '../../states/states.dart';
 import '../../utils/helpers.dart';
 import '../../widgets/app_alerts.dart';
-import '../../widgets/app_form.dart';
+import '../modals/edit_employee.dart';
 import '../modals/export_data.dart';
 
 class EmployeeManagement extends StatefulWidget {
@@ -25,9 +24,13 @@ class EmployeeManagement extends StatefulWidget {
 }
 
 class _EmployeeManagementState extends State<EmployeeManagement> {
+  final TextEditingController searchQueryController = TextEditingController();
+
   int? sortColumnIndex;
   bool isAscending = false;
   var rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
+
+  String filterName = '';
 
   List<Employee> employees = [];
   bool isNotFound = false;
@@ -212,11 +215,13 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                           SizedBox(
                             width: 300,
                             height: 40,
-                            child: AppForm.appAutoCompleteTextFormFieldForSearch(
-                              hint: "Ara...",
-                              controller: TextEditingController(),
-                              key: GlobalKey(),
-                              suggestions: [],
+                            child: TextFormField(
+                              controller: searchQueryController,
+                              onChanged: (query) => source.filterClientSide(searchQueryController.text, filterName),
+                              decoration: const InputDecoration(
+                                suffixIcon: Icon(FluentIcons.search_24_filled, color: AppColors.lightPrimary),
+                                hintText: "Ara...",
+                              ),
                             ),
                           ), ///SearchBar
                           OutlinedButton.icon(
@@ -281,12 +286,32 @@ class EmployeeSource extends AdvancedDataTableSource<Employee> {
   final List<Employee> employees;
   final BuildContext context;
 
+  String searchQuery = '';
+  String filterName = '';
+
   @override
   DataRow? getRow(int index) {
     Function setEmployeeSelectedRows = Provider.of<States>(context).setEmployeeSelectedRows;
     List<int> employeeSelectedRows = Provider.of<States>(context).employeeSelectedRows;
 
-    final employee = employees[index];
+    // final employee = employees[index];
+
+    final employee = employees.where((element) {
+      switch(filterName) {
+        case 'lastName': {
+          return element.lastName.contains(searchQuery);
+        }
+        case 'departmentName': {
+          return element.departmentName.contains(searchQuery);
+        }
+        case 'email': {
+          return element.email.toString().contains(searchQuery);
+        }
+        default: {
+          return element.firstName.contains(searchQuery);
+        }
+      }
+    }).toList()[index];
 
     String imageUrl = "${BaseService.baseUrl}/api/v1/images/employees/${employee.employeeId}";
 
@@ -375,6 +400,8 @@ class EmployeeSource extends AdvancedDataTableSource<Employee> {
     EmployeeService.deleteEmployee(employeeId).then((value) {
       if (value["success"]) {
         //Navigator.pop(context);
+        employees.retainWhere((element) => element.employeeId != employeeId);
+        setNextView();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             padding: const EdgeInsets.all(0),
@@ -397,18 +424,42 @@ class EmployeeSource extends AdvancedDataTableSource<Employee> {
     });
   }
 
+  void filterClientSide(String filterQuery, String filter) {
+    searchQuery = filterQuery.toLowerCase().trim();
+    filterName = filter;
+    setNextView();
+  }
+
   @override
   int get selectedRowCount => 0;
 
   @override
-  Future<RemoteDataSourceDetails<Employee>> getNextPage(
-      NextPageRequest pageRequest) async {
+  Future<RemoteDataSourceDetails<Employee>> getNextPage(NextPageRequest pageRequest) async {
+    List<Employee> filteredEmployees = employees.where((element) {
+      switch(filterName) {
+        case 'lastName': {
+          return element.lastName.contains(searchQuery);
+        }
+        case 'departmentName': {
+          return element.departmentName.contains(searchQuery);
+        }
+        case 'email': {
+          return element.email.toString().contains(searchQuery);
+        }
+        default: {
+          return element.firstName.contains(searchQuery);
+        }
+      }
+    }).toList();
+
     return RemoteDataSourceDetails(
-      employees.length,
-      employees
+      filteredEmployees.length,
+      filteredEmployees
           .skip(pageRequest.offset)
           .take(pageRequest.pageSize)
           .toList(),
+      filteredRows: searchQuery.isNotEmpty ? filteredEmployees.length : null,
     );
   }
+
 }

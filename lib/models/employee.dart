@@ -39,7 +39,7 @@ class Employee {
   );
 
   Map<String, dynamic> toJson() => {
-    "id": employeeId,
+    "employeeId": employeeId,
     "firstName": firstName,
     "lastName": lastName,
     "email": email,

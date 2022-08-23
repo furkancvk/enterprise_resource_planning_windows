@@ -47,10 +47,9 @@ class _EditEmployeeState extends State<EditEmployee> {
   Widget build(BuildContext context) {
     _firstNameController.text = Helpers.titleCase(widget.employee.firstName);
     _lastNameController.text = Helpers.titleCase(widget.employee.lastName);
-    _emailController.text = Helpers.titleCase(widget.employee.email);
-    _phoneNumberController.text = Helpers.titleCase(widget.employee.phoneNumber);
+    _emailController.text = widget.employee.email;
+    _phoneNumberController.text = widget.employee.phoneNumber;
     _departmentController.text = Helpers.titleCase(widget.employee.departmentName);
-
 
     return AlertDialog(
       title: Text("Personel Düzenle", style: AppText.titleSemiBold),
@@ -159,7 +158,7 @@ class _EditEmployeeState extends State<EditEmployee> {
         Padding(
           padding: const EdgeInsets.only(bottom: 16, right: 16),
           child: ElevatedButton.icon(
-            onPressed: editEmployee,
+            onPressed: updateEmployee,
             label: const Text("Düzenle"),
             icon: const Icon(FluentIcons.save_24_regular),
           ),
@@ -168,6 +167,7 @@ class _EditEmployeeState extends State<EditEmployee> {
     );
 
   }
+
 /*  Future<String> uploadFile() async {
     if (imageFile == null) return "";
 
@@ -182,9 +182,9 @@ class _EditEmployeeState extends State<EditEmployee> {
 
   }*/
 
-  void editEmployee() async {
-    print('employeeId: ${widget.employee.employeeId}');
-    if(_firstNameController.text.isNotEmpty && _lastNameController.text.isNotEmpty && _phoneNumberController.text.isNotEmpty && _departmentController.text.isNotEmpty) {
+  void updateEmployee() async {
+    if(_firstNameController.text.isNotEmpty || _lastNameController.text.isNotEmpty || _phoneNumberController.text.isNotEmpty || _departmentController.text.isNotEmpty) {
+
       Employee employeeData = Employee(
         employeeId: widget.employee.employeeId,
         firstName: _firstNameController.text.toLowerCase(),
@@ -198,6 +198,7 @@ class _EditEmployeeState extends State<EditEmployee> {
         createdAt: widget.employee.createdAt,
         updatedAt: widget.employee.updatedAt,
       );
+
       EmployeeService.updateEmployee(employeeData, null).then((value) {
         if (value["success"]){
           Navigator.pop(context);

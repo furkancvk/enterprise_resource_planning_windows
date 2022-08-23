@@ -93,6 +93,7 @@ class BaseService {
     String requestType = 'POST',
     File? file,
   }) async {
+
     String token = await secureStorage.readSecureData('token') ?? "";
     var url = Uri.parse(baseUrl + path);
     var request = http.MultipartRequest(requestType, url);

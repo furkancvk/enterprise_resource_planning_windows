@@ -409,6 +409,8 @@ class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
     MaterialService.deleteMaterial(materialId).then((value) {
       if (value["success"]) {
         //Navigator.pop(context);
+        materials.retainWhere((element) => element.materialId != materialId);
+        setNextView();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             padding: const EdgeInsets.all(0),

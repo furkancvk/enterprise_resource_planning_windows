@@ -7,11 +7,11 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../design/app_colors.dart';
-import '../../../design/app_text.dart';
-import '../../../widgets/app_alerts.dart';
-import '../../../widgets/app_cards.dart';
-import '../../../widgets/app_form.dart';
+import '../../design/app_colors.dart';
+import '../../design/app_text.dart';
+import '../../widgets/app_alerts.dart';
+import '../../widgets/app_cards.dart';
+import '../../widgets/app_form.dart';
 
 class AddEmployee extends StatefulWidget {
   const AddEmployee({Key? key}) : super(key: key);
