@@ -54,13 +54,13 @@ class _AddEmployeeState extends State<AddEmployee> {
               children: [
                 Row(
                   children: [
+                    /// İsim + Soyisim + Email
                     Expanded(
                       flex: 1,
                       child: Column(
                         children: [
                           AppForm.appTextFormFieldRegex(
-                            formatter:
-                            FilteringTextInputFormatter.deny(
+                            formatter: FilteringTextInputFormatter.deny(
                               RegExp(r'([1-9][0-9]*)'),
                             ),
                             isRequired: true,
@@ -70,10 +70,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                           ),
                           const SizedBox(height: 24),
                           AppForm.appTextFormFieldRegex(
-                            formatter:
-                            FilteringTextInputFormatter.deny(
-                              RegExp(r'([1-9][0-9]*)'),
-                            ),
+                            formatter: FilteringTextInputFormatter.deny(RegExp(r'([1-9][0-9]*)')),
                             isRequired: true,
                             label: "Soyisim",
                             hint: "ör. Demir",
@@ -90,12 +87,14 @@ class _AddEmployeeState extends State<AddEmployee> {
                       ),
                     ),
                     const SizedBox(width: 24),
+                    /// İmage + Telefon
                     Expanded(
                       flex: 1,
                       child: Column(
                         children: [
                           const SizedBox(height: 12),
-                          imageFile != null ? Stack(
+                          imageFile != null ?
+                          Stack(
                             children: [
                               Container(
                                 decoration: BoxDecoration(
@@ -110,8 +109,8 @@ class _AddEmployeeState extends State<AddEmployee> {
                               ),
                               Positioned(
                                 top: -8,
-                                  right: -8,
-                                  child: IconButton(
+                                right: -8,
+                                child: IconButton(
                                 onPressed: (){
                                   setState(() {
                                     imageFile = null;
@@ -127,10 +126,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                           const SizedBox(height: 26),
                           AppForm.appTextFormFieldRegex(
                             isRequired: true,
-                            formatter:
-                            FilteringTextInputFormatter.allow(
-                              RegExp(r'([1-9][0-9]*)'),
-                            ),
+                            formatter: FilteringTextInputFormatter.allow(RegExp(r'([1-9][0-9]*)')),
                             label: "Telefon",
                             hint: "ör.5123456789",
                             controller: _phoneNumberController,
@@ -146,7 +142,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                   label: "Birim",
                   hint: "ör. İnsan Kaynakları",
                   controller: _departmentController,
-                ),
+                ), ///Birim
               ],
             ),
           ],
@@ -165,7 +161,6 @@ class _AddEmployeeState extends State<AddEmployee> {
     );
 
   }
-
 /*  Future<String> uploadFile() async {
     if (imageFile == null) return "";
 
