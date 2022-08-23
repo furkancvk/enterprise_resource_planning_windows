@@ -66,6 +66,13 @@ class AppText {
     color: AppColors.lightBlack,
   );
 
+  static TextStyle titleSemiBoldBlue = const TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.4,
+    color: AppColors.lightPrimary,
+  );
+
   static TextStyle header = const TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.w400,

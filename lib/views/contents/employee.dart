@@ -36,6 +36,30 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
   bool isNotFound = false;
   bool isLoading = true;
 
+  String selected = "";
+  List checkListItems = [
+    {
+      "id": 0,
+      "value": true,
+      "title": "İsim",
+    },
+    {
+      "id": 1,
+      "value": false,
+      "title": "Soyisim",
+    },
+    {
+      "id": 2,
+      "value": false,
+      "title": "Birim",
+    },
+    {
+      "id": 3,
+      "value": false,
+      "title": "Telefon",
+    },
+  ];
+
   void getAllEmployee() {
     EmployeeService.getAllEmployee().then((value) => {
       if(value["success"]) {
@@ -130,6 +154,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
             ),
             child: Column(
               children: [
+                ///Tablonun üstündeki Butonlar
                 Padding(
                   padding: const EdgeInsets.all(4),
                   child: Row(
@@ -137,6 +162,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                     children: [
                       Row(
                         children: [
+                          /// Toplu İşlemler
                           Container(
                             padding: const EdgeInsets.all(6.9),
                             decoration: BoxDecoration(
@@ -178,7 +204,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                                     ],
                                   ),
                                 ),
-                              ], ///Toplu İşlemler Butonu İçeriği
+                              ],
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4),
                                 side: const BorderSide(
@@ -201,17 +227,19 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                                 ],
                               ), ///Toplu İşlemler Butonu
                             ),
-                          ), /// Toplu İşlemler
+                          ),
                           const SizedBox(width: 16),
+                          ///Dışa Aktar Butonu
                           OutlinedButton.icon(
                             onPressed: () {showExportDataModal(employees);},
                             icon: const Icon(FluentIcons.database_search_24_regular),
                             label: const Text("Dışa Aktar"),
-                          ), ///Dışa Aktar Butonu
+                          ),
                         ],
                       ),
                       Row(
                         children: [
+                          ///SearchBar
                           SizedBox(
                             width: 300,
                             height: 40,
@@ -235,30 +263,74 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                                   )
                               ),
                             ),
-                          ), ///SearchBar
-                          OutlinedButton.icon(
-                            onPressed: () {},
-                            icon: const Icon(FluentIcons.filter_24_regular),
-                            label: const Text(
-                              "Filtrele",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 0.4,
-                                color: AppColors.lightPrimary,
+                          ),
+                          ///Filtreleme Butonu
+                          PopupMenuButton<int>(
+                            tooltip: "Profil Menüsü",
+                            padding: const EdgeInsets.all(8),
+                            itemBuilder: (context) => [
+                              PopupMenuItem(child: StatefulBuilder(
+                                builder: (_context, _setState) => Column(
+                                  children: List.generate(
+                                    checkListItems.length, (index) => CheckboxListTile(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    selected: checkListItems[index]["value"],
+                                    selectedTileColor: AppColors.lightPrimary.withOpacity(0.08),
+                                    controlAffinity: ListTileControlAffinity.leading,
+                                    contentPadding: EdgeInsets.zero,
+                                    dense: true,
+                                    title: Text(checkListItems[index]["title"],style: AppText.contextSemiBoldBlue),
+                                    value: checkListItems[index]["value"],
+                                    onChanged: (value) {
+                                      _setState(() {
+                                        for (var element in checkListItems) {
+                                          element["value"] = false;
+                                        }
+                                        checkListItems[index]["value"] = value;
+                                        selected =
+                                        "${checkListItems[index]["id"]}, ${checkListItems[index]["title"]}, ${checkListItems[index]["value"]}";
+                                        print('filtre: ${selected}');
+                                      });
+                                    },
+                                  ),
+                                  ),
+                                )
+                              )),
+                            ],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
+                              side: const BorderSide(color: AppColors.lightPrimary),
+                            ),
+                            splashRadius: 20,
+                            offset: const Offset(9, 37),
+                            color: AppColors.lightSecondary,
+                            elevation: 0,
+                            child: OutlinedButton.icon(
+                              onPressed: null,
+                              icon: const Icon(FluentIcons.filter_24_regular, color: AppColors.lightPrimary),
+                              label: const Text(
+                                "Filtrele",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.4,
+                                  color: AppColors.lightPrimary,
+                                ),
+                              ),
+                              style: OutlinedButton.styleFrom(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(4), topRight: Radius.circular(4)),
+                                ),
                               ),
                             ),
-                            style: OutlinedButton.styleFrom(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(bottomRight: Radius.circular(4), topRight: Radius.circular(4)),
-                              ),
-                            ),
-                          ), ///Filtreleme Butonu
+                          )
                         ],
                       ),
                     ],
                   ),
-                ), ///Tablonun üstündeki Butonlar
+                ),
                 const SizedBox(height: 16),
                 if(isLoading) const Text("Yükleniyor"),
                 if(isNotFound) AppAlerts.info("Herhangi bir kayıt bulunamadı."),
