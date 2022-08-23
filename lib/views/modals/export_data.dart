@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,8 +7,6 @@ import 'package:pdf/widgets.dart' as pw;
 
 
 import '../../design/app_colors.dart';
-import '../../models/app_material.dart';
-import '../../utils/helpers.dart';
 
 class ExportData extends StatelessWidget {
   const ExportData({
