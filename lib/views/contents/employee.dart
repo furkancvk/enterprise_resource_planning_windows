@@ -3,7 +3,6 @@ import 'package:erp_windows/services/employee_service.dart';
 import 'package:erp_windows/views/modals/add_employee.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../design/app_colors.dart';
@@ -175,7 +174,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                                     ],
                                   ),
                                 ),
-                              ],
+                              ], ///Toplu İşlemler Butonu İçeriği
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4),
                                 side: const BorderSide(
@@ -196,15 +195,15 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                                   const Icon(FluentIcons.chevron_down_24_filled,
                                       size: 20, color: AppColors.lightPrimary),
                                 ],
-                              ),
+                              ), ///Toplu İşlemler Butonu
                             ),
-                          ),
+                          ), /// Toplu İşlemler
                           const SizedBox(width: 16),
                           OutlinedButton.icon(
                             onPressed: () {showExportDataModal(employees);},
                             icon: const Icon(FluentIcons.database_search_24_regular),
                             label: const Text("Dışa Aktar"),
-                          ),
+                          ), ///Dışa Aktar Butonu
                         ],
                       ),
                       Row(
@@ -218,7 +217,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                               key: GlobalKey(),
                               suggestions: [],
                             ),
-                          ),
+                          ), ///SearchBar
                           OutlinedButton.icon(
                             onPressed: () {},
                             icon: const Icon(FluentIcons.filter_24_regular),
@@ -231,12 +230,12 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                                 color: AppColors.lightPrimary,
                               ),
                             ),
-                          ),
+                          ), ///Filtreleme Butonu
                         ],
                       ),
                     ],
                   ),
-                ),
+                ), ///Tablonun üstündeki Butonlar
                 const SizedBox(height: 16),
                 if(isLoading) const Text("Yükleniyor"),
                 if(isNotFound) AppAlerts.info("Herhangi bir kayıt bulunamadı."),
@@ -300,14 +299,12 @@ class EmployeeSource extends AdvancedDataTableSource<Employee> {
             height: 36,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
-              /*image: const DecorationImage(
+              image: employee.imageUrl.isEmpty ?
+              const DecorationImage(
                 image: AssetImage("assets/images/placeholder-image.jpg"),
                 fit: BoxFit.cover,
-              ),*/
-              image: employee.imageUrl.isEmpty ? const DecorationImage(
-                image: AssetImage("assets/images/placeholder-image.jpg"),
-                fit: BoxFit.cover,
-              ) : DecorationImage(
+              ) :
+              DecorationImage(
                 image: NetworkImage(employee.imageUrl),
                 fit: BoxFit.cover,
               ),
