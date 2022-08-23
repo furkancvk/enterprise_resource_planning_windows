@@ -63,13 +63,12 @@ class _BarcodeState extends State<Barcode> {
   void getAllMaterial() {
     MaterialService.getAllMaterial().then((value) => {
       if(value["success"]) {
-        print(value["data"]),
         for(var data in value["data"]) {
           materials.add(AppMaterial.fromJson(data)),
         },
         if(value["data"].isEmpty) isNotFound = true,
         isLoading = false,
-        setState(() {}),
+        if (mounted) setState(() {}),
       }
     });
   }
