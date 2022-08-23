@@ -277,17 +277,6 @@ class AppForm {
             hintText: hint,
           ),
         ),
-        /*SimpleAutoCompleteTextField(
-          keyboardType: keyboardType,
-          key: key,
-          controller: controller,
-          decoration: InputDecoration(
-            hintText: hint,
-          ),
-          suggestions: suggestions,
-          textSubmitted: (String value) {},
-          clearOnSubmit: false,
-        ),*/
       ],
     );
   }
