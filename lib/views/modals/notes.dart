@@ -17,7 +17,6 @@ class _NotePadState extends State<NotePad> {
   @override
   Widget build(BuildContext context) {
     List tasks = Provider.of<States>(context).tasks;
-    //String input = Provider.of<States>(context).input;
 
     return tasks.isNotEmpty
         ? GridView.builder(
