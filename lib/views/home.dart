@@ -188,10 +188,11 @@ class _HomeState extends State<Home> {
                         ),
                         Row(
                           children: [
+                            /// Bildirimler Butonu
                             /*IconButton(
                               onPressed: (){},
                               icon: const Icon(FluentIcons.alert_24_regular),
-                            ),*/ /// Bildirimler Butonu
+                            ),*/
                             const SizedBox(width: 24),
                             Container(
                               padding: const EdgeInsets.all(8),
@@ -248,7 +249,8 @@ class _HomeState extends State<Home> {
                                     FutureBuilder(
                                       future: getFirstName(),
                                       builder: (context, snapshot) {
-                                        if(snapshot.hasData) {
+                                        if(snapshot.data != null) {
+                                          print('snapşot: ${snapshot.hasData}');
                                           return Text(
                                             Helpers.titleCase(snapshot.data.toString()),
                                             style: AppText.contextSemiBold,

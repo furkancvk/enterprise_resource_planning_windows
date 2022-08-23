@@ -371,26 +371,27 @@ class _DashboardState extends State<Dashboard> {
                   child: Column(
                     children: [
                       Container(
+                        height: 500,
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: AppColors.lightSecondary,
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(16.0),
                           child: Column(
                             children: [
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "NOTLARIM",
-                                    style: AppText.headerSemiBold,
+                                    "Notlarım",
+                                    style: AppText.titleSemiBold,
                                     textAlign: TextAlign.center,
                                   ),
                                   Row(
                                     children: [
-                                      OutlinedButton.icon(
+                                      TextButton.icon(
                                         onPressed: () {
                                           showDialog(context: context, builder: (BuildContext context) {
                                                 Function setTasks = Provider.of<States>(context).setTasks;
@@ -505,15 +506,6 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ),
                       ),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: AppColors.lightSecondary,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-
                       /// Görev Yeri
                       /*Row(
                         children: [
@@ -651,7 +643,9 @@ class _DashboardState extends State<Dashboard> {
                             tooltip: "Filtrelemek için tıkla",
                             padding: const EdgeInsets.all(8),
                             itemBuilder: (context) => [
-                              PopupMenuItem(child: StatefulBuilder(
+                              PopupMenuItem(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                                  child: StatefulBuilder(
                                   builder: (_context, _setState) => Column(
                                     children: List.generate(
                                       checkListItems.length, (index) => CheckboxListTile(
@@ -661,7 +655,7 @@ class _DashboardState extends State<Dashboard> {
                                       selected: checkListItems[index]["value"],
                                       selectedTileColor: AppColors.lightPrimary.withOpacity(0.08),
                                       controlAffinity: ListTileControlAffinity.leading,
-                                      contentPadding: EdgeInsets.zero,
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                                       dense: true,
                                       title: Text(checkListItems[index]["title"],style: AppText.contextSemiBoldBlue),
                                       value: checkListItems[index]["value"],

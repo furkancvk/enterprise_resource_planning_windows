@@ -20,7 +20,6 @@ void main() async {
     const initialSize = Size(1125, 700);
     win.minSize = initialSize;
     win.size = initialSize;
-    win.alignment = Alignment.center;
     win.title = "Solvio ERP";
     win.show();
   });

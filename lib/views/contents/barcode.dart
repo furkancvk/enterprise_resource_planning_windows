@@ -227,7 +227,9 @@ class _BarcodeState extends State<Barcode> {
                             tooltip: "Filtrelemek için tıkla",
                             padding: const EdgeInsets.all(8),
                             itemBuilder: (context) => [
-                              PopupMenuItem(child: StatefulBuilder(
+                              PopupMenuItem(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                                  child: StatefulBuilder(
                                   builder: (_context, _setState) => Column(
                                     children: List.generate(
                                       checkListItems.length, (index) => CheckboxListTile(
@@ -237,7 +239,7 @@ class _BarcodeState extends State<Barcode> {
                                       selected: checkListItems[index]["value"],
                                       selectedTileColor: AppColors.lightPrimary.withOpacity(0.08),
                                       controlAffinity: ListTileControlAffinity.leading,
-                                      contentPadding: EdgeInsets.zero,
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                                       dense: true,
                                       title: Text(checkListItems[index]["title"],style: AppText.contextSemiBoldBlue),
                                       value: checkListItems[index]["value"],
