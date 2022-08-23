@@ -263,7 +263,7 @@ class _HomeState extends State<Home> {
                                             FluentIcons.chevron_down_12_regular,
                                             size: 20)
                                         : const Icon(
-                                            FluentIcons.chevron_up_12_regular,
+                                        FluentIcons.chevron_down_12_regular,
                                             size: 20),
                                   ],
                                 ),
