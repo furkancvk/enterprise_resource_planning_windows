@@ -20,7 +20,6 @@ import '../../states/states.dart';
 import '../../storage/storage.dart';
 import '../../widgets/app_alerts.dart';
 import '../../widgets/app_cards.dart';
-import '../../widgets/app_form.dart';
 import '../modals/export_data.dart';
 
 class Dashboard extends StatefulWidget {
@@ -30,11 +29,9 @@ class Dashboard extends StatefulWidget {
   State<Dashboard> createState() => _DashboardState();
 }
 
-String createdDate =
-    DateTime.parse(DateTime.now().toString()).toLocal().toString();
+String createdDate = DateTime.parse(DateTime.now().toString()).toLocal().toString();
 String date = createdDate.substring(0, createdDate.indexOf(" "));
-String time =
-    createdDate.substring(createdDate.indexOf(" "), createdDate.length - 7);
+String time = createdDate.substring(createdDate.indexOf(" "), createdDate.length - 7);
 
 class _DashboardState extends State<Dashboard> {
   final TextEditingController searchQueryController = TextEditingController();
@@ -177,6 +174,7 @@ class _DashboardState extends State<Dashboard> {
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
+          /// Panel Cardları
           FittedBox(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -192,7 +190,8 @@ class _DashboardState extends State<Dashboard> {
                         data: snapshot.data!["data"].length.toString(),
                         color: AppColors.lightBlack,
                       );
-                    } else {
+                    }
+                    else {
                       return AppCards.panelDataCard(
                         icon: FluentIcons.people_team_24_regular,
                         label: "Toplam Personel",
@@ -201,7 +200,7 @@ class _DashboardState extends State<Dashboard> {
                       );
                     }
                   },
-                ),
+                ), /// Toplam ELeman
                 const SizedBox(width: 30),
                 FutureBuilder(
                   future: getAllMaterials(),
@@ -223,14 +222,14 @@ class _DashboardState extends State<Dashboard> {
                       );
                     }
                   },
-                ),
+                ), /// Toplam Hammadde
                 const SizedBox(width: 30),
                 AppCards.panelDataCard(
                   icon: FluentIcons.cube_24_regular,
                   label: "Toplam Bitmiş Ürün",
                   data: "217",
                   color: AppColors.lightBlack,
-                ),
+                ), /// Toplam Bitmiş Ürün (düzenlenecek)
                 const SizedBox(width: 30),
                 FutureBuilder(
                   future: getAllMaterials(),
@@ -258,7 +257,7 @@ class _DashboardState extends State<Dashboard> {
                       );
                     }
                   },
-                ),
+                ), /// Yetersiz Stok
               ],
             ),
           ),
@@ -315,13 +314,13 @@ class _DashboardState extends State<Dashboard> {
                         color: AppColors.lightPrimary.withOpacity(0.75)),
                     todayTextStyle:
                         const TextStyle(color: AppColors.lightSecondary),
-                  ),
+                  ), /// Themadan yapılacak
                   headerStyle: HeaderStyle(
                       formatButtonVisible: false,
                       titleCentered: true,
-                      titleTextStyle: AppText.headerSemiBold),
+                      titleTextStyle: AppText.headerSemiBold), /// Themadan yapılcak
                 ),
-              ),
+              ), /// Takvim
               const SizedBox(width: 24),
               Expanded(
                 child: SizedBox(
@@ -481,10 +480,10 @@ class _DashboardState extends State<Dashboard> {
                                                 );
                                               });
                                         },
-                                        label: Text("Not Ekle"),
-                                        icon: Icon(FluentIcons.add_24_regular),
+                                        label: const Text("Not Ekle"),
+                                        icon: const Icon(FluentIcons.add_24_regular),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 24,
                                       ),
                                       OutlinedButton.icon(
@@ -539,7 +538,7 @@ class _DashboardState extends State<Dashboard> {
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
-
+                      /// Görev Yeri
                       /*Row(
                         children: [
                           TextButton(
@@ -615,7 +614,7 @@ class _DashboardState extends State<Dashboard> {
                     ],
                   ),
                 ),
-              ),
+              ), ///Notlar kısmı
             ],
           ),
           const SizedBox(height: 24),
@@ -639,7 +638,7 @@ class _DashboardState extends State<Dashboard> {
                         icon: const Icon(
                             FluentIcons.database_search_24_regular),
                         label: const Text("Dışa Aktar"),
-                      ),
+                      ), ///Dışa Aktar Butonu
                       Row(
                         children: [
                           SizedBox(
@@ -655,7 +654,7 @@ class _DashboardState extends State<Dashboard> {
                                 hintText: "Ara...",
                               ),
                             ),
-                          ),
+                          ), ///Table SearchBar
                           OutlinedButton.icon(
                             onPressed: () {},
                             icon: const Icon(FluentIcons.filter_24_regular),
@@ -668,7 +667,7 @@ class _DashboardState extends State<Dashboard> {
                                 color: AppColors.lightPrimary,
                               ),
                             ),
-                          ),
+                          ), /// Filtreleme Butonu
                         ],
                       ),
                     ],
@@ -737,8 +736,8 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 }
-
-class ToDo extends StatelessWidget {
+///To Do
+/*class ToDo extends StatelessWidget {
   const ToDo({Key? key}) : super(key: key);
 
   @override
@@ -853,7 +852,7 @@ class Completed extends StatelessWidget {
       ],
     );
   }
-}
+}*/
 
 class DashboardSource extends AdvancedDataTableSource<AppProcess> {
   DashboardSource(this.context, this.processes);
