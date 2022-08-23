@@ -25,7 +25,6 @@ class _AppShowNotesState extends State<AppShowNotes> {
     Function setTasks = Provider.of<States>(context).setTasks;
 
     List tasks = Provider.of<States>(context).tasks;
-    //String input = Provider.of<States>(context).input;
     return Column(
       children: [
         Dismissible(
