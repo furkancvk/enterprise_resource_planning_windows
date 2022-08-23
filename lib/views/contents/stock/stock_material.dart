@@ -224,6 +224,18 @@ class _StockMaterialState extends State<StockMaterial> {
                               decoration: const InputDecoration(
                                 suffixIcon: Icon(FluentIcons.search_24_filled, color: AppColors.lightPrimary),
                                 hintText: "Ara...",
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: AppColors.lightInfo
+                                    ),
+                                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(4), topLeft: Radius.circular(4)),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: AppColors.lightPrimary
+                                    ),
+                                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(4), topLeft: Radius.circular(4)),
+                                  )
                               ),
                             ),
                           ), /// SearchBar
@@ -236,6 +248,11 @@ class _StockMaterialState extends State<StockMaterial> {
                               letterSpacing: 0.4,
                               color: AppColors.lightPrimary,
                             )),
+                            style: OutlinedButton.styleFrom(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(bottomRight: Radius.circular(4), topRight: Radius.circular(4)),
+                              ),
+                            ),
                           ), /// Filtrele Butonu
                         ],
                       ),
