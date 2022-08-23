@@ -235,15 +235,15 @@ class _HomeState extends State<Home> {
                                   children: [
                                     /// Profildeki resmin verildiği kısım
                                     Container(
+                                      width: 28,
+                                      height: 28,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(4),
-                                        image: const DecorationImage(
-                                          image: AssetImage("assets/images/avatar.png"),
-                                          fit: BoxFit.fill,
-                                        ),
+                                        color: AppColors.lightGrey,
                                       ),
-                                      height: 28,
-                                      width: 28,
+                                      child: Icon(
+                                        FluentIcons.person_32_regular, color: AppColors.lightPrimary.withOpacity(0.4),
+                                      ),
                                     ),
                                     const SizedBox(width: 16),
                                     FutureBuilder(

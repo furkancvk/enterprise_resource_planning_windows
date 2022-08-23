@@ -422,20 +422,28 @@ class EmployeeSource extends AdvancedDataTableSource<Employee> {
       onSelectChanged: (value) => setEmployeeSelectedRows(employee.employeeId),
       cells: [
         DataCell(
+          employee.imageUrl.isEmpty ?
           Container(
             width: 36,
             height: 36,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
-              image: employee.imageUrl.isEmpty ?
-              const DecorationImage(
-                image: AssetImage("assets/images/placeholder-image.jpg"),
-                fit: BoxFit.cover,
-              ) :
-              DecorationImage(
+              color: AppColors.lightGrey,
+            ),
+            child: Icon(
+              FluentIcons.person_32_regular, color: AppColors.lightPrimary.withOpacity(0.4),
+            ),
+          )
+          : Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              image: DecorationImage(
                 image: NetworkImage(employee.imageUrl),
                 fit: BoxFit.cover,
               ),
+
             ),
           ),
         ),
