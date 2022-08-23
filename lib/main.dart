@@ -21,7 +21,7 @@ void main() async {
     win.minSize = initialSize;
     win.size = initialSize;
     win.alignment = Alignment.center;
-    win.title = "Custom window with Flutter";
+    win.title = "Solvio ERP";
     win.show();
   });
 }
@@ -55,7 +55,6 @@ class _MyAppState extends State<MyApp> {
             debugShowCheckedModeBanner: false,
             theme: AppThemeData.lightTheme(context),
             // darkTheme: AppThemeData.darkTheme(context),
-            // home: const Login(),
             initialRoute: snapshot.data == null ? "login_view" : "home_view",
             routes: routes,
           );
@@ -66,7 +65,6 @@ class _MyAppState extends State<MyApp> {
             debugShowCheckedModeBanner: false,
             theme: AppThemeData.lightTheme(context),
             // darkTheme: AppThemeData.darkTheme(context),
-            // home: const Login(),
             initialRoute: "login_view",
             routes: routes,
           );
