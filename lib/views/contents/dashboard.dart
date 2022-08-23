@@ -648,7 +648,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                          /// Filtreleme Butonu
                           PopupMenuButton<int>(
-                            tooltip: "Profil Menüsü",
+                            tooltip: "Filtrelemek için tıkla",
                             padding: const EdgeInsets.all(8),
                             itemBuilder: (context) => [
                               PopupMenuItem(child: StatefulBuilder(

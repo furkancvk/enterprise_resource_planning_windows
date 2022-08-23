@@ -276,7 +276,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                           ),
                           ///Filtreleme Butonu
                           PopupMenuButton<int>(
-                            tooltip: "Profil Menüsü",
+                            tooltip: "Filtrelemek için tıkla",
                             padding: const EdgeInsets.all(8),
                             itemBuilder: (context) => [
                               PopupMenuItem(child: StatefulBuilder(

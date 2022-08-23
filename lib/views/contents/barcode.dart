@@ -35,6 +35,7 @@ class _BarcodeState extends State<Barcode> {
   bool isLoading = true;
 
   String filterName = '';
+  String hintText = '';
 
   String selected = "";
   List checkListItems = [
@@ -202,16 +203,16 @@ class _BarcodeState extends State<Barcode> {
                             child:TextFormField(
                               controller: searchQueryController,
                               onChanged: (query) => source.filterClientSide(searchQueryController.text, filterName),
-                              decoration: const InputDecoration(
-                                suffixIcon: Icon(FluentIcons.search_24_filled, color: AppColors.lightPrimary),
-                                hintText: "Ara...",
-                                focusedBorder: OutlineInputBorder(
+                              decoration: InputDecoration(
+                                suffixIcon: const Icon(FluentIcons.search_24_filled, color: AppColors.lightPrimary),
+                                hintText: "${hintText} Ara...",
+                                focusedBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: AppColors.lightInfo
                                   ),
                                   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(4), topLeft: Radius.circular(4)),
                                 ),
-                                enabledBorder: OutlineInputBorder(
+                                enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: AppColors.lightPrimary
                                   ),
@@ -222,7 +223,7 @@ class _BarcodeState extends State<Barcode> {
                           ),
                           /// Filtreleme Butonu
                           PopupMenuButton<int>(
-                            tooltip: "Profil Menüsü",
+                            tooltip: "Filtrelemek için tıkla",
                             padding: const EdgeInsets.all(8),
                             itemBuilder: (context) => [
                               PopupMenuItem(child: StatefulBuilder(
@@ -249,6 +250,7 @@ class _BarcodeState extends State<Barcode> {
                                           "${checkListItems[index]["id"]}, ${checkListItems[index]["title"]}, ${checkListItems[index]["value"]}";
                                           print('filtre: ${selected}');
                                           filterName = value! ? checkListItems[index]["filterName"] : "";
+                                          hintText = checkListItems[index]["title"].toString() ;
                                         });
                                       },
                                     ),
