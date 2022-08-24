@@ -238,6 +238,8 @@ class _EditEmployeeState extends State<EditEmployee> {
         }
       });
     } else {
+      setState(()=>isLoading=false);
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           padding: const EdgeInsets.all(0),

@@ -236,6 +236,8 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
         }
       });
     } else {
+      setState(()=>isLoading=false);
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           padding: const EdgeInsets.all(0),
