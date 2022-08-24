@@ -303,7 +303,7 @@ class _HomeState extends State<Home> {
                             const SizedBox(width: 24),
                             IconButton(
                               onPressed: logOut,
-                              icon: const Icon(FluentIcons.arrow_exit_20_regular),
+                              icon: const Icon(FluentIcons.arrow_exit_20_regular,color: AppColors.lightPrimary,),
                             ),  /// Ayarlar Butonu
                           ],
                         ),

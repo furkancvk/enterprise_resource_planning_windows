@@ -25,6 +25,7 @@ class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
 
   bool isChecked = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -35,219 +36,218 @@ class _LoginState extends State<Login> {
         child: Row(
           children: [
             Expanded(
-              flex: 2,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.asset(
-                    "assets/images/background-login.jpg",
-                    width: double.infinity,
-                    height: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                  Positioned.fill(
-                    child: Align(
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment(-2, -8),
-                            colors: [
-                              AppColors.lightPrimary,
-                              Colors.transparent,
-                            ],
+                flex: 2,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Image.asset(
+                      "assets/images/background-login.jpg",
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                    Positioned.fill(
+                      child: Align(
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment(-2, -8),
+                              colors: [
+                                AppColors.lightPrimary,
+                                Colors.transparent,
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    top: 24,
-                    left: 24,
-                    child: Image.asset("assets/images/logo.png"),
-                  ),
-                  Positioned(
-                    top: 220,
-                    left: 40,
-                    child: Column(
-                      children: [
-                        Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Container(
-                              width: 260,
-                              height: 32,
-                              alignment: Alignment.centerLeft,
-                              padding: const EdgeInsets.only(left: 48),
-                              decoration: const BoxDecoration(
-                                color: AppColors.lightSecondary,
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(16),
-                                  bottomRight: Radius.circular(16),
-                                ),
-                              ),
-                              child: Text(
-                                "Kolay ve anlaşılır panel yönetimi",
-                                style: AppText.helperSemiBold,
-                              ),
-                            ),
-                            const Positioned(
-                              top: -8,
-                              left: -10,
-                              child: CircleAvatar(
-                                backgroundColor: AppColors.lightAccent,
-                                radius: 24,
-                                child: Text(
-                                  "1",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: 0.4,
-                                    color: AppColors.lightSecondary,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 32),
-                        Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Container(
-                              width: 260,
-                              height: 32,
-                              alignment: Alignment.centerLeft,
-                              padding: const EdgeInsets.only(left: 48),
-                              decoration: const BoxDecoration(
-                                color: AppColors.lightSecondary,
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(16),
-                                  bottomRight: Radius.circular(16),
-                                ),
-                              ),
-                              child: Text(
-                                "Hızlı ve güvenilir stok takibi",
-                                style: AppText.helperSemiBold,
-                              ),
-                            ),
-                            const Positioned(
-                              top: -8,
-                              left: -10,
-                              child: CircleAvatar(
-                                backgroundColor: AppColors.lightAccent,
-                                radius: 24,
-                                child: Text(
-                                  "2",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: 0.4,
-                                    color: AppColors.lightSecondary,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 32),
-                        Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Container(
-                              width: 260,
-                              height: 32,
-                              alignment: Alignment.centerLeft,
-                              padding: const EdgeInsets.only(left: 48),
-                              decoration: const BoxDecoration(
-                                color: AppColors.lightSecondary,
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(16),
-                                  bottomRight: Radius.circular(16),
-                                ),
-                              ),
-                              child: Text(
-                                "Gerçekçi ve ayrıntılı istatistikler",
-                                style: AppText.helperSemiBold,
-                              ),
-                            ),
-                            const Positioned(
-                              top: -8,
-                              left: -10,
-                              child: CircleAvatar(
-                                backgroundColor: AppColors.lightAccent,
-                                radius: 24,
-                                child: Text(
-                                  "3",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: 0.4,
-                                    color: AppColors.lightSecondary,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 32),
-                        Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Container(
-                              width: 260,
-                              height: 32,
-                              alignment: Alignment.centerLeft,
-                              padding: const EdgeInsets.only(left: 48),
-                              decoration: const BoxDecoration(
-                                color: AppColors.lightSecondary,
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(16),
-                                  bottomRight: Radius.circular(16),
-                                ),
-                              ),
-                              child: Text(
-                                "Geniş çaplı raporlama sistemi",
-                                style: AppText.helperSemiBold,
-                              ),
-                            ),
-                            const Positioned(
-                              top: -8,
-                              left: -10,
-                              child: CircleAvatar(
-                                backgroundColor: AppColors.lightAccent,
-                                radius: 24,
-                                child: Text(
-                                  "4",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: 0.4,
-                                    color: AppColors.lightSecondary,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                    Positioned(
+                      top: 24,
+                      left: 24,
+                      child: Image.asset("assets/images/logo.png"),
                     ),
-                  ),
-                  const Positioned(
-                    bottom: 24,
-                    child: Text(
-                      "Copyright © Solvio Yazılım",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        letterSpacing: 0.4,
-                        color: AppColors.lightSecondary,
+                    Positioned(
+                      top: 220,
+                      left: 40,
+                      child: Column(
+                        children: [
+                          Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Container(
+                                width: 260,
+                                height: 32,
+                                alignment: Alignment.centerLeft,
+                                padding: const EdgeInsets.only(left: 48),
+                                decoration: const BoxDecoration(
+                                  color: AppColors.lightSecondary,
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(16),
+                                    bottomRight: Radius.circular(16),
+                                  ),
+                                ),
+                                child: Text(
+                                  "Kolay ve anlaşılır panel yönetimi",
+                                  style: AppText.helperSemiBold,
+                                ),
+                              ),
+                              const Positioned(
+                                top: -8,
+                                left: -10,
+                                child: CircleAvatar(
+                                  backgroundColor: AppColors.lightAccent,
+                                  radius: 24,
+                                  child: Text(
+                                    "1",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 0.4,
+                                      color: AppColors.lightSecondary,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 32),
+                          Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Container(
+                                width: 260,
+                                height: 32,
+                                alignment: Alignment.centerLeft,
+                                padding: const EdgeInsets.only(left: 48),
+                                decoration: const BoxDecoration(
+                                  color: AppColors.lightSecondary,
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(16),
+                                    bottomRight: Radius.circular(16),
+                                  ),
+                                ),
+                                child: Text(
+                                  "Hızlı ve güvenilir stok takibi",
+                                  style: AppText.helperSemiBold,
+                                ),
+                              ),
+                              const Positioned(
+                                top: -8,
+                                left: -10,
+                                child: CircleAvatar(
+                                  backgroundColor: AppColors.lightAccent,
+                                  radius: 24,
+                                  child: Text(
+                                    "2",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 0.4,
+                                      color: AppColors.lightSecondary,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 32),
+                          Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Container(
+                                width: 260,
+                                height: 32,
+                                alignment: Alignment.centerLeft,
+                                padding: const EdgeInsets.only(left: 48),
+                                decoration: const BoxDecoration(
+                                  color: AppColors.lightSecondary,
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(16),
+                                    bottomRight: Radius.circular(16),
+                                  ),
+                                ),
+                                child: Text(
+                                  "Gerçekçi ve ayrıntılı istatistikler",
+                                  style: AppText.helperSemiBold,
+                                ),
+                              ),
+                              const Positioned(
+                                top: -8,
+                                left: -10,
+                                child: CircleAvatar(
+                                  backgroundColor: AppColors.lightAccent,
+                                  radius: 24,
+                                  child: Text(
+                                    "3",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 0.4,
+                                      color: AppColors.lightSecondary,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 32),
+                          Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Container(
+                                width: 260,
+                                height: 32,
+                                alignment: Alignment.centerLeft,
+                                padding: const EdgeInsets.only(left: 48),
+                                decoration: const BoxDecoration(
+                                  color: AppColors.lightSecondary,
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(16),
+                                    bottomRight: Radius.circular(16),
+                                  ),
+                                ),
+                                child: Text(
+                                  "Geniş çaplı raporlama sistemi",
+                                  style: AppText.helperSemiBold,
+                                ),
+                              ),
+                              const Positioned(
+                                top: -8,
+                                left: -10,
+                                child: CircleAvatar(
+                                  backgroundColor: AppColors.lightAccent,
+                                  radius: 24,
+                                  child: Text(
+                                    "4",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 0.4,
+                                      color: AppColors.lightSecondary,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
-              )
-            ),
+                    const Positioned(
+                      bottom: 24,
+                      child: Text(
+                        "Copyright © Solvio Yazılım",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          letterSpacing: 0.4,
+                          color: AppColors.lightSecondary,
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
             Expanded(
               flex: 3,
               child: Column(
@@ -270,16 +270,20 @@ class _LoginState extends State<Login> {
                           children: [
                             Text("Hoş geldiniz", style: AppText.titleSemiBold),
                             const SizedBox(height: 4),
-                            Text("Giriş yapmak için kullanıcı adınızı & şifrenizi giriniz.", style: AppText.context),
+                            Text(
+                                "Giriş yapmak için kullanıcı adınızı & şifrenizi giriniz.",
+                                style: AppText.context),
                             const SizedBox(height: 32),
                             AppForm.appTextFormFieldRegex(
-                              formatter: FilteringTextInputFormatter.allow(RegExp(r'\S')),
+                              formatter: FilteringTextInputFormatter.allow(
+                                  RegExp(r'\S')),
                               label: "Kullanıcı Adı",
                               hint: "ör. isimsoyisim",
                               controller: _usernameController,
                             ),
                             const SizedBox(height: 24),
-                            PasswordFieldWithVisibility(controller: _passwordController),
+                            PasswordFieldWithVisibility(
+                                controller: _passwordController),
                             const SizedBox(height: 12),
                             Row(
                               children: [
@@ -299,8 +303,20 @@ class _LoginState extends State<Login> {
                             Align(
                               alignment: Alignment.centerRight,
                               child: ElevatedButton(
-                                onPressed: logIn,
-                                child: const Text("Giriş Yap"),
+                                onPressed: () {
+                                  setState(() => isLoading = true);
+                                  logIn();
+                                },
+                                child: isLoading
+                                    ? Container(
+                                        height: 20,
+                                        width: 20,
+                                        child: const CircularProgressIndicator(
+                                          color: AppColors.lightSecondary,
+                                          strokeWidth: 3,
+                                        ),
+                                      )
+                                    : const Text("Giriş Yap"),
                               ),
                             ),
                           ],
@@ -323,37 +339,47 @@ class _LoginState extends State<Login> {
         await UserService.logIn(
           _usernameController.text,
           _passwordController.text,
-        ).then((value) => {
-          if (value["success"]){
-            Navigator.pushReplacementNamed(context, 'home_view'),
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                padding: const EdgeInsets.all(0),
-                content: AppAlerts.success(value["message"]),
-                duration: const Duration(milliseconds: 1500),
-                backgroundColor: AppColors.lightSecondary,
-              ),
-            ),
-            // AppAlerts.toast(message: value["message"]),
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                padding: const EdgeInsets.all(0),
-                content: AppAlerts.error(value["message"]),
-                duration: const Duration(milliseconds: 1500),
-                backgroundColor: AppColors.lightSecondary,
-              ),
-            ),
-            // AppAlerts.toast(message: value["message"]),
+        ).then(
+          (value) => {
+            if (value["success"])
+              {
+                setState(() => isLoading = false),
+                Navigator.pushReplacementNamed(context, 'home_view'),
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    padding: const EdgeInsets.all(0),
+                    content: AppAlerts.success(value["message"]),
+                    duration: const Duration(milliseconds: 1500),
+                    backgroundColor: AppColors.lightSecondary,
+                  ),
+                ),
+                // AppAlerts.toast(message: value["message"]),
+              }
+            else
+              {
+                setState(() => isLoading = false),
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    padding: const EdgeInsets.all(0),
+                    content: AppAlerts.error(value["message"]),
+                    duration: const Duration(milliseconds: 1500),
+                    backgroundColor: AppColors.lightSecondary,
+                  ),
+                ),
+                // AppAlerts.toast(message: value["message"]),
+              },
           },
-        },
         );
-      }
+      } else
+        setState(() => isLoading = false);
     } on SocketException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           padding: const EdgeInsets.all(20),
-          content: Text("İnternet bağlantınızı kontrol ediniz.", style: AppText.contextSemiBold,),
+          content: Text(
+            "İnternet bağlantınızı kontrol ediniz.",
+            style: AppText.contextSemiBold,
+          ),
           duration: const Duration(milliseconds: 1500),
           backgroundColor: AppColors.lightSecondary,
         ),
@@ -377,9 +403,7 @@ class _LoginState extends State<Login> {
     _passwordController.dispose();
     super.dispose();
   }
-
 }
-
 
 /// Kapatma, küçültme ve alta alma butonların kodları
 
