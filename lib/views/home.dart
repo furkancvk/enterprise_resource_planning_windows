@@ -101,6 +101,8 @@ class _HomeState extends State<Home> {
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
     int indexContent = Provider.of<States>(context).indexContent;
 
+    getTokenExpireDate();
+
     return Scaffold(
       body: WindowBorder(
         color: AppColors.lightSecondary,
@@ -326,6 +328,37 @@ class _HomeState extends State<Home> {
         firstName = value;
       });
     });
+  }
+
+  void getTokenExpireDate() async {
+    secureStorage.readSecureData('tokenExpireDate').then((value) {
+      print(DateTime.parse(value).isBefore(DateTime.now()));
+      if(DateTime.parse(value).isBefore(DateTime.now())) showMessage();
+      /*setState(() {
+        firstName = value;
+      });*/
+    });
+  }
+
+  void showMessage() async {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Token Süresi Dolmuştur", textAlign: TextAlign.center, style: AppText.titleSemiBold,),
+          content: const Text("Hesabınızla ilişkilendirilen token süresi\ndolmuştur. İşlemlerinize devam etmek için\nlütfen tekrar giriş yapınız.", textAlign: TextAlign.center),
+          actionsAlignment: MainAxisAlignment.end,
+          actionsPadding: const EdgeInsets.only(bottom: 24, right: 24),
+          actions: [
+            ElevatedButton(
+              onPressed: logOut,
+              child: const Text("Giriş Yap"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void logOut() async {

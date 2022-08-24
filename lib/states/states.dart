@@ -4,6 +4,9 @@ class States with ChangeNotifier {
   int indexTabBar = 0;
   int indexSidebar = 0;
   int indexContent = 0;
+
+  bool isAuthenticated = false;
+
   Map<String, dynamic> currentUser = {};
 
   List tasks =[];
@@ -76,6 +79,11 @@ class States with ChangeNotifier {
     } else {
       employeeSelectedRows.add(index);
     }
+    notifyListeners();
+  }
+
+  void setIsAuthenticated(bool isAuthenticated) {
+    this.isAuthenticated = isAuthenticated;
     notifyListeners();
   }
 }

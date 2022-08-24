@@ -29,13 +29,10 @@ class Dashboard extends StatefulWidget {
   State<Dashboard> createState() => _DashboardState();
 }
 
-String createdDate = DateTime.parse(DateTime.now().toString()).toLocal().toString();
-String date = createdDate.substring(0, createdDate.indexOf(" "));
-String time = createdDate.substring(createdDate.indexOf(" "), createdDate.length - 7);
-
 class _DashboardState extends State<Dashboard> {
   final TextEditingController searchQueryController = TextEditingController();
   static SecureStorage secureStorage = SecureStorage();
+
   int? sortColumnIndex;
   bool isAscending = false;
   var rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
@@ -404,6 +401,7 @@ class _DashboardState extends State<Dashboard> {
                                           showDialog(context: context, builder: (BuildContext context) {
                                                 Function setTasks = Provider.of<States>(context).setTasks;
                                                 Function setInput = Provider.of<States>(context).setInput;
+
                                                 return AlertDialog(
                                                   title: Row(
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

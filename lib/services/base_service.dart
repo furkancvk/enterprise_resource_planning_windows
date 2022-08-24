@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/user.dart';
@@ -21,6 +20,9 @@ class BaseService {
     };
     var response = await http.get(url, headers: headers);
     var body = jsonDecode(utf8.decode(response.bodyBytes));
+    if(body["message"] == "Unauthorized") {
+      print("******* Unauthorized ******** Tekrar Giriş Yapılması Gerekiyor *******");
+    }
     return body;
   }
 
@@ -38,8 +40,15 @@ class BaseService {
     var response = await http.post(url, body: isLogin ? json.encode(data) : json.encode(data.toJson()), headers: headers);
     var body = jsonDecode(utf8.decode(response.bodyBytes));
     print(body);
+    if(body["message"] == "Unauthorized") {
+      print("******* Unauthorized ******** Tekrar Giriş Yapılması Gerekiyor *******");
+    }
     if(body["success"] && isLogin){
       User user = User.fromJson(body["data"]);
+
+      String tokenExpireDate = DateTime.now().add(const Duration(hours: 12)).toString();
+
+      await secureStorage.writeSecureData('tokenExpireDate', tokenExpireDate);
       await secureStorage.writeSecureData('firstName', user.firstName);
       await secureStorage.writeSecureData('lastName', user.lastName);
       await secureStorage.writeSecureData('email', user.email);
@@ -59,6 +68,9 @@ class BaseService {
     };
     var response = await http.put(url, body: json.encode(data.toJson()), headers: headers);
     var body = jsonDecode(utf8.decode(response.bodyBytes));
+    if(body["message"] == "Unauthorized") {
+      print("******* Unauthorized ******** Tekrar Giriş Yapılması Gerekiyor *******");
+    }
     return body;
   }
 
@@ -71,6 +83,9 @@ class BaseService {
     };
     var response = await http.patch(url, body: json.encode(data.toJson()), headers: headers);
     var body = jsonDecode(utf8.decode(response.bodyBytes));
+    if(body["message"] == "Unauthorized") {
+      print("******* Unauthorized ******** Tekrar Giriş Yapılması Gerekiyor *******");
+    }
     return body;
   }
 
@@ -83,6 +98,9 @@ class BaseService {
     };
     var response = await http.delete(url, headers: headers);
     var body = jsonDecode(utf8.decode(response.bodyBytes));
+    if(body["message"] == "Unauthorized") {
+      print("******* Unauthorized ******** Tekrar Giriş Yapılması Gerekiyor *******");
+    }
     return body;
   }
 
@@ -109,6 +127,10 @@ class BaseService {
 
     var body = jsonDecode(utf8.decode(responded.bodyBytes));
     print(body);
+
+    if(body["message"] == "Unauthorized") {
+      print("******* Unauthorized ******** Tekrar Giriş Yapılması Gerekiyor *******");
+    }
     return body;
   }
 

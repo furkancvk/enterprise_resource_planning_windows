@@ -13,18 +13,17 @@ class AppShowNotes extends StatefulWidget {
   State<AppShowNotes> createState() => _AppShowNotesState();
 }
 
-String createdDate =
-    DateTime.parse(DateTime.now().toString()).toLocal().toString();
-String date = createdDate.substring(0, createdDate.indexOf(" "));
-String time =
-    createdDate.substring(createdDate.indexOf(" "), createdDate.length - 7);
-
 class _AppShowNotesState extends State<AppShowNotes> {
+
   @override
   Widget build(BuildContext context) {
-    Function setTasks = Provider.of<States>(context).setTasks;
+    String createdDate = DateTime.parse(DateTime.now().toString()).toLocal().toString();
+    String date = createdDate.substring(0, createdDate.indexOf(" "));
+    String time = createdDate.substring(createdDate.indexOf(" "), createdDate.length - 7);
 
+    Function setTasks = Provider.of<States>(context).setTasks;
     List tasks = Provider.of<States>(context).tasks;
+
     return Column(
       children: [
         Dismissible(
