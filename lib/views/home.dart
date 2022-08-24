@@ -88,6 +88,14 @@ class _HomeState extends State<Home> {
 
   bool _isSelected = false;
 
+  String firstName = "";
+
+  @override
+  void initState() {
+    super.initState();
+    getFirstName();
+  }
+
   @override
   Widget build(BuildContext context) {
     Function setIndexContent = Provider.of<States>(context).setIndexContent;
@@ -201,7 +209,37 @@ class _HomeState extends State<Home> {
                                 border: Border.all(color: AppColors.lightPrimary),
                                 borderRadius: BorderRadius.circular(4),
                               ),
-                              child: PopupMenuButton<int>(
+                              child: Row(
+                                children: [
+                                  /// Profildeki resmin verildiği kısım
+                                  Container(
+                                    width: 28,
+                                    height: 28,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      color: AppColors.lightGrey,
+                                    ),
+                                    child: Icon(
+                                      FluentIcons.person_32_regular, color: AppColors.lightPrimary.withOpacity(0.4),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Text(
+                                    Helpers.titleCase(firstName),
+                                    style: AppText.contextSemiBold,
+                                  ),
+                                  const SizedBox(width: 16),
+                                  /*const SizedBox(width: 16),
+                                  _isSelected == true
+                                      ? const Icon(
+                                      FluentIcons.chevron_down_12_regular,
+                                      size: 20)
+                                      : const Icon(
+                                      FluentIcons.chevron_down_12_regular,
+                                      size: 20),*/
+                                ],
+                              ),
+                              /*child: PopupMenuButton<int>(
                                 onCanceled: () => _isSelected = false,
                                 onSelected: (value) => _isSelected = true,
                                 tooltip: "Profil Menüsü",
@@ -246,18 +284,9 @@ class _HomeState extends State<Home> {
                                       ),
                                     ),
                                     const SizedBox(width: 16),
-                                    FutureBuilder(
-                                      future: getFirstName(),
-                                      builder: (context, snapshot) {
-                                        if(snapshot.data != null) {
-                                          print('snapşot: ${snapshot.hasData}');
-                                          return Text(
-                                            Helpers.titleCase(snapshot.data.toString()),
-                                            style: AppText.contextSemiBold,
-                                          );
-                                        }
-                                        return const Text("");
-                                      },
+                                    Text(
+                                      Helpers.titleCase(firstName),
+                                      style: AppText.contextSemiBold,
                                     ),
                                     const SizedBox(width: 16),
                                     _isSelected == true
@@ -269,12 +298,12 @@ class _HomeState extends State<Home> {
                                             size: 20),
                                   ],
                                 ),
-                              ),
+                              ),*/
                             ), /// Profil Kısmı
                             const SizedBox(width: 24),
                             IconButton(
-                              onPressed: () {},
-                              icon: const Icon(FluentIcons.settings_24_regular),
+                              onPressed: logOut,
+                              icon: const Icon(FluentIcons.arrow_exit_20_regular),
                             ),  /// Ayarlar Butonu
                           ],
                         ),
@@ -291,8 +320,12 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Future<String> getFirstName() async {
-    return await secureStorage.readSecureData('firstName');
+  void getFirstName() async {
+    secureStorage.readSecureData('firstName').then((value) {
+      setState(() {
+        firstName = value;
+      });
+    });
   }
 
   void logOut() async {

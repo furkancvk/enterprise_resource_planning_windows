@@ -133,10 +133,10 @@ class _BarcodeState extends State<Barcode> {
                 Padding(
                   padding: const EdgeInsets.all(4),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       /// Toplu İşlemler Butonu
-                      Container(
+                      /*Container(
                         padding: const EdgeInsets.all(6.9),
                         decoration: BoxDecoration(
                           color: AppColors.lightSecondary,
@@ -194,7 +194,7 @@ class _BarcodeState extends State<Barcode> {
                             ],
                           ),
                         ),
-                      ),
+                      ),*/
                       Row(
                         children: [
                           /// SearchBar
@@ -315,10 +315,10 @@ class _BarcodeState extends State<Barcode> {
                   columns: [
                     DataColumn(label: Text('Etiket', style: AppText.contextSemiBoldBlue)),
                     DataColumn(label: Text('Görsel', style: AppText.contextSemiBoldBlue)),
-                    DataColumn(label: Text('İsim', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                    DataColumn(label: Text('Cins', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                    DataColumn(label: Text('Renk', style: AppText.contextSemiBoldBlue),onSort: onSort),
-                    DataColumn(label: Text('Boyut', style: AppText.contextSemiBoldBlue),onSort: onSort),
+                    DataColumn(label: Text('İsim', style: AppText.contextSemiBoldBlue)),
+                    DataColumn(label: Text('Cins', style: AppText.contextSemiBoldBlue)),
+                    DataColumn(label: Text('Renk', style: AppText.contextSemiBoldBlue)),
+                    DataColumn(label: Text('Boyut', style: AppText.contextSemiBoldBlue)),
                     DataColumn(label: Text('Miktar', style: AppText.contextSemiBoldBlue)),
                     DataColumn(label: Text('İşlemler', style: AppText.contextSemiBoldBlue)),
                   ],

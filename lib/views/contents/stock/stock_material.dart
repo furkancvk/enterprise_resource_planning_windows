@@ -175,7 +175,7 @@ class _StockMaterialState extends State<StockMaterial> {
                       Row(
                         children: [
                           ///Toplu İşlemler Butonu
-                          Container(
+                          /*Container(
                             padding: const EdgeInsets.all(6.9),
                             decoration: BoxDecoration(
                               color: AppColors.lightSecondary,
@@ -234,7 +234,7 @@ class _StockMaterialState extends State<StockMaterial> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 16),
+                          const SizedBox(width: 16),*/
                           ///Dışa Aktar Butonu
                           OutlinedButton.icon(
                             onPressed: () {showExportDataModal(materials);},
@@ -492,10 +492,14 @@ class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
                   showDialog(context: context, builder: (context) =>  UpdateMaterial(material: material));
                 }, icon: const Icon(FluentIcons.edit_16_regular, color: AppColors.lightPrimary), splashRadius: 20),
                 IconButton(
-                    onPressed: () {
-                      deleteMaterial(material.materialId);
-                      print('deleted');
-                      }, icon: const Icon(FluentIcons.delete_16_regular, color: AppColors.lightPrimary), splashRadius: 20),
+                  onPressed: () {
+                    showMessage(material.materialId);
+                    /*deleteMaterial(material.materialId);
+                    print('deleted');*/
+                    },
+                  icon: const Icon(FluentIcons.delete_16_regular, color: AppColors.lightPrimary),
+                  splashRadius: 20,
+                ),
               ],
             )
         ), /// İşlem butonlarına popUpButtonları konucak
@@ -512,7 +516,7 @@ class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
   void deleteMaterial (int materialId) {
     MaterialService.deleteMaterial(materialId).then((value) {
       if (value["success"]) {
-        //Navigator.pop(context);
+        Navigator.pop(context);
         materials.retainWhere((element) => element.materialId != materialId);
         setNextView();
         ScaffoldMessenger.of(context).showSnackBar(
@@ -536,6 +540,33 @@ class StockMaterialSource extends AdvancedDataTableSource<AppMaterial> {
       }
     });
 
+  }
+
+  void showMessage(int materialId) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Hammadde Sil", textAlign: TextAlign.center, style: AppText.titleSemiBold,),
+          content: const Text("Seçtiğiniz hammaddeyi silmek \nüzereseniz, emin misiniz?", textAlign: TextAlign.center),
+          actionsAlignment: MainAxisAlignment.spaceEvenly,
+          actionsPadding: const EdgeInsets.only(bottom: 24),
+          actions: [
+            OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: AppColors.lightError),
+              ),
+              child: const Text("Evet, sil", style: TextStyle(color: AppColors.lightError)),
+              onPressed: () {deleteMaterial(materialId);},
+            ),
+            ElevatedButton(
+              child: const Text("Hayır, silme"),
+              onPressed: () => Navigator.of(context).pop(),
+            )
+          ],
+        );
+      },
+    );
   }
 
   void filterClientSide(String filterQuery, String filter) {

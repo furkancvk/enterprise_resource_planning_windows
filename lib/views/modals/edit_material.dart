@@ -74,6 +74,7 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
                     label: "İsim",
                     hint: "ör. Gizli Ayak",
                     controller: _nameController,
+                    isRequired: true,
                   ),
                   const SizedBox(height: 24),
                   AppForm.appTextFormField(
@@ -88,6 +89,7 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
                     controller: _amountController,
                     key: GlobalKey(),
                     keyboardType: TextInputType.number,
+                    isRequired: true,
                   ),
                   const SizedBox(height: 24),
                   AppForm.appTextFormField(
@@ -138,6 +140,7 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
                     label: "Miktar Birimi",
                     hint: "ör. Adet",
                     controller: _unitController,
+                    isRequired: true,
                   ),
                   const SizedBox(height: 24),
                   AppForm.appTextFormField(
@@ -152,7 +155,7 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
         ),
         const SizedBox(height: 24),
         AppForm.appTextFormField(
-          maxLines: 2,
+          maxLines: 3,
           label: "Açıklama",
           hint: "Ekstra bilgileri buraya ekleyebilirsiniz.",
           controller: _explanationController,
@@ -178,7 +181,7 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
   }
 
   void updateMaterial() {
-    if(_nameController.text.isNotEmpty || _typeController.text.isNotEmpty || _unitController.text.isNotEmpty ||_amountController.text.isNotEmpty ||_colorController.text.isNotEmpty || _sizeController.text.isNotEmpty ||_explanationController.text.isNotEmpty) {
+    if(_nameController.text.isNotEmpty && _amountController.text.isNotEmpty && _unitController.text.isNotEmpty) {
       AppMaterial materialData = AppMaterial(
           materialId: widget.material.materialId,
           referenceNumber: widget.material.referenceNumber,
@@ -229,4 +232,5 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
       );
     }
   }
+
 }

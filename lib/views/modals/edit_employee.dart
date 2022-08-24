@@ -183,7 +183,7 @@ class _EditEmployeeState extends State<EditEmployee> {
   }*/
 
   void updateEmployee() async {
-    if(_firstNameController.text.isNotEmpty || _lastNameController.text.isNotEmpty || _phoneNumberController.text.isNotEmpty || _departmentController.text.isNotEmpty) {
+    if(_firstNameController.text.isNotEmpty && _lastNameController.text.isNotEmpty && _phoneNumberController.text.isNotEmpty && _departmentController.text.isNotEmpty) {
 
       Employee employeeData = Employee(
         employeeId: widget.employee.employeeId,

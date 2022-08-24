@@ -173,7 +173,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                       Row(
                         children: [
                           /// Toplu İşlemler
-                          Container(
+                          /*Container(
                             padding: const EdgeInsets.all(6.9),
                             decoration: BoxDecoration(
                               color: AppColors.lightSecondary,
@@ -238,7 +238,7 @@ class _EmployeeManagementState extends State<EmployeeManagement> {
                               ), ///Toplu İşlemler Butonu
                             ),
                           ),
-                          const SizedBox(width: 16),
+                          const SizedBox(width: 16),*/
                           ///Dışa Aktar Butonu
                           OutlinedButton.icon(
                             onPressed: () {showExportDataModal(employees);},
@@ -483,8 +483,9 @@ class EmployeeSource extends AdvancedDataTableSource<Employee> {
             ),
             IconButton(
               onPressed: () {
-                print('deleted');
-                deleteEmployee(employee.employeeId);
+                showMessage(employee.employeeId);
+                /*print('deleted');
+                deleteEmployee(employee.employeeId);*/
                 },
               icon: const Icon(FluentIcons.delete_16_regular, color: AppColors.lightPrimary),
               splashRadius: 20,
@@ -509,7 +510,7 @@ class EmployeeSource extends AdvancedDataTableSource<Employee> {
   void deleteEmployee (int employeeId) {
     EmployeeService.deleteEmployee(employeeId).then((value) {
       if (value["success"]) {
-        //Navigator.pop(context);
+        Navigator.pop(context);
         employees.retainWhere((element) => element.employeeId != employeeId);
         setNextView();
         ScaffoldMessenger.of(context).showSnackBar(
@@ -532,6 +533,33 @@ class EmployeeSource extends AdvancedDataTableSource<Employee> {
         );
       }
     });
+  }
+
+  void showMessage(int employeeId) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Personel Sil", textAlign: TextAlign.center, style: AppText.titleSemiBold,),
+          content: const Text("Seçtiğiniz personeli silmek \nüzereseniz, emin misiniz?", textAlign: TextAlign.center),
+          actionsAlignment: MainAxisAlignment.spaceEvenly,
+          actionsPadding: const EdgeInsets.only(bottom: 24),
+          actions: [
+            OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: AppColors.lightError),
+              ),
+              child: const Text("Evet, sil", style: TextStyle(color: AppColors.lightError)),
+              onPressed: () {deleteEmployee(employeeId);},
+            ),
+            ElevatedButton(
+              child: const Text("Hayır, silme"),
+              onPressed: () => Navigator.of(context).pop(),
+            )
+          ],
+        );
+      },
+    );
   }
 
   void filterClientSide(String filterQuery, String filter) {
