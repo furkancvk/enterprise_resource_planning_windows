@@ -30,7 +30,7 @@ class _EditEmployeeState extends State<EditEmployee> {
   final TextEditingController _departmentController = TextEditingController();
 
   File? imageFile;
-
+  bool isLoading = false ;
   pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -157,8 +157,21 @@ class _EditEmployeeState extends State<EditEmployee> {
       actions: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16, right: 16),
-          child: ElevatedButton.icon(
-            onPressed: updateEmployee,
+          child: isLoading ? ElevatedButton(
+              onPressed: (){}
+              , child: Container(
+            height: 20,
+            width: 20,
+            child: const CircularProgressIndicator(
+              color: AppColors.lightSecondary,
+              strokeWidth: 3,
+            ),
+          )) :ElevatedButton.icon(
+            onPressed: (){
+              setState(()=>isLoading =true);
+              updateEmployee();
+
+            },
             label: const Text("Düzenle"),
             icon: const Icon(FluentIcons.save_24_regular),
           ),
@@ -201,6 +214,7 @@ class _EditEmployeeState extends State<EditEmployee> {
 
       EmployeeService.updateEmployee(employeeData, null).then((value) {
         if (value["success"]){
+          setState(()=>isLoading =false);
           Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -211,6 +225,8 @@ class _EditEmployeeState extends State<EditEmployee> {
             ),
           );
         }else {
+          setState(()=>isLoading =false);
+          Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               padding: const EdgeInsets.all(0),

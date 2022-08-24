@@ -33,7 +33,7 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
   int currentStock = 0;
 
   File? imageFile;
-
+  bool isLoading = false ;
   pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -163,8 +163,19 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
         const SizedBox(height: 24),
         Align(
           alignment: Alignment.centerRight,
-          child: ElevatedButton.icon(
-            onPressed: updateMaterial,
+          child: isLoading ? ElevatedButton(
+              onPressed: (){}
+              , child: Container(
+            height: 20,
+            width: 20,
+            child: const CircularProgressIndicator(
+              color: AppColors.lightSecondary,
+              strokeWidth: 3,
+            ),
+          )) : ElevatedButton.icon(
+            onPressed: (){
+              setState(()=>isLoading=true);
+              updateMaterial();},
             icon: const Icon(FluentIcons.save_24_regular),
             label: const Text("Kaydet"),
           ),
@@ -201,6 +212,7 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
 
       MaterialService.updateMaterial(materialData, null).then((value) {
         if (value["success"]){
+          setState(()=>isLoading=false);
             Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -211,6 +223,8 @@ class _UpdateMaterialState extends State<UpdateMaterial> {
             ),
           );
         } else {
+          setState(()=>isLoading=false);
+          Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               padding: const EdgeInsets.all(0),
