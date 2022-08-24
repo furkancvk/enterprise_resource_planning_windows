@@ -17,7 +17,7 @@ class PreviewPdf extends StatelessWidget {
     final font = await rootBundle.load("assets/fonts/SourceSansPro-SemiBold.ttf");
     final ttf = pw.Font.ttf(font);
     final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
-    final resultData = List.generate(amount, (index) {
+    final resultData = List.generate(amount >= 4000 ? 4000: amount, (index) {
       return pw.BarcodeWidget(
         color: PdfColor.fromHex("#000000"),
         barcode: pw.Barcode.qrCode(),
@@ -27,6 +27,7 @@ class PreviewPdf extends StatelessWidget {
 
     pdf.addPage(
       pw.MultiPage(
+        maxPages: 60,
         header: (context) {
           return pw.Column(
               children: [
