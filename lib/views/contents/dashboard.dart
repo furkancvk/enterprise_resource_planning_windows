@@ -205,6 +205,7 @@ class _DashboardState extends State<Dashboard> {
     tasks = Provider.of<States>(context).tasks;
     Function setIndexTabBar = Provider.of<States>(context).setIndexTabBar;
     int indexTabBar = Provider.of<States>(context).indexTabBar;
+    Function setIndexContent = Provider.of<States>(context).setIndexContent;
 
     final source = DashboardSource(context, processes);
 
@@ -227,6 +228,7 @@ class _DashboardState extends State<Dashboard> {
                       (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
                     if (snapshot.data != null) {
                       return AppCards.panelDataCard(
+                        onTap: () {setIndexContent(6);},
                         icon: FluentIcons.people_team_24_regular,
                         label: "Toplam Personel",
                         data: snapshot.data!["data"].length.toString(),
@@ -235,6 +237,7 @@ class _DashboardState extends State<Dashboard> {
                     }
                     else {
                       return AppCards.panelDataCard(
+                        onTap: () {setIndexContent(6);},
                         icon: FluentIcons.people_team_24_regular,
                         label: "Toplam Personel",
                         data: "0",
@@ -250,6 +253,7 @@ class _DashboardState extends State<Dashboard> {
                       (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
                     if (snapshot.data != null) {
                       return AppCards.panelDataCard(
+                        onTap: () {setIndexContent(1);},
                         icon: FluentIcons.apps_24_regular,
                         label: "Toplam Hammadde",
                         data: snapshot.data!["data"].length.toString(),
@@ -257,6 +261,7 @@ class _DashboardState extends State<Dashboard> {
                       );
                     } else {
                       return AppCards.panelDataCard(
+                        onTap: () {setIndexContent(1);},
                         icon: FluentIcons.apps_24_regular,
                         label: "Toplam Hammadde",
                         data: "0",
@@ -267,6 +272,7 @@ class _DashboardState extends State<Dashboard> {
                 ), /// Toplam Hammadde
                 const SizedBox(width: 30),
                 AppCards.panelDataCard(
+                  onTap: () {setIndexContent(2);},
                   icon: FluentIcons.cube_24_regular,
                   label: "Toplam Bitmiş Ürün",
                   data: "217",
@@ -285,6 +291,7 @@ class _DashboardState extends State<Dashboard> {
                       materials.retainWhere((element) => element.amount <= 100);
 
                       return AppCards.panelDataCard(
+                        onTap: () {setIndexContent(1);},
                         icon: FluentIcons.warning_24_regular,
                         label: "Yetersiz Stok",
                         data: materials.length.toString(),
@@ -292,6 +299,7 @@ class _DashboardState extends State<Dashboard> {
                       );
                     } else {
                       return AppCards.panelDataCard(
+                        onTap: () {setIndexContent(1);},
                         icon: FluentIcons.warning_24_regular,
                         label: "Yetersiz Stok",
                         data: "0",
