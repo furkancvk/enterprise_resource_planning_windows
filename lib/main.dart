@@ -9,10 +9,13 @@ import 'storage/storage.dart';
 
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final SecureStorage secureStorage = SecureStorage();
+  final String? isAuthenticated = await secureStorage.readSecureData('isAuthenticated');
   runApp(
     ChangeNotifierProvider<States>(
       create: (BuildContext context) => States(),
-      child: const MyApp(),
+      child: MyApp(isAuthenticated: isAuthenticated),
     ),
   );
   doWhenWindowReady(() {
@@ -25,50 +28,20 @@ void main() async {
   });
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key, required this.isAuthenticated}) : super(key: key);
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final SecureStorage secureStorage = SecureStorage();
-
-  Future<String> getToken() async {
-    return await secureStorage.readSecureData('token');
-  }
+  final String? isAuthenticated;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: getToken(),
-      builder: (context, snapshot) {
-        // print(snapshot.data);
-        if(snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        } else if(snapshot.hasData) {
-          // print("has data: " + snapshot.data.toString());
-          return MaterialApp(
-            title: "Solvio Kurumsal Kaynak Planlama Programlama",
-            debugShowCheckedModeBanner: false,
-            theme: AppThemeData.lightTheme(context),
-            // darkTheme: AppThemeData.darkTheme(context),
-            initialRoute: snapshot.data == null ? "login_view" : "home_view",
-            routes: routes,
-          );
-        } else {
-          // print("no data: " + snapshot.data.toString());
-          return MaterialApp(
-            title: "Solvio Kurumsal Kaynak Planlama Programlama",
-            debugShowCheckedModeBanner: false,
-            theme: AppThemeData.lightTheme(context),
-            // darkTheme: AppThemeData.darkTheme(context),
-            initialRoute: "login_view",
-            routes: routes,
-          );
-        }
-      },
+    debugPrint("isAuthenticated Main: $isAuthenticated");
+    return MaterialApp(
+      title: "Solvio Kurumsal Kaynak Planlama Programı",
+      debugShowCheckedModeBanner: false,
+      theme: AppThemeData.lightTheme(context),
+      initialRoute: isAuthenticated == 'true' ? "home_view" : "login_view",
+      routes: routes,
     );
   }
 }

@@ -86,8 +86,6 @@ class _HomeState extends State<Home> {
      DocumentBills(), //13*/
   ];
 
-  bool _isSelected = false;
-
   String firstName = "";
 
   @override
@@ -102,6 +100,7 @@ class _HomeState extends State<Home> {
     int indexContent = Provider.of<States>(context).indexContent;
 
     getTokenExpireDate();
+    getAuthInfo();
 
     return Scaffold(
       body: WindowBorder(
@@ -161,7 +160,7 @@ class _HomeState extends State<Home> {
                               );
                             },
                             onSelected: (Map<String, dynamic> item) {
-                              print('Selected: ${item["contentName"]}');
+                              debugPrint('Selected: ${item["contentName"]}');
                               setIndexContent(item["index"]);
                             },
                             optionsViewBuilder: (
@@ -332,11 +331,15 @@ class _HomeState extends State<Home> {
 
   void getTokenExpireDate() async {
     secureStorage.readSecureData('tokenExpireDate').then((value) {
-      print(DateTime.parse(value).isBefore(DateTime.now()));
+      debugPrint(DateTime.parse(value).isBefore(DateTime.now()).toString());
       if(DateTime.parse(value).isBefore(DateTime.now())) showMessage();
-      /*setState(() {
-        firstName = value;
-      });*/
+    });
+  }
+
+  void getAuthInfo() async {
+    secureStorage.readSecureData('isAuthenticated').then((value) {
+      debugPrint("isAuthenticated Home : $value");
+      if(value == 'false') showMessage();
     });
   }
 
