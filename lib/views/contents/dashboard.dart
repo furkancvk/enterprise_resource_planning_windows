@@ -86,6 +86,10 @@ class _DashboardState extends State<Dashboard> {
 
   String filterName = 'firstName';
 
+  int amountOfEmployee = 0;
+  int amountOfMaterial = 0;
+  int amountOfLowLevelStock = 0;
+
   void getAllProcess() {
     ProcessService.getAllProcess().then((value) => {
           if (value["success"])
@@ -101,12 +105,23 @@ class _DashboardState extends State<Dashboard> {
         });
   }
 
-  Future<Map<String, dynamic>> getAllEmployee() async {
-    return await EmployeeService.getAllEmployee();
+  void getAllEmployee() {
+    EmployeeService.getAllEmployee().then((value) {
+      if(value["data"].isNotEmpty) amountOfEmployee = value["data"].length;
+      if(mounted) setState(() {});
+    });
   }
 
-  Future<Map<String, dynamic>> getAllMaterials() async {
-    return await MaterialService.getAllMaterial();
+  void getAllMaterial() {
+    MaterialService.getAllMaterial().then((value) {
+      if(value["data"].isNotEmpty) {
+        amountOfMaterial = value["data"].length;
+        List<AppMaterial> materials = List.generate(value["data"].length, (index) => AppMaterial.fromJson(value["data"][index]));
+        materials.retainWhere((element) => element.amount <= 100);
+        amountOfLowLevelStock = materials.length;
+      }
+      if(mounted) setState(() {});
+    });
   }
 
   void onSort(int columnIndex, bool ascending) {
@@ -195,6 +210,8 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
     getAllProcess();
+    getAllEmployee();
+    getAllMaterial();
   }
 
   @override
@@ -219,53 +236,20 @@ class _DashboardState extends State<Dashboard> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                FutureBuilder(
-                  future: getAllEmployee(),
-                  builder:
-                      (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                    if (snapshot.data != null) {
-                      return AppCards.panelDataCard(
-                        onTap: () {setIndexContent(6);},
-                        icon: FluentIcons.people_team_24_regular,
-                        label: "Toplam Personel",
-                        data: snapshot.data!["data"].length.toString(),
-                        color: AppColors.lightBlack,
-                      );
-                    }
-                    else {
-                      return AppCards.panelDataCard(
-                        onTap: () {setIndexContent(6);},
-                        icon: FluentIcons.people_team_24_regular,
-                        label: "Toplam Personel",
-                        data: "0",
-                        color: AppColors.lightBlack,
-                      );
-                    }
-                  },
-                ), /// Toplam ELeman
+                AppCards.panelDataCard(
+                  onTap: () {setIndexContent(6);},
+                  icon: FluentIcons.people_team_24_regular,
+                  label: "Toplam Personel",
+                  data: amountOfEmployee.toString(),
+                  color: AppColors.lightBlack,
+                ), /// Toplam Personel
                 const SizedBox(width: 30),
-                FutureBuilder(
-                  future: getAllMaterials(),
-                  builder:
-                      (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                    if (snapshot.data != null) {
-                      return AppCards.panelDataCard(
-                        onTap: () {setIndexContent(1);},
-                        icon: FluentIcons.apps_24_regular,
-                        label: "Toplam Hammadde",
-                        data: snapshot.data!["data"].length.toString(),
-                        color: AppColors.lightBlack,
-                      );
-                    } else {
-                      return AppCards.panelDataCard(
-                        onTap: () {setIndexContent(1);},
-                        icon: FluentIcons.apps_24_regular,
-                        label: "Toplam Hammadde",
-                        data: "0",
-                        color: AppColors.lightBlack,
-                      );
-                    }
-                  },
+                AppCards.panelDataCard(
+                  onTap: () {setIndexContent(1);},
+                  icon: FluentIcons.apps_24_regular,
+                  label: "Toplam Hammadde",
+                  data: amountOfMaterial.toString(),
+                  color: AppColors.lightBlack,
                 ), /// Toplam Hammadde
                 const SizedBox(width: 30),
                 AppCards.panelDataCard(
@@ -276,34 +260,12 @@ class _DashboardState extends State<Dashboard> {
                   color: AppColors.lightBlack,
                 ), /// Toplam Bitmiş Ürün (düzenlenecek)
                 const SizedBox(width: 30),
-                FutureBuilder(
-                  future: getAllMaterials(),
-                  builder:
-                      (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-                    if (snapshot.data != null) {
-                      List<AppMaterial> materials = List.generate(
-                          snapshot.data!["data"].length,
-                          (index) => AppMaterial.fromJson(
-                              snapshot.data!["data"][index]));
-                      materials.retainWhere((element) => element.amount <= 100);
-
-                      return AppCards.panelDataCard(
-                        onTap: () {setIndexContent(1);},
-                        icon: FluentIcons.warning_24_regular,
-                        label: "Yetersiz Stok",
-                        data: materials.length.toString(),
-                        color: AppColors.lightError,
-                      );
-                    } else {
-                      return AppCards.panelDataCard(
-                        onTap: () {setIndexContent(1);},
-                        icon: FluentIcons.warning_24_regular,
-                        label: "Yetersiz Stok",
-                        data: "0",
-                        color: AppColors.lightError,
-                      );
-                    }
-                  },
+                AppCards.panelDataCard(
+                  onTap: () {setIndexContent(1);},
+                  icon: FluentIcons.warning_24_regular,
+                  label: "Yetersiz Stok",
+                  data: amountOfLowLevelStock.toString(),
+                  color: AppColors.lightError,
                 ), /// Yetersiz Stok
               ],
             ),
