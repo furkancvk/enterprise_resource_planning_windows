@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import '../design/app_colors.dart';
 import '../design/app_text.dart';
 import '../services/user_service.dart';
+import '../storage/storage.dart';
 import '../widgets/app_alerts.dart';
 
 const borderColor = AppColors.lightSecondary;
@@ -20,12 +21,28 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final SecureStorage secureStorage = SecureStorage();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   bool isChecked = false;
   bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    secureStorage.readSecureData('rememberMeUsername').then((value) => {
+      _usernameController.text = value ?? '',
+      if(value != null) isChecked = true,
+      if(mounted) setState(() {}),
+    });
+    secureStorage.readSecureData('rememberMePassword').then((value) => {
+      _passwordController.text = value ?? '',
+      if(value != null) isChecked = true,
+      if(mounted) setState(() {}),
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -334,6 +351,15 @@ class _LoginState extends State<Login> {
   }
 
   void logIn() async {
+
+    if(isChecked) {
+      await secureStorage.writeSecureData('rememberMeUsername', _usernameController.text);
+      await secureStorage.writeSecureData('rememberMePassword', _passwordController.text);
+    } else {
+      await secureStorage.deleteSecureData('rememberMeUsername');
+      await secureStorage.deleteSecureData('rememberMePassword');
+    }
+
     try {
       if (_formKey.currentState!.validate()) {
         await UserService.logIn(
@@ -403,6 +429,7 @@ class _LoginState extends State<Login> {
     _passwordController.dispose();
     super.dispose();
   }
+
 }
 
 /// Kapatma, küçültme ve alta alma butonların kodları

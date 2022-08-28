@@ -365,9 +365,16 @@ class _HomeState extends State<Home> {
   }
 
   void logOut() async {
-    await secureStorage.deleteAllSecureData().then((value) => {
-          Navigator.pushReplacementNamed(context, 'login_view'),
-        });
+
+    await secureStorage.deleteSecureData('tokenExpireDate');
+    await secureStorage.deleteSecureData('isAuthenticated');
+    await secureStorage.deleteSecureData('firstName');
+    await secureStorage.deleteSecureData('lastName');
+    await secureStorage.deleteSecureData('email');
+    await secureStorage.deleteSecureData('phoneNumber');
+    await secureStorage.deleteSecureData('userId');
+    await secureStorage.deleteSecureData('token').then((value) => Navigator.pushReplacementNamed(context, 'login_view'));
+
   }
 
 }
