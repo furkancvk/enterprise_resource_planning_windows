@@ -37,8 +37,12 @@ Solvio ERP Masaüstü uygulaması, işletmenin tüm departmanlarını kapsayan k
   </div>
 </div>
 
+## Sahipler
+- [@furkancvk](https://github.com/furkancvk)
+- [@tozlukozmos](https://github.com/tozlukozmos)
+- [@OFD16](https://github.com/OFD16)
 
-# Yeni Özellikler:
+# Gelecek Özellikler:
 - **Fatura ve Ödeme İşlemleri:** Faturalandırma süreçlerini otomatikleştirir, ödeme takibini sağlar ve finansal süreçleri kolaylaştırır.
 
 
